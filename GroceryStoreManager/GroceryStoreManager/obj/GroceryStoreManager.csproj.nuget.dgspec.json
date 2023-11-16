@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\source\\repos\\quocanlikebanana\\Grocery-Store-Manager\\GroceryStoreManager\\GroceryStoreManager\\GroceryStoreManager.csproj": {}
+    "C:\\Users\\Admin\\Source\\Repos\\quocanlikebanana\\Grocery-Store-Manager\\GroceryStoreManager\\GroceryStoreManager\\GroceryStoreManager.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\source\\repos\\quocanlikebanana\\Grocery-Store-Manager\\GroceryStoreManager\\GroceryStoreManager\\GroceryStoreManager.csproj": {
+    "C:\\Users\\Admin\\Source\\Repos\\quocanlikebanana\\Grocery-Store-Manager\\GroceryStoreManager\\GroceryStoreManager\\GroceryStoreManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\source\\repos\\quocanlikebanana\\Grocery-Store-Manager\\GroceryStoreManager\\GroceryStoreManager\\GroceryStoreManager.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Source\\Repos\\quocanlikebanana\\Grocery-Store-Manager\\GroceryStoreManager\\GroceryStoreManager\\GroceryStoreManager.csproj",
         "projectName": "GroceryStoreManager",
-        "projectPath": "C:\\Users\\Admin\\source\\repos\\quocanlikebanana\\Grocery-Store-Manager\\GroceryStoreManager\\GroceryStoreManager\\GroceryStoreManager.csproj",
+        "projectPath": "C:\\Users\\Admin\\Source\\Repos\\quocanlikebanana\\Grocery-Store-Manager\\GroceryStoreManager\\GroceryStoreManager\\GroceryStoreManager.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Admin\\source\\repos\\quocanlikebanana\\Grocery-Store-Manager\\GroceryStoreManager\\GroceryStoreManager\\obj\\",
         "projectStyle": "PackageReference",
