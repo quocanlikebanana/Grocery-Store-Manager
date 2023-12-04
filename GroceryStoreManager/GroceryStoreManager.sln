@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroceryStore.Domain", "Groc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GroceryStore.Data.EntityFramework", "GroceryStore.Data.EntityFramework\GroceryStore.Data.EntityFramework.csproj", "{A8F6C588-A99D-40E2-8754-4BE8A3B3859E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_ConsoleApp", "Test_ConsoleApp\Test_ConsoleApp\Test_ConsoleApp.csproj", "{1F47099D-6D53-456D-92CA-B6F0DCBED1FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test_ConsoleApp", "Test_ConsoleApp\Test_ConsoleApp\Test_ConsoleApp.csproj", "{1F47099D-6D53-456D-92CA-B6F0DCBED1FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
