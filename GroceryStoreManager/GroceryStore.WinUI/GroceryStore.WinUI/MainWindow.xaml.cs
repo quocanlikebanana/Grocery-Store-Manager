@@ -1,3 +1,4 @@
+using GroceryStore.WinUI.ViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -28,9 +29,6 @@ namespace GroceryStore.WinUI
             this.InitializeComponent();
         }
 
-        private void myButton_Click(object sender, RoutedEventArgs e)
-        {
-            myButton.Content = "Clicked";
-        }
+        public DemoVM demoVM { get; } = new DemoVM();
     }
 }
