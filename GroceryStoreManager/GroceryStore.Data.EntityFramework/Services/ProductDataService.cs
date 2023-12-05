@@ -6,24 +6,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GroceryStore.Data.EntityFramework.Services
 {
-    public class CouponDataService : IDataService<Coupon>
+    public class ProductDataService : IDataService<Product>
     {
-
         private string _connectionString = string.Empty;
 
-        public CouponDataService(string connectionString) {
+        public ProductDataService(string connectionString)
+        {
             this._connectionString = connectionString;
         }
-
-        public async Task<Coupon?> Create(Coupon entity)
+        public async Task<Product?> Create(Product entity)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                var result = await context.Set<Coupon>().AddAsync(entity);
+                var result = await context.Set<Product>().AddAsync(entity);
                 await context.SaveChangesAsync();
                 return result.Entity;
             }
@@ -33,60 +31,56 @@ namespace GroceryStore.Data.EntityFramework.Services
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                Coupon? removeEntity = context.Set<Coupon>().FirstOrDefault((e) => e.Id == id);
+                Product? removeEntity = context.Set<Product>().FirstOrDefault((e) => e.Id == id);
                 if (removeEntity != null)
                 {
-                    context.Set<Coupon>().Remove(removeEntity);
-                    await context.SaveChangesAsync();
-                    return true;
+                    context.Set<Product>().Remove(removeEntity);
                 }
-                else
-                {
-                    return false;
-                }
+                await context.SaveChangesAsync();
+                return true;
             }
         }
 
         public Task<bool> Delete(int id1, int id2)
         {
-            throw new NotImplementedException("!");
+            throw new NotImplementedException();
         }
 
-        public async Task<Coupon?> Get(int id)
+        public async Task<Product?> Get(int id)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                Coupon? result = await context.Set<Coupon>().FirstOrDefaultAsync(e => e.Id == id);
+                Product? result = await context.Set<Product>().Include(t => t.Type).FirstOrDefaultAsync(e => e.Id == id);
                 return result;
             }
         }
 
-        public  Task<Coupon?> Get(int id1, int id2)
+        public Task<Product?> Get(int id1, int id2)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Coupon>> GetAll()
+        public async Task<IEnumerable<Product>> GetAll()
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                IEnumerable<Coupon> entities = await context.Set<Coupon>().ToListAsync();
+                IEnumerable<Product> entities = await context.Set<Product>().ToListAsync();
                 return entities;
             }
         }
 
-        public async Task<Coupon?> Update(int id, Coupon entity)
+        public async Task<Product?> Update(int id, Product entity)
         {
             entity.Id = id;
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                context.Set<Coupon>().Update(entity);
+                context.Set<Product>().Update(entity);
                 await context.SaveChangesAsync();
                 return entity;
             }
         }
 
-        public Task<Coupon?> Update(int id1, int id2, Coupon entity)
+        public Task<Product?> Update(int id1, int id2, Product entity)
         {
             throw new NotImplementedException();
         }
