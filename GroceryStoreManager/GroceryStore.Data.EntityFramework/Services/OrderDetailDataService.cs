@@ -2,6 +2,7 @@
 using GroceryStore.Domain.Service;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,12 +51,18 @@ namespace GroceryStore.Data.EntityFramework.Services
 
         public async Task<OrderDetail?> Get(int orderID, int proID)
         {
-            throw new NotImplementedException();
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) { 
+                OrderDetail? orderDetail = await context.Set<OrderDetail>().FirstOrDefaultAsync(od => od.order.Id == orderID && od.product.Id== proID);
+                return orderDetail;
+            }
         }
 
-        public Task<IEnumerable<OrderDetail>> GetAll()
+        public async Task<IEnumerable<OrderDetail>> GetAll()
         {
-            throw new NotImplementedException();
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
+                IEnumerable<OrderDetail> orderDetails = await context.Set<OrderDetail>().ToListAsync();
+                return orderDetails;
+            }
         }
 
         public Task<OrderDetail?> Update(int id, OrderDetail entity)
@@ -63,9 +70,16 @@ namespace GroceryStore.Data.EntityFramework.Services
             throw new NotImplementedException();
         }
 
-        public Task<OrderDetail?> Update(int id1, int id2, OrderDetail entity)
+        public async Task<OrderDetail?> Update(int orderID, int proID, OrderDetail entity)
         {
-            throw new NotImplementedException();
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                entity.order.Id = orderID; 
+                entity.product.Id = proID;
+                context.Set<OrderDetail>().Update(entity);
+                await context.SaveChangesAsync();
+                return entity;
+            }   
         }
     }
 }

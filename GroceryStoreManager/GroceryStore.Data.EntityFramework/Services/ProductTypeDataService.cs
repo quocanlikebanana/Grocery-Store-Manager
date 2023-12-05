@@ -6,24 +6,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GroceryStore.Data.EntityFramework.Services
 {
-    public class CouponDataService : IDataService<Coupon>
+    public class ProductTypeDataService : IDataService<ProductType>
     {
-
         private string _connectionString = string.Empty;
 
-        public CouponDataService(string connectionString) {
+        public ProductTypeDataService(string connectionString)
+        {
             this._connectionString = connectionString;
         }
 
-        public async Task<Coupon?> Create(Coupon entity)
+        public async Task<ProductType?> Create(ProductType entity)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                var result = await context.Set<Coupon>().AddAsync(entity);
+                var result = await context.Set<ProductType>().AddAsync(entity);
                 await context.SaveChangesAsync();
                 return result.Entity;
             }
@@ -33,10 +32,10 @@ namespace GroceryStore.Data.EntityFramework.Services
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                Coupon? removeEntity = context.Set<Coupon>().FirstOrDefault((e) => e.Id == id);
+                ProductType? removeEntity = context.Set<ProductType>().FirstOrDefault((e) => e.Id == id);
                 if (removeEntity != null)
                 {
-                    context.Set<Coupon>().Remove(removeEntity);
+                    context.Set<ProductType>().Remove(removeEntity);
                     await context.SaveChangesAsync();
                     return true;
                 }
@@ -52,43 +51,43 @@ namespace GroceryStore.Data.EntityFramework.Services
             throw new NotImplementedException("!");
         }
 
-        public async Task<Coupon?> Get(int id)
+        public async Task<ProductType?> Get(int id)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                Coupon? result = await context.Set<Coupon>().FirstOrDefaultAsync(e => e.Id == id);
+                ProductType? result = await context.Set<ProductType>().FirstOrDefaultAsync(e => e.Id == id);
                 return result;
             }
         }
 
-        public  Task<Coupon?> Get(int id1, int id2)
+        public Task<ProductType?> Get(int id1, int id2)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("!");
         }
 
-        public async Task<IEnumerable<Coupon>> GetAll()
+        public async Task<IEnumerable<ProductType>> GetAll()
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                IEnumerable<Coupon> entities = await context.Set<Coupon>().ToListAsync();
+                IEnumerable<ProductType> entities = await context.Set<ProductType>().ToListAsync();
                 return entities;
             }
         }
 
-        public async Task<Coupon?> Update(int id, Coupon entity)
+        public async Task<ProductType?> Update(int id, ProductType entity)
         {
             entity.Id = id;
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                context.Set<Coupon>().Update(entity);
+                context.Set<ProductType>().Update(entity);
                 await context.SaveChangesAsync();
                 return entity;
             }
         }
 
-        public Task<Coupon?> Update(int id1, int id2, Coupon entity)
+        public Task<ProductType?> Update(int id1, int id2, ProductType entity)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("!");
         }
     }
 }
