@@ -33,24 +33,19 @@ namespace Test_ConsoleApp
         }
         static async Task Main(string[] args)
         {
-            var builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "localhost\\SQLEXPRESS";
-            builder.InitialCatalog = "testDataWindow";
-            builder.IntegratedSecurity = true;
-            builder.TrustServerCertificate = true;
-            string connectionString = builder.ConnectionString;
+            try {
+                var builder = new SqlConnectionStringBuilder();
+                builder.DataSource = "localhost\\SQLEXPRESS";
+                builder.InitialCatalog = "testDataWindow123";
+                builder.IntegratedSecurity = true;
+                builder.TrustServerCertificate = true;
+                string connectionString = builder.ConnectionString;
 
-            IDataService<Customer> cusDBC = new CustomerDataService(connectionString);
-            Customer customer = new Customer()
+                await testCustomer(connectionString);
+            } catch (Exception ex)
             {
-                Name = "Test",
-                Coupons = new List<Coupon> {
-                        new Coupon(){ perCoupon = 69, ThresHold = 21}, 
-                },
-                MoneyForPromotion = 1
-            };
-
-            await cusDBC.Create(customer);
+                Console.WriteLine($"{ex.Message}");
+            }
 
 
         }
