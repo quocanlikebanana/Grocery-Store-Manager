@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "GroceryStore.MainApp (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "GroceryStore.MainApp (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}

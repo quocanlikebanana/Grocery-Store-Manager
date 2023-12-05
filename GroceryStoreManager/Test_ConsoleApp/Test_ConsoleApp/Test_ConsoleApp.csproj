@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\GroceryStore.Data.EntityFramework\GroceryStore.Data.EntityFramework.csproj" />
     <ProjectReference Include="..\..\GroceryStore.Domain\GroceryStore.Domain.csproj" />
+    <ProjectReference Include="..\..\GroceryStore.WinUI\GroceryStore.WinUI (Package)\GroceryStore.WinUI (Package).wapproj" />
   </ItemGroup>
 
 </Project>
