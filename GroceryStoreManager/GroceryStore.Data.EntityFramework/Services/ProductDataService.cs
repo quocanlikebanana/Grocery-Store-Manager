@@ -35,9 +35,13 @@ namespace GroceryStore.Data.EntityFramework.Services
                 if (removeEntity != null)
                 {
                     context.Set<Product>().Remove(removeEntity);
+                    await context.SaveChangesAsync();
+                    return true;
                 }
-                await context.SaveChangesAsync();
-                return true;
+                else
+                {
+                    return false;
+                }
             }
         }
 
