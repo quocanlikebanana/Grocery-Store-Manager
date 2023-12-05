@@ -1,4 +1,9 @@
-﻿using GroceryStore.MainApp.Activation;
+﻿using System.Diagnostics;
+using System.ServiceModel.Channels;
+using DynamicPluginSupport;
+using GroceryStore.Domain.Model;
+using GroceryStore.Domain.Service;
+using GroceryStore.MainApp.Activation;
 using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Core.Contracts.Services;
 using GroceryStore.MainApp.Core.Services;
@@ -7,10 +12,11 @@ using GroceryStore.MainApp.Models;
 using GroceryStore.MainApp.Services;
 using GroceryStore.MainApp.ViewModels;
 using GroceryStore.MainApp.Views;
-
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
+using Windows.UI.Popups;
 
 namespace GroceryStore.MainApp;
 
@@ -30,17 +36,21 @@ public partial class App : Application
     public static T GetService<T>()
         where T : class
     {
-        if ((App.Current as App)!.Host.Services.GetService(typeof(T)) is not T service)
+        var host = (Current as App)!.Host;
+        var obj = host.Services.GetService(typeof(T));
+        if (obj is not T serviecRes)
         {
             throw new ArgumentException($"{typeof(T)} needs to be registered in ConfigureServices within App.xaml.cs.");
         }
-
-        return service;
+        return serviecRes;
     }
 
     public static WindowEx MainWindow { get; } = new MainWindow();
 
-    public static UIElement? AppTitlebar { get; set; }
+    public static UIElement? AppTitlebar
+    {
+        get; set;
+    }
 
     public App()
     {
@@ -65,8 +75,43 @@ public partial class App : Application
             services.AddSingleton<IPageService, PageService>();
             services.AddSingleton<INavigationService, NavigationService>();
 
-            // Core Services
-            services.AddSingleton<ISampleDataService, SampleDataService>();
+            // Domain Services
+            // TODO2: Connection string configuration
+            var builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "localhost\\SQLEXPRESS";
+            builder.InitialCatalog = "testDataWindow";
+            builder.IntegratedSecurity = true;
+            builder.TrustServerCertificate = true;
+            var connectionString = builder.ConnectionString;
+
+            // Temp - Log it later
+            //try
+            //{
+            var order_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Order>>().ToList();
+            var coupon_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Coupon>>().ToList();
+            var customer_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Customer>>().ToList();
+            var orderDetail_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<OrderDetail>>().ToList();
+            var product_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Product>>().ToList();
+            var productType_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<ProductType>>().ToList();
+
+            coupon_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Coupon>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
+
+            customer_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Customer>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
+
+            order_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Order>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
+
+            orderDetail_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<OrderDetail>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
+
+            product_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Product>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
+
+            productType_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<ProductType>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
+            //}
+            //catch (Exception)
+            //{
+            //    //DisplayErrorDialog(ex);
+            //    throw;
+            //}
+
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
@@ -89,20 +134,37 @@ public partial class App : Application
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
         }).
         Build();
-
         UnhandledException += App_UnhandledException;
+        AppDomain.CurrentDomain.UnhandledException += System_UnhandledException;
     }
 
+    // Exceptions for App (Microsoft.UI.Xaml)
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
     {
-        // TODO: Log and handle exceptions as appropriate.
+        // TODO2: Log and handle exceptions as appropriate.
         // https://docs.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.application.unhandledexception.
+        DisplayErrorDialog(e.Exception);
+    }
+
+    // System's exceptions
+    private void System_UnhandledException(object sender, System.UnhandledExceptionEventArgs e)
+    {
+        DisplayErrorDialog(e.ExceptionObject);
+    }
+
+    // TODO2: Would rather log the error than displaying it (the App is not yet shown)
+    private static void DisplayErrorDialog(object exObj)
+    {
+        var errorMessage = string.Format((exObj as Exception)?.Message ?? "");
+        MessageDialog error = new(errorMessage, "An unhandled exception occurred");
+        error.Options = MessageDialogOptions.None;
+        _ = error.ShowAsync();
     }
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
         base.OnLaunched(args);
 
-        await App.GetService<IActivationService>().ActivateAsync(args);
+        await GetService<IActivationService>().ActivateAsync(args);
     }
 }

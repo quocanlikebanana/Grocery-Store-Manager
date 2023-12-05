@@ -41,11 +41,6 @@ namespace GroceryStore.Data.EntityFramework.Services
                 return true;
             }
         }
-
-        public Task<bool> Delete(int id1, int id2)
-        {
-            throw new NotImplementedException("!");
-        }
                 
         public async Task<Customer?> Get(int id)
         {
@@ -54,11 +49,6 @@ namespace GroceryStore.Data.EntityFramework.Services
                 Customer? result = await context.Set<Customer>().Include(c => c.Coupons).FirstOrDefaultAsync(e => e.Id == id);
                 return result;
             }
-        }
-
-        public Task<Customer?> Get(int id1, int id2)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Customer>> GetAll()
@@ -79,11 +69,6 @@ namespace GroceryStore.Data.EntityFramework.Services
                 await context.SaveChangesAsync();
                 return entity;
             }
-        }
-
-        public  Task<Customer?> Update(int id1, int id2, Customer entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }

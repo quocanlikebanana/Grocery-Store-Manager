@@ -1,7 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 
 using CommunityToolkit.Mvvm.ComponentModel;
-
+using GroceryStore.Domain.Model;
+using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Contracts.ViewModels;
 using GroceryStore.MainApp.Core.Contracts.Services;
 using GroceryStore.MainApp.Core.Models;
@@ -10,13 +11,13 @@ namespace GroceryStore.MainApp.ViewModels;
 
 public partial class OrderViewModel : ObservableRecipient, INavigationAware
 {
-    private readonly ISampleDataService _sampleDataService;
+    private readonly IDataService<Order> _dataService;
 
-    public ObservableCollection<SampleOrder> Source { get; } = new ObservableCollection<SampleOrder>();
+    public ObservableCollection<Order> Source { get; } = new ();
 
-    public OrderViewModel(ISampleDataService sampleDataService)
+    public OrderViewModel(IDataService<Order> dataService)
     {
-        _sampleDataService = sampleDataService;
+        _dataService = dataService;
     }
 
     public async void OnNavigatedTo(object parameter)
@@ -24,7 +25,7 @@ public partial class OrderViewModel : ObservableRecipient, INavigationAware
         Source.Clear();
 
         // TODO: Replace with real data.
-        var data = await _sampleDataService.GetGridDataAsync();
+        var data = await _dataService.GetAll();
 
         foreach (var item in data)
         {

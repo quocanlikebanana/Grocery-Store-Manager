@@ -1,4 +1,6 @@
-﻿using GroceryStore.MainApp.Core.Contracts.Services;
+﻿using System.ComponentModel.Design;
+using System.Reflection.Emit;
+using GroceryStore.MainApp.Core.Contracts.Services;
 using GroceryStore.MainApp.Core.Models;
 
 namespace GroceryStore.MainApp.Core.Services;
@@ -496,10 +498,15 @@ public class SampleDataService : ISampleDataService
         };
     }
 
+    // Those 2 implements below are the same
+
     public async Task<IEnumerable<SampleOrder>> GetGridDataAsync()
     {
         _allOrders ??= new List<SampleOrder>(AllOrders());
 
+        // https://stackoverflow.com/questions/44096253/await-task-completedtask-for-what
+        // Because of the design is for asynchronous data get
+        // Whilst the scaffolded sample code is synchronous, the Template Studio is designed specifically around an async data access layer, you are expected to implement your own data access by modifying the body of the generated methods.
         await Task.CompletedTask;
         return _allOrders;
     }

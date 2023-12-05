@@ -83,7 +83,7 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <controls:ListDetailsView
+        <!--<controls:ListDetailsView
             x:Uid="Product"
             x:Name="ListDetailsViewControl"
             BackButtonBehavior="Manual"
@@ -95,6 +95,6 @@
             ListHeaderTemplate="{StaticResource MinimalListHeaderTemplate}"
             NoSelectionContentTemplate="{StaticResource NoSelectionContentTemplate}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=TwoWay}"
-            ViewStateChanged="OnViewStateChanged"/>
+            ViewStateChanged="OnViewStateChanged"/>-->
     </Grid>
 </Page>

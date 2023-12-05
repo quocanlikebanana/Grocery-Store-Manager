@@ -1,7 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 
 using CommunityToolkit.Mvvm.ComponentModel;
-
+using GroceryStore.Domain.Model;
+using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Contracts.ViewModels;
 using GroceryStore.MainApp.Core.Contracts.Services;
 using GroceryStore.MainApp.Core.Models;
@@ -10,28 +11,25 @@ namespace GroceryStore.MainApp.ViewModels;
 
 public partial class ProductViewModel : ObservableRecipient, INavigationAware
 {
-    private readonly ISampleDataService _sampleDataService;
+    private readonly IDataService<Product> _dataService;
 
     [ObservableProperty]
-    private SampleOrder? selected;
+    private Product? selected;
 
-    public ObservableCollection<SampleOrder> SampleItems { get; private set; } = new ObservableCollection<SampleOrder>();
+    public ObservableCollection<Product> Source { get; private set; } = new ();
 
-    public ProductViewModel(ISampleDataService sampleDataService)
+    public ProductViewModel(IDataService<Product> dataService)
     {
-        _sampleDataService = sampleDataService;
+        _dataService = dataService;
     }
 
     public async void OnNavigatedTo(object parameter)
     {
-        SampleItems.Clear();
-
-        // TODO: Replace with real data.
-        var data = await _sampleDataService.GetListDetailsDataAsync();
-
+        Source.Clear();
+        var data = await _dataService.GetAll();
         foreach (var item in data)
         {
-            SampleItems.Add(item);
+            Source.Add(item);
         }
     }
 
@@ -41,6 +39,6 @@ public partial class ProductViewModel : ObservableRecipient, INavigationAware
 
     public void EnsureItemSelected()
     {
-        Selected ??= SampleItems.First();
+        Selected ??= Source.First();
     }
 }
