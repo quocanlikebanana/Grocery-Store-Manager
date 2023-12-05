@@ -34,7 +34,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<bool> Delete(int  orderID, int proID)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
-                OrderDetail? removeEntity = await context.Set<OrderDetail>().FirstOrDefaultAsync(od => od.order.Id == orderID && od.product.Id == proID);
+                OrderDetail? removeEntity = await context.Set<OrderDetail>().FirstOrDefaultAsync(od => od.order != null && od.order.Id == orderID && od.product != null && od.product.Id == proID);
                 if(removeEntity != null)
                 {
                     context.Set<OrderDetail>().Remove(removeEntity);
@@ -52,7 +52,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<OrderDetail?> Get(int orderID, int proID)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) { 
-                OrderDetail? orderDetail = await context.Set<OrderDetail>().FirstOrDefaultAsync(od => od.order.Id == orderID && od.product.Id== proID);
+                OrderDetail? orderDetail = await context.Set<OrderDetail>().FirstOrDefaultAsync(od => od.order != null && od.order.Id == orderID && od.product != null && od.product.Id == proID);
                 return orderDetail;
             }
         }
@@ -72,14 +72,19 @@ namespace GroceryStore.Data.EntityFramework.Services
 
         public async Task<OrderDetail?> Update(int orderID, int proID, OrderDetail entity)
         {
-            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
-            {
-                entity.order.Id = orderID; 
+            if (entity.order != null && entity.product != null) { 
+                entity.order.Id = orderID;
                 entity.product.Id = proID;
-                context.Set<OrderDetail>().Update(entity);
-                await context.SaveChangesAsync();
-                return entity;
-            }   
+                using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+                {
+                    context.Set<OrderDetail>().Update(entity);
+                    await context.SaveChangesAsync();
+                    return entity;
+                }
+            } else
+            {
+                return null;
+            }
         }
     }
 }
