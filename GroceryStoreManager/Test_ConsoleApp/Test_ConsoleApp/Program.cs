@@ -13,8 +13,13 @@ namespace Test_ConsoleApp
         public static async Task testOrderDetail(string connectionString)
         {
             IDataService<OrderDetail> orderdbs = new OrderDetailDataService(connectionString);
-            OrderDetail? orderDetail = await orderdbs.Get(1,1);
-            Console.WriteLine(orderDetail.Product.Name);
+            IEnumerable<OrderDetail>? orders = await orderdbs.GetAll(1);
+            foreach (var order in orders)
+            {
+                Console.WriteLine(order.Product.Name);
+            }
+            //OrderDetail? orderDetail = await orderdbs.Get(1,1);
+            //Console.WriteLine(orderDetail.Product.Name);
         }
 
         public static async Task testOrder(string connectionString) { 

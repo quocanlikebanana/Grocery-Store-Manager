@@ -60,7 +60,16 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<IEnumerable<OrderDetail>> GetAll()
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
-                IEnumerable<OrderDetail> orderDetails = await context.Set<OrderDetail>().ToListAsync();
+                IEnumerable<OrderDetail> orderDetails = await context.Set<OrderDetail>().Include(o => o.Order).Include(o => o.Product).ToListAsync();
+                return orderDetails;
+            }
+        }
+
+        public async Task<IEnumerable<OrderDetail>> GetAll(int id)
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                IEnumerable<OrderDetail> orderDetails = await context.Set<OrderDetail>().Include(o => o.Order).Include(o => o.Product).Where(o => o.Order.Id == id).ToListAsync();
                 return orderDetails;
             }
         }
