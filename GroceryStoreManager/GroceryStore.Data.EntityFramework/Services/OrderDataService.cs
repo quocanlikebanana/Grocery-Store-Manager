@@ -60,7 +60,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<IEnumerable<Order>> GetAll()
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
-                IEnumerable<Order> entities = await context.Set<Order>().ToListAsync();
+                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).ToListAsync();
                 return entities;
             }
         }
