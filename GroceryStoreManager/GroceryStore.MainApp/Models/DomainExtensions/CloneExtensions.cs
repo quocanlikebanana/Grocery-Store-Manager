@@ -18,14 +18,14 @@ public static class OrderDetailCloneExtensions
     {
         var orderDetail = new OrderDetail()
         {
-            order = new Order()
+            Order = new Order()
             {
                 Id = 0,
-                Customer = source.order?.Customer ?? null,
-                OrderDate = source.order?.OrderDate ?? new DateTime(),
-                TotalPrice = source.order?.TotalPrice ?? 0,
+                Customer = source.Order?.Customer ?? null,
+                OrderDate = source.Order?.OrderDate ?? new DateTime(),
+                TotalPrice = source.Order?.TotalPrice ?? 0,
             },
-            product = source.product,
+            Product = source.Product,
             Quantity = source.Quantity,
         };
         return orderDetail;

@@ -75,6 +75,11 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
+        public Task<IEnumerable<Coupon>> GetAll(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Coupon?> Update(int id, Coupon entity)
         {
             entity.Id = id;

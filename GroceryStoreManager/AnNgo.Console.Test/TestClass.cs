@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using GroceryStore.Data.EntityFramework.Services;
 using Microsoft.Data.SqlClient;
 
-namespace AnNgo.Console.Test;
+namespace AnNgo.ConsoleTest;
 
 public class TestClass
 {

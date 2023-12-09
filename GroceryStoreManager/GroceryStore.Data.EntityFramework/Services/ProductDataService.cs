@@ -73,6 +73,11 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
+        public Task<IEnumerable<Product>> GetAll(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Product?> Update(int id, Product entity)
         {
             entity.Id = id;

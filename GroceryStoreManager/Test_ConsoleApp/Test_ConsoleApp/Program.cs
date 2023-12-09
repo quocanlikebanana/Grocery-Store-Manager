@@ -5,29 +5,25 @@ z
         public static async Task testCustomer(string connectionString)
         {
             IDataService<Customer> cusDBC = new CustomerDataService(connectionString);
-            Customer? customer = await cusDBC.Get(1);
-            if(customer != null)
+            IEnumerable<Customer>? customers = await cusDBC.GetAll() ;
+
+            foreach (var cus in customers)
             {
-                Console.WriteLine(customer.Id);
-                Console.WriteLine(customer.Name);
-                Console.WriteLine(customer.MoneyForPromotion);
-                foreach (var coupon in customer.Coupons)
-                {
-                    Console.WriteLine(coupon.perCoupon);
-                }
+                Console.WriteLine(cus.Name);
             }
+    
         }
         static async Task Main(string[] args)
         {
             try {
                 var builder = new SqlConnectionStringBuilder();
                 builder.DataSource = "localhost\\SQLEXPRESS";
-                builder.InitialCatalog = "testDataWindow123";
+                builder.InitialCatalog = "testDataWindow";
                 builder.IntegratedSecurity = true;
                 builder.TrustServerCertificate = true;
                 string connectionString = builder.ConnectionString;
 
-                await testCustomer(connectionString);
+                await testOrderDetail(connectionString);
             } catch (Exception ex)
             {
                 Console.WriteLine($"{ex.Message}");

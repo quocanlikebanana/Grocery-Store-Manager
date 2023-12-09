@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using GroceryStore.Domain.Model;
 using GroceryStore.MainApp.Models.DomainExtensions;
 
-namespace GroceryStore.MainApp.Views;
+namespace GroceryStore.MainApp.Views.DisplayObjects;
 
 // Read only classes
 
@@ -18,9 +18,9 @@ public class OrderDisplay
     {
         _orderDetail = orderDetail;
     }
-    public DateTime? OrderDate => _orderDetail.order?.OrderDate ?? null;
-    public string? ProductName => _orderDetail.product?.Name ?? null;
+    public DateTime? OrderDate => _orderDetail.Order?.OrderDate ?? null;
+    public string? ProductName => _orderDetail.Product?.Name ?? null;
     public int? Quantity => _orderDetail.Quantity;
-    public string? CustomerName => _orderDetail.order?.Customer?.Name ?? null;
-    public double? TotalPrice => _orderDetail.order?.TotalPrice ?? null;
+    public string? CustomerName => _orderDetail.Order?.Customer?.Name ?? null;
+    public double? TotalPrice => _orderDetail.Order?.TotalPrice ?? null;
 }

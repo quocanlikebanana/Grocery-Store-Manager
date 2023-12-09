@@ -29,11 +29,11 @@ public partial class OrderFormVM : FormVMBase
 
         if (orderDetail != null)
         {
-            _hasCustomer = orderDetail.order?.Customer == null ? false : true;
-            _orderDate = orderDetail.order?.OrderDate ?? DateTime.Now;
+            _hasCustomer = orderDetail.Order?.Customer == null ? false : true;
+            _orderDate = orderDetail.Order?.OrderDate ?? DateTime.Now;
             _quantity = orderDetail.Quantity;
-            _selectedCustomer = orderDetail.order?.Customer;
-            _selectedProduct = orderDetail.product;
+            _selectedCustomer = orderDetail.Order?.Customer;
+            _selectedProduct = orderDetail.Product;
             _couponUsed = 0;
         }
     }
@@ -93,8 +93,8 @@ public partial class OrderFormVM : FormVMBase
         return new OrderDetail()
         {
             Quantity = Quantity,
-            product = SelectedProduct,
-            order = new Order()
+            Product = SelectedProduct ?? new(),
+            Order = new Order()
             {
                 Id = 0,
                 Customer = SelectedCustomer,

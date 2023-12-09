@@ -1,5 +1,4 @@
-﻿using AnNgo.Console.Test;
-using GroceryStore.Data.EntityFramework.Services;
+﻿using GroceryStore.Data.EntityFramework.Services;
 using Microsoft.Data.SqlClient;
 
 namespace AnNgo.ConsoleTest;
@@ -21,8 +20,8 @@ internal class Program
 
     static async Task Main(string[] args)
     {
-        //await Test1();
-        //await Test2();
+        await Test1();
+        await Test2();
         TestClass test = new();
         test.Test();
     }

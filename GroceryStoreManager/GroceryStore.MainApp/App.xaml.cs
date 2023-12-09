@@ -127,6 +127,7 @@ public partial class App : Application
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
 
             // My services and ViewModel
+            // TODO: Check if these 2 are neccessary
             services.AddTransient<OrderForm>();
             services.AddTransient<OrderFormVM>();
 

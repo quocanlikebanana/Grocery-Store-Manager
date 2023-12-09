@@ -11,7 +11,7 @@ using GroceryStore.MainApp.Core.Contracts.Services;
 using GroceryStore.MainApp.Core.Models;
 using GroceryStore.MainApp.Services;
 using GroceryStore.MainApp.ViewModels.SubWindowVM;
-using GroceryStore.MainApp.Views;
+using GroceryStore.MainApp.Views.DisplayObjects;
 using GroceryStore.MainApp.Views.SubWindowView;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;

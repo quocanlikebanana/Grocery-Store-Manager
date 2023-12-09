@@ -41,7 +41,9 @@ namespace GroceryStore.Data.EntityFramework.Services
                 return true;
             }
         }
-                
+
+        public Task<bool> Delete(int id1, int id2) => throw new NotImplementedException();
+
         public async Task<Customer?> Get(int id)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
@@ -51,6 +53,8 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
+        public Task<Customer?> Get(int id1, int id2) => throw new NotImplementedException();
+
         public async Task<IEnumerable<Customer>> GetAll()
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
@@ -58,6 +62,11 @@ namespace GroceryStore.Data.EntityFramework.Services
                 IEnumerable<Customer> entities = await context.Set<Customer>().ToListAsync();
                 return entities;
             }
+        }
+
+        public Task<IEnumerable<Customer>> GetAll(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Customer?> Update(int id, Customer entity)
@@ -70,5 +79,7 @@ namespace GroceryStore.Data.EntityFramework.Services
                 return entity;
             }
         }
+
+        public Task<Customer?> Update(int id1, int id2, Customer entity) => throw new NotImplementedException();
     }
 }
