@@ -5,15 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroceryStore.Domain.Model
-{
-    public class OrderDetail
-    {
-        [Key]
-        public Order? order;
-        [Key]
-        public Product? product;
+namespace GroceryStore.Domain.Model;
 
-        public int Quantity;
-    }
+public class OrderDetail
+{
+    [Key]
+    public Order? order;
+    [Key]
+    public Product? product;
+
+    public int Quantity;
 }

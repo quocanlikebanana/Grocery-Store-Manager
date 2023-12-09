@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page x:Class="GroceryStore.MainApp.Views.SubWindowView.OrderForm"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:GroceryStore.MainApp.Views.SubWindowView"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      xmlns:dxe="using:DevExpress.WinUI.Editors"
+      x:DefaultBindMode="OneWay">
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  HorizontalScrollMode="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Spacing="10"
+                            Orientation="Horizontal">
+                    <ComboBox Header="Select a Customer: "
+                              ItemsSource="{x:Bind ViewModel.AvailbleCustomer}"
+                              SelectedItem="{x:Bind ViewModel.SelectedCustomer}"
+                              IsEnabled="{x:Bind ViewModel.HasCustomer}" />
+                    <CheckBox x:Uid="HasCustomer_CheckBox"
+                              IsChecked="{x:Bind ViewModel.HasCustomer}" />
+                </StackPanel>
+                <ComboBox Grid.Row="1"
+                          Header="Select a Product: "
+                          ItemsSource="{x:Bind ViewModel.AvailbleProduct}"
+                          SelectedItem="{x:Bind ViewModel.SelectedProduct}" />
+                <dxe:DateEdit Grid.Row="2"
+                              Header="Order date:"
+                              NullValue="Enter a date"
+                              EditValue="{x:Bind ViewModel.OrderDate}"
+                              MaxValue="{x:Bind DateTimeNow}" />
+                <dxe:SpinEdit Grid.Row="3"
+                              Header="Quantity:"
+                              EditValue="{x:Bind ViewModel.Quantity}"
+                              MinValue="0">
+                    <dxe:SpinEdit.TextInputSettings>
+                        <dxe:TextInputMaskSettings MaskType="Numeric"
+                                                   Mask="n0" />
+                    </dxe:SpinEdit.TextInputSettings>
+                </dxe:SpinEdit>
+                <dxe:SpinEdit Grid.Row="4"
+                              IsEnabled="{x:Bind ViewModel.HasCustomer}"
+                              Header="Coupon used:"
+                              EditValue="{x:Bind ViewModel.CouponUsed}"
+                              MinValue="0"
+                              MaxValue="{x:Bind ViewModel.SelectedCustomer.Coupons.Count, Mode=OneWay}">
+                    <dxe:SpinEdit.TextInputSettings>
+                        <dxe:TextInputMaskSettings MaskType="Numeric"
+                                                   Mask="n0" />
+                    </dxe:SpinEdit.TextInputSettings>
+                </dxe:SpinEdit>
+                <dxe:TextEdit Grid.Row="5"
+                              Header="Total Price"
+                              EditValue="125000"
+                              IsReadOnly="True">
+                    <dxe:TextEdit.TextInputSettings>
+                        <dxe:TextInputMaskSettings Mask="c0"
+                                                   MaskType="Numeric" />
+                    </dxe:TextEdit.TextInputSettings>
+                </dxe:TextEdit>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</Page>

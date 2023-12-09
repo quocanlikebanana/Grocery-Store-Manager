@@ -5,7 +5,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
       xmlns:viewmodels="using:GroceryStore.MainApp.ViewModels"
-      d:DataContext="{d:DesignInstance Type=viewmodels:CategoryViewModel}"
       mc:Ignorable="d"
       xmlns:dxg="using:DevExpress.WinUI.Grid">
 

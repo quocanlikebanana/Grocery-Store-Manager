@@ -5,10 +5,166 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
       mc:Ignorable="d"
-      xmlns:dxg="using:DevExpress.WinUI.Grid">
+      xmlns:dxg="using:DevExpress.WinUI.Grid"
+      xmlns:dxr="using:DevExpress.WinUI.Ribbon"
+      xmlns:dx="using:DevExpress.WinUI.Core"
+      xmlns:dxe="using:DevExpress.WinUI.Editors">
 
     <Grid x:Name="ContentArea">
-        <dxg:GridControl ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}">
-        </dxg:GridControl>
+
+        <dxr:RibbonControl Padding="10,0,10,10">
+            <dxr:RibbonControl.Tabs>
+                <!--Modify-->
+                <dxr:RibbonTab Caption="Modify">
+                    <!--Record-->
+                    <dxr:RibbonGroup Caption="Modify">
+                        <!--Add-->
+                        <dxr:RibbonButton Content="Add"
+                                          DisplayMode="Large"
+                                          Command="{x:Bind ViewModel.AddCommand}"
+                                          ToolTipDescription="Add order">
+                            <dxr:RibbonButton.LargeIcon>
+                                <dx:DXSymbolIconSource Symbol="Add" />
+                            </dxr:RibbonButton.LargeIcon>
+                        </dxr:RibbonButton>
+                        <!--Edit-->
+                        <dxr:RibbonButton Content="Edit"
+                                          DisplayMode="Large"
+                                          Command="{x:Bind ViewModel.EditCommand}"
+                                          ToolTipDescription="Edit order">
+                            <dxr:RibbonButton.SmallIcon>
+                                <dx:DXSymbolIconSource Symbol="Edit" />
+                            </dxr:RibbonButton.SmallIcon>
+                        </dxr:RibbonButton>
+                        <!--Delete-->
+                        <dxr:RibbonButton Content="Delete"
+                                          DisplayMode="Large"
+                                          Command="{x:Bind ViewModel.DeleteCommand}"
+                                          ToolTipDescription="Delete order">
+                            <dxr:RibbonButton.SmallIcon>
+                                <dx:DXSymbolIconSource Symbol="Delete" />
+                            </dxr:RibbonButton.SmallIcon>
+                        </dxr:RibbonButton>
+                    </dxr:RibbonGroup>
+                    <!--Options-->
+                    <dxr:RibbonGroup Caption="Options">
+                        <dxr:RibbonCustomItem DisplayMode="Large">
+                            <Grid Margin="10 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0"
+                                           Text="New row position:" />
+                                <RadioButton Grid.Row="1"
+                                             x:Name="top"
+                                             Content="Top"
+                                             GroupName="NewItemRowPositionGroup"
+                                             IsChecked="True" />
+                                <RadioButton Grid.Row="2"
+                                             x:Name="bottom"
+                                             Content="Bottom"
+                                             GroupName="NewItemRowPositionGroup" />
+                            </Grid>
+                        </dxr:RibbonCustomItem>
+                        <dxr:RibbonCheckBox Text="Allow edit"
+                                            ToolTipDescription="Show or hide ruler.">
+                        </dxr:RibbonCheckBox>
+                        <dxr:RibbonCheckBox Text="Allow delete"
+                                            ToolTipDescription="Show or hide grid lines.">
+                        </dxr:RibbonCheckBox>
+                        <!--<dxr:RibbonCheckBox Text="Status bar"
+                                             ToolTipDescription="Show or hide status bar.">
+                             <dx:Interaction.Behaviors>
+                                 <dx:EventToCommand EventName="Checked"
+                                                    Command="{x:Bind ViewModel.CheckedCommand}"
+                                                    CommandParameter="Status bar" />
+                                 <dx:EventToCommand EventName="Unchecked"
+                                                    Command="{x:Bind ViewModel.UncheckedCommand}"
+                                                    CommandParameter="Status bar" />
+                             </dx:Interaction.Behaviors>
+                         </dxr:RibbonCheckBox>-->
+                    </dxr:RibbonGroup>
+                    <!--Detail-->
+                    <dxr:RibbonGroup Caption="Detail">
+                        <!--Detail-->
+                        <dxr:RibbonButton Content="Detail order"
+                                          DisplayMode="Large"
+                                          ToolTipDescription="View order detail">
+                            <dxr:RibbonButton.LargeIcon>
+                                <dx:DXSymbolIconSource Symbol="Zoom" />
+                            </dxr:RibbonButton.LargeIcon>
+                        </dxr:RibbonButton>
+                        <!--Currently selected-->
+                        <dxr:RibbonCustomItem DisplayMode="Large">
+                            <Grid Margin="10 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="1"
+                                            Orientation="Horizontal">
+                                    <TextBlock Text="Row: ">
+                                        <Run Text="temp" />
+                                    </TextBlock>
+                                </StackPanel>
+                                <StackPanel Grid.Row="2"
+                                            Orientation="Horizontal">
+                                    <TextBlock Text="Page: ">
+                                        <Run Text="temp" />
+                                    </TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </dxr:RibbonCustomItem>
+                    </dxr:RibbonGroup>
+                </dxr:RibbonTab>
+
+                <!--View-->
+                <dxr:RibbonTab Caption="View">
+                    <!--List view-->
+                    <dxr:RibbonGroup Caption="List view">
+                        <dxr:RibbonCustomItem DisplayMode="Large">
+                            <Grid Margin="10">
+                                <!--Per page edit-->
+                                <dxe:SpinEdit Header="Record per page"
+                                              EditValue="10"
+                                              Increment="1"
+                                              MaxValue="15"
+                                              MinValue="5" />
+                            </Grid>
+                        </dxr:RibbonCustomItem>
+                    </dxr:RibbonGroup>
+                    <!--Filter ??-->
+                </dxr:RibbonTab>
+            </dxr:RibbonControl.Tabs>
+
+            <!--CONTENT-->
+            <!--CONTENT-->
+            <!--CONTENT-->
+
+            <dxg:GridControl ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}"
+                             AutoGenerateColumns="False">
+                <dxg:GridControl.Columns>
+                    <dxg:GridTextColumn Header="Order ID"
+                                        FieldName="Id"
+                                        AllowEditing="False" />
+                    <dxg:GridTextColumn Header="Customer"
+                                        FieldName="Customer.Name"
+                                        AllowEditing="False" />
+                    <dxg:GridDateColumn Header="Date"
+                                        FieldName="OrderDate"
+                                        AllowEditing="False" />
+                    <dxg:GridMaskColumn x:Name="CurrencyColumn"
+                                        Header="Total Price"
+                                        FieldName="TotalPrice"
+                                        AllowEditing="False"
+                                        MaskUseAsDisplayFormat="True"
+                                        Mask="c" />
+                </dxg:GridControl.Columns>
+            </dxg:GridControl>
+        </dxr:RibbonControl>
     </Grid>
 </Page>

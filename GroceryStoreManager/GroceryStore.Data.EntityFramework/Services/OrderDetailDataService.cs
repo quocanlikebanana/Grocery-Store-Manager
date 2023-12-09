@@ -14,12 +14,14 @@ namespace GroceryStore.Data.EntityFramework.Services
     {
         private string _connectionString = string.Empty;
 
-        public OrderDetailDataService(string connectionString) {
+        public OrderDetailDataService(string connectionString)
+        {
             this._connectionString = connectionString;
         }
         public async Task<OrderDetail?> Create(OrderDetail entity)
         {
-            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) { 
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
                 var result = await context.Set<OrderDetail>().AddAsync(entity);
                 await context.SaveChangesAsync();
                 return result.Entity;
@@ -31,27 +33,30 @@ namespace GroceryStore.Data.EntityFramework.Services
             throw new NotImplementedException();
         }
 
-        public async Task<bool> Delete(int  orderID, int proID)
+        public async Task<bool> Delete(int orderID, int proID)
         {
-            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
                 OrderDetail? removeEntity = await context.Set<OrderDetail>().FirstOrDefaultAsync(od => od.order != null && od.order.Id == orderID && od.product != null && od.product.Id == proID);
-                if(removeEntity != null)
+                if (removeEntity != null)
                 {
                     context.Set<OrderDetail>().Remove(removeEntity);
-                    await context.SaveChangesAsync();   
+                    await context.SaveChangesAsync();
                     return true;
-                } else { return false; }
+                }
+                else { return false; }
             }
         }
 
-        public Task<OrderDetail?> Get(int id) 
+        public Task<OrderDetail?> Get(int id)
         {
             throw new NotImplementedException();
         }
 
         public async Task<OrderDetail?> Get(int orderID, int proID)
         {
-            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) { 
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
                 OrderDetail? orderDetail = await context.Set<OrderDetail>().FirstOrDefaultAsync(od => od.order != null && od.order.Id == orderID && od.product != null && od.product.Id == proID);
                 return orderDetail;
             }
@@ -59,7 +64,8 @@ namespace GroceryStore.Data.EntityFramework.Services
 
         public async Task<IEnumerable<OrderDetail>> GetAll()
         {
-            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
                 IEnumerable<OrderDetail> orderDetails = await context.Set<OrderDetail>().ToListAsync();
                 return orderDetails;
             }
@@ -72,7 +78,8 @@ namespace GroceryStore.Data.EntityFramework.Services
 
         public async Task<OrderDetail?> Update(int orderID, int proID, OrderDetail entity)
         {
-            if (entity.order != null && entity.product != null) { 
+            if (entity.order != null && entity.product != null)
+            {
                 entity.order.Id = orderID;
                 entity.product.Id = proID;
                 using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
@@ -81,7 +88,8 @@ namespace GroceryStore.Data.EntityFramework.Services
                     await context.SaveChangesAsync();
                     return entity;
                 }
-            } else
+            }
+            else
             {
                 return null;
             }

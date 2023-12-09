@@ -11,7 +11,9 @@ using GroceryStore.MainApp.Helpers;
 using GroceryStore.MainApp.Models;
 using GroceryStore.MainApp.Services;
 using GroceryStore.MainApp.ViewModels;
+using GroceryStore.MainApp.ViewModels.SubWindowVM;
 using GroceryStore.MainApp.Views;
+using GroceryStore.MainApp.Views.SubWindowView;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -84,9 +86,6 @@ public partial class App : Application
             builder.TrustServerCertificate = true;
             var connectionString = builder.ConnectionString;
 
-            // Temp - Log it later
-            //try
-            //{
             var order_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Order>>().ToList();
             var coupon_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Coupon>>().ToList();
             var customer_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Customer>>().ToList();
@@ -105,12 +104,6 @@ public partial class App : Application
             product_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Product>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
 
             productType_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<ProductType>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
-            //}
-            //catch (Exception)
-            //{
-            //    //DisplayErrorDialog(ex);
-            //    throw;
-            //}
 
             services.AddSingleton<IFileService, FileService>();
 
@@ -132,6 +125,11 @@ public partial class App : Application
 
             // Configuration
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
+
+            // My services and ViewModel
+            services.AddTransient<OrderForm>();
+            services.AddTransient<OrderFormVM>();
+
         }).
         Build();
         UnhandledException += App_UnhandledException;

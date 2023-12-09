@@ -14,6 +14,10 @@
 	<UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Control\Subwindow.xaml" />
+    <None Remove="Views\SubWindowView\OrderForm.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Manifest Include="$(ApplicationManifest)" />
@@ -42,6 +46,12 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\SubWindowView\OrderForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Control\Subwindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <None Update="_dlls\GroceryStore.Data.EntityFramework.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -58,6 +68,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Factories\" />
     <Folder Include="_libs\" />
   </ItemGroup>
   

@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test_ConsoleApp", "Test_Con
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Temporary_Appendix", "Temporary_Appendix\Temporary_Appendix.csproj", "{832E733D-0D47-460A-9555-9A33B7751F48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnNgo.Console.Test", "AnNgo.Console.Test\AnNgo.Console.Test.csproj", "{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,6 +151,22 @@ Global
 		{832E733D-0D47-460A-9555-9A33B7751F48}.Release|x64.Build.0 = Release|Any CPU
 		{832E733D-0D47-460A-9555-9A33B7751F48}.Release|x86.ActiveCfg = Release|Any CPU
 		{832E733D-0D47-460A-9555-9A33B7751F48}.Release|x86.Build.0 = Release|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Debug|x64.Build.0 = Debug|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Debug|x86.Build.0 = Debug|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Release|ARM64.Build.0 = Release|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Release|x64.ActiveCfg = Release|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Release|x64.Build.0 = Release|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Release|x86.ActiveCfg = Release|Any CPU
+		{DAD58F21-BFDC-490B-A7D6-AA49FAA313FB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
