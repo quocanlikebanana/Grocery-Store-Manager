@@ -11,7 +11,9 @@ namespace GroceryStore.Domain.Model
     {
         [Key]
         public int Id { get; set; }
-        public Customer? Customer { get; set; }
+
+        public int CustomerID { get; set; }
+        public virtual Customer? Customer { get; set; }
 
         public DateTime OrderDate { get; set; }
         public double TotalPrice { get; set; }

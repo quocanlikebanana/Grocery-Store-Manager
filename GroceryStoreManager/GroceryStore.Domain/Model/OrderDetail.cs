@@ -10,6 +10,10 @@ namespace GroceryStore.Domain.Model
 {
     public class OrderDetail
     {
+        [Key]
+        public int OrderId { get; set; }
+        [Key]
+        public int ProductId { get; set; } 
         
         public virtual Order Order { get; set; }
 

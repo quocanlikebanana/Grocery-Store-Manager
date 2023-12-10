@@ -34,7 +34,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<bool> Delete(int  orderID, int proID)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
-                OrderDetail? removeEntity = await context.Set<OrderDetail>().Include(o => o.Order).Include(o => o.Product).FirstOrDefaultAsync(od => od.Order != null && od.Order.Id == orderID && od.Product != null && od.Product.Id == proID);
+                OrderDetail? removeEntity = await context.Set<OrderDetail>().Include(o => o.Order).Include(o => o.Product).ThenInclude(p => p.Type).FirstOrDefaultAsync(od => od.Order != null && od.Order.Id == orderID && od.Product != null && od.Product.Id == proID);
                 if(removeEntity != null)
                 {
                     context.Set<OrderDetail>().Remove(removeEntity);
@@ -52,7 +52,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<OrderDetail?> Get(int orderID, int proID)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) { 
-                OrderDetail? orderDetail = await context.Set<OrderDetail>().Include(o => o.Order).Include(o=> o.Product).FirstOrDefaultAsync(od => od.Order != null && od.Order.Id == orderID && od.Product != null && od.Product.Id == proID);
+                OrderDetail? orderDetail = await context.Set<OrderDetail>().Include(o => o.Order).Include(o=> o.Product).ThenInclude(p => p.Type).FirstOrDefaultAsync(od => od.Order != null && od.Order.Id == orderID && od.Product != null && od.Product.Id == proID);
                 return orderDetail;
             }
         }
@@ -60,7 +60,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<IEnumerable<OrderDetail>> GetAll()
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
-                IEnumerable<OrderDetail> orderDetails = await context.Set<OrderDetail>().Include(o => o.Order).Include(o => o.Product).ToListAsync();
+                IEnumerable<OrderDetail> orderDetails = await context.Set<OrderDetail>().Include(o => o.Order).Include(o => o.Product).ThenInclude(p => p.Type).ToListAsync();
                 return orderDetails;
             }
         }
@@ -69,7 +69,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                IEnumerable<OrderDetail> orderDetails = await context.Set<OrderDetail>().Include(o => o.Order).Include(o => o.Product).Where(o => o.Order.Id == id).ToListAsync();
+                IEnumerable<OrderDetail> orderDetails = await context.Set<OrderDetail>().Include(o => o.Order).Include(o => o.Product).ThenInclude(p => p.Type).Where(o => o.Order.Id == id).ToListAsync();
                 return orderDetails;
             }
         }
