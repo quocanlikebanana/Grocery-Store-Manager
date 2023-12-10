@@ -1,24 +1,18 @@
-﻿using System.Diagnostics;
-using System.ServiceModel.Channels;
-using DynamicPluginSupport;
+﻿using DynamicPluginSupport;
 using GroceryStore.Domain.Model;
 using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Activation;
 using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Core.Contracts.Services;
 using GroceryStore.MainApp.Core.Services;
-using GroceryStore.MainApp.Helpers;
 using GroceryStore.MainApp.Models;
 using GroceryStore.MainApp.Services;
 using GroceryStore.MainApp.ViewModels;
-using GroceryStore.MainApp.ViewModels.SubWindowVM;
 using GroceryStore.MainApp.Views;
-using GroceryStore.MainApp.Views.SubWindowView;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
-using Windows.UI.Popups;
 
 namespace GroceryStore.MainApp;
 
@@ -125,12 +119,6 @@ public partial class App : Application
 
             // Configuration
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
-
-            // My services and ViewModel
-            // TODO: Check if these 2 are neccessary
-            services.AddTransient<OrderForm>();
-            services.AddTransient<OrderFormVM>();
-
         }).
         Build();
         UnhandledException += App_UnhandledException;
@@ -154,10 +142,10 @@ public partial class App : Application
     // TODO2: Would rather log the error than displaying it (the App is not yet shown)
     private static void DisplayErrorDialog(object exObj)
     {
-        var errorMessage = string.Format((exObj as Exception)?.Message ?? "");
-        MessageDialog error = new(errorMessage, "An unhandled exception occurred");
-        error.Options = MessageDialogOptions.None;
-        _ = error.ShowAsync();
+        //var errorMessage = string.Format((exObj as Exception)?.Message ?? "");
+        //MessageDialog error = new(errorMessage, "An unhandled exception occurred");
+        //error.Options = MessageDialogOptions.None;
+        //_ = error.ShowAsync();
     }
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)

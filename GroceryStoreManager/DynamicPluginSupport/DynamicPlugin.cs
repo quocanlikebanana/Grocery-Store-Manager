@@ -20,6 +20,8 @@ public class DynamicPlugin
         _domain = AppDomain.CurrentDomain;
     }
 
+    // NOTICE: Everytime the assembly project is updated, you should re-copy it back to the _dlls file
+
     public static IEnumerable<Type> GetImplements<IContract>()
     {
         // List of Contract's inhertance

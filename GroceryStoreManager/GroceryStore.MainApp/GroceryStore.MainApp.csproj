@@ -15,8 +15,9 @@
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Control\Subwindow.xaml" />
-    <None Remove="Views\SubWindowView\OrderForm.xaml" />
+    <None Remove="CustomControls\ContentDialogBase.xaml" />
+    <None Remove="Views\PopupView\ContentDialogBase.xaml" />
+    <None Remove="Views\PopupView\OrderPopup.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,10 +47,16 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Page Update="Views\SubWindowView\OrderForm.xaml">
+    <Page Update="Views\PopupView\OrderPopup.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Control\Subwindow.xaml">
+    <Page Update="CustomControls\ContentDialogBase.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\SubWindowView\ContentDialogBase.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\SubWindowView\OrderPopup.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <None Update="_dlls\GroceryStore.Data.EntityFramework.dll">
@@ -68,7 +75,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Factories\" />
+    <Folder Include="Themes\" />
     <Folder Include="_libs\" />
   </ItemGroup>
   

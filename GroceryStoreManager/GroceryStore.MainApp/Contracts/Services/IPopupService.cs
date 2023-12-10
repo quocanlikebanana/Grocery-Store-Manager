@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace GroceryStore.MainApp.Contracts.Services;
 
-public interface IWindowDialogService
+public interface IPopupService
 {
-    void ShowWindow();
+    event Action? OnWindowClose;
+    void ShowWindow(object? content = null);
     void CloseWindow();
 }
+
+// TODO: sua ten OrderForm

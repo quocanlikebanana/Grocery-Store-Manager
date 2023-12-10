@@ -7,17 +7,8 @@ using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Command;
 using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Contracts.ViewModels;
-using GroceryStore.MainApp.Core.Contracts.Services;
-using GroceryStore.MainApp.Core.Models;
-using GroceryStore.MainApp.Services;
-using GroceryStore.MainApp.ViewModels.SubWindowVM;
+using GroceryStore.MainApp.Factories;
 using GroceryStore.MainApp.Views.DisplayObjects;
-using GroceryStore.MainApp.Views.SubWindowView;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
-using Windows.UI.Popups;
 
 namespace GroceryStore.MainApp.ViewModels;
 
@@ -25,14 +16,16 @@ namespace GroceryStore.MainApp.ViewModels;
 public partial class OrderViewModel : ObservableRecipient, INavigationAware
 {
     private readonly IDataService<OrderDetail> _orderDetailDataService;
+    private readonly IPopupService _popupService;
 
     public OrderViewModel(IDataService<OrderDetail> orderDetailDataService)
     {
         _orderDetailDataService = orderDetailDataService;
-
-        AddCommand = new DelegateCommand(obj => { TestFunctionDialog("Add"); });
+        AddCommand = new DelegateCommand(AddRecord);
         EditCommand = new DelegateCommand(obj => { TestFunctionDialog("Edit"); });
         DeleteCommand = new DelegateCommand(obj => { TestFunctionDialog("Delete"); });
+
+        _popupService = PopupServiceFactoryMethod.Get(PopupType.ContentDialog, PopupContent.Order);
     }
 
     public ObservableCollection<OrderDisplay> Source { get; private set; } = new();
@@ -51,12 +44,10 @@ public partial class OrderViewModel : ObservableRecipient, INavigationAware
     {
     }
 
-
     // =======================================
     // Commands
     // =======================================
 
-    // No DI here cause all of these should only belong to this VM
     private void TestFunctionDialog(string content)
     {
         Debug.WriteLine(content);
@@ -77,12 +68,6 @@ public partial class OrderViewModel : ObservableRecipient, INavigationAware
 
     private void AddRecord(object? obj)
     {
-        var _orderDataService = App.GetService<IDataService<Order>>();
-        var _productDataService = App.GetService<IDataService<Product>>();
-        var _customerDataService = App.GetService<IDataService<Customer>>();
-        IWindowDialogService dialogService = new FormDialogService(typeof(OrderForm), (wds) => new OrderFormVM(wds, _orderDetailDataService, _productDataService, _customerDataService, null));
-        dialogService.ShowWindow();
-
+        _popupService.ShowWindow();
     }
-
 }

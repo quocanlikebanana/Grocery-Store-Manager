@@ -17,23 +17,25 @@ public enum FormResult
     Indeterminate,
 }
 
-public abstract class FormVMBase : ObservableRecipient
+public abstract class PopupVMBase : ObservableRecipient
 {
-    private readonly IWindowDialogService _dialogService;
+    private readonly IPopupService _dialogService;
 
     protected FormResult _result;
+    protected object? _content = null;
     public FormResult Result
     {
         get;
     }
 
-    protected FormVMBase(IWindowDialogService dialogService)
+    protected PopupVMBase(IPopupService dialogService, object? content = null)
     {
         _result = FormResult.Indeterminate;
         _dialogService = dialogService;
 
         AcceptCommand = new DelegateCommand(Accept);
         DeclineCommand = new DelegateCommand(Decline);
+        _content = content;
     }
 
     public ICommand AcceptCommand

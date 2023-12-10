@@ -61,29 +61,30 @@ public class OrderDataService : IDataService<Order>
         throw new NotImplementedException();
     }
 
-        public async Task<IEnumerable<Order>> GetAll()
+    public async Task<IEnumerable<Order>> GetAll()
+    {
+        using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
         {
-            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
-                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).ToListAsync();
-                return entities;
-            }
+            IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).ToListAsync();
+            return entities;
         }
+    }
 
-        public Task<IEnumerable<Order>> GetAll(int id)
-        {
-            throw new NotImplementedException();
-        }
+    public Task<IEnumerable<Order>> GetAll(int id)
+    {
+        throw new NotImplementedException();
+    }
 
-        public async Task<Order?> Update(int id, Order entity)
+    public async Task<Order?> Update(int id, Order entity)
+    {
+        entity.Id = id;
+        using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
         {
-            entity.Id = id;
-            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
-            {
-                context.Set<Order>().Update(entity);
-                await context.SaveChangesAsync();
-                return entity;
-            }
+            context.Set<Order>().Update(entity);
+            await context.SaveChangesAsync();
+            return entity;
         }
+    }
 
     public Task<Order?> Update(int id1, int id2, Order entity)
     {

@@ -13,13 +13,13 @@ using GroceryStore.MainApp.Models.DomainExtensions;
 
 namespace GroceryStore.MainApp.ViewModels.SubWindowVM;
 
-public partial class OrderFormVM : FormVMBase
+public partial class OrderPopupVM : PopupVMBase
 {
     private readonly IDataService<OrderDetail> _orderDeatailDataService;
     private readonly IDataService<Product> _productDataService;
     private readonly IDataService<Customer> _customerDataService;
 
-    public OrderFormVM(IWindowDialogService dialogService, IDataService<OrderDetail> dataService, IDataService<Product> productDataService, IDataService<Customer> customerDataService, OrderDetail? orderDetail = null) : base(dialogService)
+    public OrderPopupVM(IPopupService dialogService, IDataService<OrderDetail> dataService, IDataService<Product> productDataService, IDataService<Customer> customerDataService, OrderDetail? orderDetail = null) : base(dialogService, orderDetail)
     {
         _orderDeatailDataService = dataService;
         _productDataService = productDataService;
