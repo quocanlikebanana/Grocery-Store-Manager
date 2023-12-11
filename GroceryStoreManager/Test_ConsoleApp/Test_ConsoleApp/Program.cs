@@ -12,6 +12,11 @@ namespace Test_ConsoleApp
     {
         public static async Task testOrderDetail(string connectionString)
         {
+
+            IDataService<Product> db = new ProductDataService(connectionString);
+            Product? pro = await db.Get(1);
+            Console.WriteLine(pro.Type.Name);
+
             //IDataService<OrderDetail> orderdbs = new OrderDetailDataService(connectionString);
             //IEnumerable<OrderDetail>? orders = await orderdbs.GetAll(1);
             //foreach (var item in orders)
@@ -19,20 +24,20 @@ namespace Test_ConsoleApp
             //    Console.WriteLine(item.Product.Type.Name);
             //}
 
-            //await orderdbs.Create(new OrderDetail()
+            //await orderdbs.create(new orderdetail()
             //{
-            //    OrderId = 1,
-            //    ProductId = 5,
-            //    Quantity = 1,
+            //    orderid = 1,
+            //    productid = 5,
+            //    quantity = 1,
             //}) ;
 
-            IDataService<Order> orderdbs = new OrderDataService(connectionString);
-            await orderdbs.Create(new Order()
-            {
-                CustomerID = 1,
-                OrderDate = DateTime.Now,
-                TotalPrice = 0,
-            }) ;
+            //IDataService<Order> orderdbs = new OrderDataService(connectionString);
+            //await orderdbs.Create(new Order()
+            //{
+            //    CustomerID = 1,
+            //    OrderDate = DateTime.Now,
+            //    TotalPrice = 0,
+            //}) ;
 
         }
 
