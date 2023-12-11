@@ -14,9 +14,20 @@ namespace Test_ConsoleApp
         {
 
             IDataService<Product> db = new ProductDataService(connectionString);
-            Product? pro3 = await db.Get(3);
-            Product? pro4 = await db.Get(4);
-            Product? pro5 = await db.Get(5);
+            //await db.Create(new Product()
+            //{
+            //    Name = "Test",
+            //    Type = new ProductType() { 
+            //        Name = "Test",  
+            //        Image = "test"
+            //    },
+            //    Price = 100,
+            //    Quantity = 100,
+            //    Image = "cc"
+            //});
+            //Product? pro3 = await db.Get(3);
+            //Product? pro4 = await db.Get(4);
+            //Product? pro5 = await db.Get(5);
             //Console.WriteLine(pro.Type.Name);
 
             //IDataService<OrderDetail> orderdbs = new OrderDetailDataService(connectionString);
@@ -46,8 +57,8 @@ namespace Test_ConsoleApp
                 OrderDate = DateTime.Now,
                 details = new List<OrderDetail>(){
                     new OrderDetail() {
-                        ProductId = 3,
-                        OrderId = 3,
+                        ProductId = 2,
+                        OrderId = null,
                         Quantity = 20,
                     }
                 }
