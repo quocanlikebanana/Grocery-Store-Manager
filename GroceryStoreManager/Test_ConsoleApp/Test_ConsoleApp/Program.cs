@@ -14,8 +14,10 @@ namespace Test_ConsoleApp
         {
 
             IDataService<Product> db = new ProductDataService(connectionString);
-            Product? pro = await db.Get(1);
-            Console.WriteLine(pro.Type.Name);
+            Product? pro3 = await db.Get(3);
+            Product? pro4 = await db.Get(4);
+            Product? pro5 = await db.Get(5);
+            //Console.WriteLine(pro.Type.Name);
 
             //IDataService<OrderDetail> orderdbs = new OrderDetailDataService(connectionString);
             //IEnumerable<OrderDetail>? orders = await orderdbs.GetAll(1);
@@ -31,12 +33,31 @@ namespace Test_ConsoleApp
             //    quantity = 1,
             //}) ;
 
-            //IDataService<Order> orderdbs = new OrderDataService(connectionString);
-            //await orderdbs.Create(new Order()
+            IDataService<Order> orderdbs = new OrderDataService(connectionString);
+            //Order? order = await orderdbs.Get(1);
+            //foreach (var item in order.details)
+            //{   
+            //    Console.WriteLine(item.Product.Name);
+            //    Console.WriteLine(item.Quantity);
+            //}
+            await orderdbs.Create(new Order()
+            {
+                CustomerID = 3,
+                OrderDate = DateTime.Now,
+                details = new List<OrderDetail>(){
+                    new OrderDetail() {
+                        ProductId = 3,
+                        OrderId = 3,
+                        Quantity = 20,
+                    }
+                }
+            });
+
+            //await orderdbs.create(new order()
             //{
-            //    CustomerID = 1,
-            //    OrderDate = DateTime.Now,
-            //    TotalPrice = 0,
+            //    customerid = 1,
+            //    orderdate = datetime.now,
+            //    totalprice = 0,
             //}) ;
 
         }

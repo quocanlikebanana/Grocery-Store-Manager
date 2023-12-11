@@ -47,7 +47,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<Order?> Get(int id)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) { 
-                Order? order = await context.Set<Order>().Include(o => o.Customer).FirstOrDefaultAsync(o => o.Id == id);
+                Order? order = await context.Set<Order>().Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d=> d.Type).FirstOrDefaultAsync(o => o.Id == id);
                 return order;
             }
         }
@@ -60,7 +60,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<IEnumerable<Order>> GetAll()
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
-                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).ToListAsync();
+                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d => d.Type).ToListAsync();
                 return entities;
             }
         }
