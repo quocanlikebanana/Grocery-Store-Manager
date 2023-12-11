@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GroceryStore.Domain.Model;
-using GroceryStore.MainApp.Models.DomainExtensions;
+﻿using GroceryStore.Domain.Model;
 
 namespace GroceryStore.MainApp.Views.DisplayObjects;
 

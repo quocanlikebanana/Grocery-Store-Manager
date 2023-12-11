@@ -5,14 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroceryStore.Domain.Model;
-
-public class Order
+namespace GroceryStore.Domain.Model
 {
-    [Key]
-    public int Id { get; set; }
-    public Customer? Customer { get; set; }
+    public class Order
+    {
+        [Key]
+        public int Id { get; set; }
 
-    public DateTime OrderDate { get; set; }
-    public double TotalPrice { get; set; }
+        public int CustomerID { get; set; }
+        public virtual Customer? Customer { get; set; }
+        public virtual List<OrderDetail>? details { get; set; }
+        public DateTime OrderDate { get; set; }
+        public double TotalPrice { get; set; }
+    }
 }

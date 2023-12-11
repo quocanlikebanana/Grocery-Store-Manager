@@ -49,7 +49,7 @@ namespace GroceryStore.Data.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<OrderDetail>().HasNoKey();
+            modelBuilder.Entity<OrderDetail>().HasKey(od => new { od.OrderId, od.ProductId });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

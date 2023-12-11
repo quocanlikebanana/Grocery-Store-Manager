@@ -51,7 +51,7 @@ public abstract class PopupVMBase : ObservableRecipient
     public void Accept(object? obj)
     {
         var data = GetFormData();
-        var result = OnAccept(data);
+        var result = ContinueAccept(data);
         if (result == true)
         {
             _result = FormResult.Accept;
@@ -69,14 +69,12 @@ public abstract class PopupVMBase : ObservableRecipient
         _dialogService?.CloseWindow();
     }
 
-    protected virtual bool OnAccept(object formData)
+    protected virtual bool ContinueAccept(object formData)
     {
         return true;
     }
 
-    protected virtual void OnInvalid()
-    {
-    }
+    protected abstract void OnInvalid();
 
     public abstract object GetFormData();
 }

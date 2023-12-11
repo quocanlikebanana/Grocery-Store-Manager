@@ -16,6 +16,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="CustomControls\ContentDialogBase.xaml" />
+    <None Remove="Styles\Controls.xaml" />
     <None Remove="Views\PopupView\ContentDialogBase.xaml" />
     <None Remove="Views\PopupView\OrderPopup.xaml" />
   </ItemGroup>
@@ -47,6 +48,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Styles\Controls.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="Views\PopupView\OrderPopup.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

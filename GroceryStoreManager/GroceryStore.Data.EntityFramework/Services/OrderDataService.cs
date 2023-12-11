@@ -47,28 +47,26 @@ public class OrderDataService : IDataService<Order>
         throw new NotImplementedException();
     }
 
-    public async Task<Order?> Get(int id)
-    {
-        using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+        public async Task<Order?> Get(int id)
         {
-            Order? order = await context.Set<Order>().Include(o => o.Customer).FirstOrDefaultAsync(o => o.Id == id);
-            return order;
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) { 
+                Order? order = await context.Set<Order>().Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d=> d.Type).FirstOrDefaultAsync(o => o.Id == id);
+                return order;
+            }
         }
-    }
 
     public Task<Order?> Get(int id1, int id2)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<Order>> GetAll()
-    {
-        using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+        public async Task<IEnumerable<Order>> GetAll()
         {
-            IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).ToListAsync();
-            return entities;
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
+                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d => d.Type).ToListAsync();
+                return entities;
+            }
         }
-    }
 
     public Task<IEnumerable<Order>> GetAll(int id)
     {

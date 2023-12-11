@@ -33,7 +33,7 @@ public class PopupServiceFactoryMethod
         {
             case PopupContent.Order:
                 contentType = typeof(OrderPopup);
-                contentCreate = (ps, obj) => new OrderPopupVM(ps, _orderDetailDataService, _productDataService, _customerDataService, obj as OrderDetail);
+                contentCreate = (ps, obj) => new OrderPopupVM(ps, _orderDataService, _productDataService, _customerDataService, obj as Order);
                 break;
             default:
                 throw new Exception();

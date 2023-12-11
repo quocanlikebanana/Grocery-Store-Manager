@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GroceryStore.Domain.Model;
 
-namespace GroceryStore.MainApp.Models.DomainExtensions;
+namespace GroceryStore.MainApp.Models.Extensions;
 
 public static class CloneExtensions
 {

@@ -6,10 +6,13 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:dxe="using:DevExpress.WinUI.Editors"
+      xmlns:tkcontrols="using:CommunityToolkit.WinUI.UI.Controls"
       mc:Ignorable="d"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       MinWidth="500"
-      MinHeight="700">
+      MinHeight="700"
+      x:DefaultBindMode="TwoWay"
+      Name="root">
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto"
                   HorizontalScrollMode="Auto">
@@ -27,33 +30,68 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
-                <StackPanel Spacing="10"
-                            Orientation="Horizontal">
-                    <ComboBox Header="Select a Customer: "
-                              ItemsSource="{x:Bind ViewModel.AvailbleCustomer}"
-                              SelectedItem="{x:Bind ViewModel.SelectedCustomer}"
-                              IsEnabled="{x:Bind ViewModel.HasCustomer}" />
-                    <CheckBox x:Uid="HasCustomer_CheckBox"
-                              IsChecked="{x:Bind ViewModel.HasCustomer}" />
-                </StackPanel>
-                <ComboBox Grid.Row="1"
-                          Header="Select a Product: "
-                          ItemsSource="{x:Bind ViewModel.AvailbleProduct}"
-                          SelectedItem="{x:Bind ViewModel.SelectedProduct}" />
+                <ComboBox Grid.Row="0"
+                          IsTextSearchEnabled="True"
+                          Header="Select Customer: "
+                          ItemsSource="{x:Bind ViewModel.AvailbleCustomer, Mode=OneWay}"
+                          SelectedItem="{x:Bind ViewModel.SelectedCustomer, Mode=TwoWay}" />
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox Grid.Row="0"
+                              Grid.Column="0"
+                              IsTextSearchEnabled="True"
+                              Header="Select Product: "
+                              ItemsSource="{x:Bind ViewModel.AvailbleProduct}"
+                              SelectedItem="{x:Bind ViewModel.SelectedProduct}" />
+                    <dxe:SpinEdit Grid.Row="0"
+                                  Grid.Column="1"
+                                  Header="Quantity:"
+                                  EditValue="{x:Bind ViewModel.Quantity}"
+                                  MinValue="0">
+                        <dxe:SpinEdit.TextInputSettings>
+                            <dxe:TextInputMaskSettings MaskType="Numeric"
+                                                       Mask="n0" />
+                        </dxe:SpinEdit.TextInputSettings>
+                    </dxe:SpinEdit>
+                    <Button  Grid.Row="0"
+                             Grid.Column="2"
+                             Content="Add to Order"
+                             Command="{x:Bind ViewModel.AddToOrderCommand}" />
+
+                    <tkcontrols:DataGrid>
+                        <tkcontrols:DataGrid.Columns>
+                            <tkcontrols:DataGridTextColumn>
+
+                            </tkcontrols:DataGridTextColumn>
+                            <tkcontrols:DataGridTemplateColumn Header="Delete">
+                                <tkcontrols:DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Delete"
+                                                Command="{Binding Path=ViewModel.DetailsDelete, ElementName=root}"
+                                                CommandParameter="{x:Bind}" />
+                                    </DataTemplate>
+                                </tkcontrols:DataGridTemplateColumn.CellTemplate>
+                            </tkcontrols:DataGridTemplateColumn>
+                        </tkcontrols:DataGrid.Columns>
+                    </tkcontrols:DataGrid>
+                </Grid>
+
                 <dxe:DateEdit Grid.Row="2"
                               Header="Order date:"
                               NullValue="Enter a date"
                               EditValue="{x:Bind ViewModel.OrderDate}"
                               MaxValue="{x:Bind DateTimeNow}" />
-                <dxe:SpinEdit Grid.Row="3"
-                              Header="Quantity:"
-                              EditValue="{x:Bind ViewModel.Quantity}"
-                              MinValue="0">
-                    <dxe:SpinEdit.TextInputSettings>
-                        <dxe:TextInputMaskSettings MaskType="Numeric"
-                                                   Mask="n0" />
-                    </dxe:SpinEdit.TextInputSettings>
-                </dxe:SpinEdit>
+
                 <dxe:SpinEdit Grid.Row="4"
                               IsEnabled="{x:Bind ViewModel.HasCustomer}"
                               Header="Coupon used:"
