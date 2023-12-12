@@ -13,17 +13,29 @@ namespace Test_ConsoleApp
         public static async Task testOrderDetail(string connectionString)
         {
 
+            //IDataService<Customer> cusbd = new CustomerDataService(connectionString);
+            //await cusbd.Update(1,new Customer() { 
+            //    Name = "vo chi trung",
+            //    MoneyForPromotion= 999,
+             
+            //});
+
+
             IDataService<Product> db = new ProductDataService(connectionString);
+            //var products = await db.FilterPrice(100,17000,1,1);
+            //foreach (var item in products)
+            //{
+            //    Console.WriteLine($"TenSp: {item.Name} LoaiSp: {item.Type.Name}  Gia: {item.Price} SoLuong: {item.Quantity}" );
+            //}
             //await db.Create(new Product()
             //{
             //    Name = "Test",
-            //    Type = new ProductType() { 
-            //        Name = "Test",  
-            //        Image = "test"
+            //    Type = new ProductType()
+            //    {
+            //        Name = "Test",
             //    },
             //    Price = 100,
             //    Quantity = 100,
-            //    Image = "cc"
             //});
             //Product? pro3 = await db.Get(3);
             //Product? pro4 = await db.Get(4);
@@ -46,23 +58,49 @@ namespace Test_ConsoleApp
 
             IDataService<Order> orderdbs = new OrderDataService(connectionString);
             //Order? order = await orderdbs.Get(1);
+            //Console.WriteLine(order.Id);
+            //Console.WriteLine(order.Customer.Name);
+            //Console.WriteLine(order.TotalPrice);
+            //Console.WriteLine(order.TotalDiscount);
             //foreach (var item in order.details)
-            //{   
+            //{
+            //    Console.WriteLine(item.Product.Name);
+            //    Console.WriteLine(item.Product.Quantity);
+            //}
+
+            //Console.WriteLine(order);
+            //Order? order = await orderdbs.Get(1);
+            //foreach (var item in order.details)
+            //{
             //    Console.WriteLine(item.Product.Name);
             //    Console.WriteLine(item.Quantity);
             //}
-            await orderdbs.Create(new Order()
-            {
-                CustomerID = 3,
-                OrderDate = DateTime.Now,
-                details = new List<OrderDetail>(){
-                    new OrderDetail() {
-                        ProductId = 2,
-                        OrderId = null,
-                        Quantity = 20,
-                    }
-                }
-            });
+            //await orderdbs.Create(new Order()
+            //{
+
+            //    Customer = new Customer()
+            //    {
+            //        Name = "Trung",
+            //        MoneyForPromotion = 0,
+            //        CouponCount = 12,
+            //    },
+
+            //    OrderDate = DateTime.Now,
+            //    details = new List<OrderDetail>(){
+            //        new OrderDetail() {
+            //            ProductId = 2,
+            //            OrderId = null, // tự động lấy
+            //            Quantity = 20,
+            //        },
+            //        new OrderDetail() {
+            //            ProductId = 3,
+            //            OrderId = null, // tự động lấy
+            //            Quantity = 20,
+            //        }
+            //    },
+            //    TotalPrice = 0,
+            //    TotalDiscount = 0,
+            //});
 
             //await orderdbs.create(new order()
             //{
@@ -98,7 +136,7 @@ namespace Test_ConsoleApp
             try {
                 var builder = new SqlConnectionStringBuilder();
                 builder.DataSource = "localhost\\SQLEXPRESS";
-                builder.InitialCatalog = "testDataWindow";
+                builder.InitialCatalog = "newestDataBase";
                 builder.IntegratedSecurity = true;
                 builder.TrustServerCertificate = true;
                 string connectionString = builder.ConnectionString;
@@ -106,7 +144,8 @@ namespace Test_ConsoleApp
                 await testOrderDetail(connectionString);
             } catch (Exception ex)
             {
-                Console.WriteLine($"{ex.Message}");
+                Console.WriteLine(ex.Message);
+                Console.WriteLine($"{ex.InnerException?.Message}");
             }
 
 

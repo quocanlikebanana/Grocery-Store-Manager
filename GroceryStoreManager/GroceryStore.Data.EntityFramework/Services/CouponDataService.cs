@@ -19,6 +19,15 @@ namespace GroceryStore.Data.EntityFramework.Services
             this._connectionString = connectionString;
         }
 
+        public async Task<int> Count()
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                var result = await context.Set<Coupon>().CountAsync();
+                return result;
+            }
+        }
+
         public async Task<Coupon?> Create(Coupon entity)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
@@ -52,6 +61,26 @@ namespace GroceryStore.Data.EntityFramework.Services
             throw new NotImplementedException("!");
         }
 
+        public Task<IEnumerable<Coupon>> FilterDate(DateTime start, DateTime end)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Coupon>> FilterDate(DateTime start, DateTime end, int page, int perPage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Coupon>> FilterPrice(double min, double max)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Coupon>> FilterPrice(double min, double max, int page, int perPage)
+        {
+            throw new NotImplementedException();
+        }
+ 
         public async Task<Coupon?> Get(int id)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
@@ -75,7 +104,7 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
-        public Task<IEnumerable<Coupon>> GetAll(int id)
+        public Task<double> TotalRevenue()
         {
             throw new NotImplementedException();
         }
