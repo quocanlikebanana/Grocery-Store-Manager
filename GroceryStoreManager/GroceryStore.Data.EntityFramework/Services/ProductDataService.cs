@@ -17,6 +17,16 @@ namespace GroceryStore.Data.EntityFramework.Services
         {
             this._connectionString = connectionString;
         }
+
+        public async Task<int> Count()
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                var result = await context.Set<Product>().CountAsync();
+                return result;
+            }
+        }
+
         public async Task<Product?> Create(Product entity)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
@@ -50,6 +60,33 @@ namespace GroceryStore.Data.EntityFramework.Services
             throw new NotImplementedException();
         }
 
+        public Task<IEnumerable<Product>> FilterDate(DateTime start, DateTime end)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Product>> FilterDate(DateTime start, DateTime end, int page, int perPage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Product>> FilterPrice(double min, double max)
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
+                IEnumerable<Product> entities = await context.Set<Product>().Include(x => x.Type).Where(x => x.Price >= min && x.Price <= max).ToListAsync();    
+                return entities;
+            }
+        }
+
+        public async Task<IEnumerable<Product>> FilterPrice(double min, double max, int page, int perPage)
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                IEnumerable<Product> entities = await context.Set<Product>().Include(x => x.Type).Where(x => x.Price >= min && x.Price <= max).Skip((page - 1) * perPage).Take(perPage).ToListAsync();
+                return entities;
+            }
+        }
+
         public async Task<Product?> Get(int id)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
@@ -68,12 +105,12 @@ namespace GroceryStore.Data.EntityFramework.Services
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                IEnumerable<Product> entities = await context.Set<Product>().ToListAsync();
+                IEnumerable<Product> entities = await context.Set<Product>().Include(p=> p.Type).ToListAsync();
                 return entities;
             }
         }
 
-        public Task<IEnumerable<Product>> GetAll(int id)
+        public Task<double> TotalRevenue()
         {
             throw new NotImplementedException();
         }

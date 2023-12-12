@@ -9,13 +9,30 @@ namespace GroceryStore.Domain.Model
 {
     public class Customer
     {
+        public Customer()
+        {
+        }
+
+        public Customer(int id, string name, double moneyForPromotion, int couponCount, string tel, string address)
+        {
+            Id = id;
+            Name = name;
+            MoneyForPromotion = moneyForPromotion;
+            CouponCount = couponCount;
+            Tel = tel;
+            Address = address;
+        }
+
         [Key]
-        public int Id { get; set; }
-        public string? Name { get; set; }
+        public int? Id { get; set; } = null;
+        public string Name { get; set; } = string.Empty;
 
         public double MoneyForPromotion { get; set; }
 
-        public List<Coupon> Coupons { get; set; } = new List<Coupon>();
+        public int CouponCount { get; set; }
 
+        public string Tel { get; set; } = string.Empty;
+
+        public string Address { get; set; } = string.Empty;
     }
 }  

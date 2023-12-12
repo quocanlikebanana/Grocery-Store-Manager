@@ -13,19 +13,27 @@ public class OrderDataService : IDataService<Order>
 {
     private readonly string _connectionString = string.Empty;
 
-    public OrderDataService(string connectionString)
-    {
-        this._connectionString = connectionString;
-    }
-    public async Task<Order?> Create(Order entity)
-    {
-        using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
-        {
-            var result = await context.Set<Order>().AddAsync(entity);
-            await context.SaveChangesAsync();
-            return result.Entity;
+        public OrderDataService(string connectionString) {
+            this._connectionString = connectionString;
         }
-    }
+
+        public async Task<int> Count()
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                int result = await context.Set<Order>().CountAsync();
+                return result;
+            }
+        }
+
+        public async Task<Order?> Create(Order entity)
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) { 
+                var result = await context.Set<Order>().AddAsync(entity);
+                await context.SaveChangesAsync();
+                return result.Entity;
+            }
+        }
 
     public async Task<bool> Delete(int id)
     {
@@ -46,6 +54,34 @@ public class OrderDataService : IDataService<Order>
     {
         throw new NotImplementedException();
     }
+
+        public async Task<IEnumerable<Order>> FilterDate(DateTime start, DateTime end)
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).Include(o =>o.details).ThenInclude(d => d.Product).ThenInclude(d => d.Type).Where(o => o.OrderDate >= start && o.OrderDate <= end).ToListAsync();
+                return entities;
+            }
+        }
+
+        public async Task<IEnumerable<Order>> FilterDate(DateTime start, DateTime end, int page, int perPage)
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d => d.Type).Where(o => o.OrderDate >= start && o.OrderDate <= end).Skip((page - 1) * perPage).Take(perPage).ToListAsync();
+                return entities;
+            }
+        }
+
+        public Task<IEnumerable<Order>> FilterPrice(double min, double max)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Order>> FilterPrice(double min, double max, int page, int perPage)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<Order?> Get(int id)
         {
@@ -68,10 +104,10 @@ public class OrderDataService : IDataService<Order>
             }
         }
 
-    public Task<IEnumerable<Order>> GetAll(int id)
-    {
-        throw new NotImplementedException();
-    }
+        public Task<double> TotalRevenue()
+        {
+            throw new NotImplementedException();
+        }
 
     public async Task<Order?> Update(int id, Order entity)
     {

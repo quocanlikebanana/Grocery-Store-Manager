@@ -18,6 +18,16 @@ namespace GroceryStore.Data.EntityFramework.Services
         {
             this._connectionString = connectionString;
         }
+
+        public async Task<int> Count()
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                var result = await context.Set<OrderDetail>().CountAsync();
+                return result;
+            }
+        }
+
         public async Task<OrderDetail?> Create(OrderDetail entity)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
@@ -36,7 +46,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<bool> Delete(int orderID, int proID)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
-                OrderDetail? removeEntity = await context.Set<OrderDetail>().Include(o => o.Order).Include(o => o.Product).ThenInclude(p => p.Type).FirstOrDefaultAsync(od => od.Order != null && od.Order.Id == orderID && od.Product != null && od.Product.Id == proID);
+                OrderDetail? removeEntity = await context.Set<OrderDetail>().Include(o => o.Order).Include(o => o.Product).ThenInclude(p =>  p.Type).FirstOrDefaultAsync(od => od.Order != null && od.Order.Id == orderID && od.Product != null && od.Product.Id == proID);
                 if(removeEntity != null)
                 {
                     context.Set<OrderDetail>().Remove(removeEntity);
@@ -47,7 +57,27 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
-        public Task<OrderDetail?> Get(int id)
+        public Task<IEnumerable<OrderDetail>> FilterDate(DateTime start, DateTime end)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<OrderDetail>> FilterDate(DateTime start, DateTime end, int page, int perPage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<OrderDetail>> FilterPrice(double min, double max)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<OrderDetail>> FilterPrice(double min, double max, int page, int perPage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<OrderDetail?> Get(int id) 
         {
             throw new NotImplementedException();
         }
@@ -68,13 +98,9 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
-        public async Task<IEnumerable<OrderDetail>> GetAll(int id)
+        public Task<double> TotalRevenue()
         {
-            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
-            {
-                IEnumerable<OrderDetail> orderDetails = await context.Set<OrderDetail>().Include(o => o.Order).Include(o => o.Product).ThenInclude(p => p.Type).Where(o => o.Order.Id == id).ToListAsync();
-                return orderDetails;
-            }
+            throw new NotImplementedException();
         }
 
         public Task<OrderDetail?> Update(int id, OrderDetail entity)

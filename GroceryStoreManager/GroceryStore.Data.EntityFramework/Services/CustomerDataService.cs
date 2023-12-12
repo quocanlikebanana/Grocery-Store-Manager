@@ -18,6 +18,14 @@ namespace GroceryStore.Data.EntityFramework.Services
             this._connectionString = connectionString;
         }
 
+        public async Task<int> Count()
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
+                int result = await context.Set<Customer>().CountAsync();
+                return result;
+            }
+        }
+
         public async Task<Customer?> Create(Customer entity)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
@@ -42,13 +50,36 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
-        public Task<bool> Delete(int id1, int id2) => throw new NotImplementedException();
+        public Task<bool> Delete(int id1, int id2)
+        {
+            throw new NotImplementedException("!");
+        }
+
+        public Task<IEnumerable<Customer>> FilterDate(DateTime start, DateTime end)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Customer>> FilterDate(DateTime start, DateTime end, int page, int perPage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Customer>> FilterPrice(double min, double max)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Customer>> FilterPrice(double min, double max, int page, int perPage)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<Customer?> Get(int id)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                Customer? result = await context.Set<Customer>().Include(c => c.Coupons).FirstOrDefaultAsync(e => e.Id == id);
+                Customer? result = await context.Set<Customer>().FirstOrDefaultAsync(e => e.Id == id);
                 return result;
             }
         }
@@ -64,7 +95,7 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
-        public Task<IEnumerable<Customer>> GetAll(int id)
+        public Task<double> TotalRevenue()
         {
             throw new NotImplementedException();
         }
