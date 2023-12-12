@@ -104,10 +104,7 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
-        public Task<double> TotalRevenue()
-        {
-            throw new NotImplementedException();
-        }
+   
 
         public async Task<Coupon?> Update(int id, Coupon entity)
         {

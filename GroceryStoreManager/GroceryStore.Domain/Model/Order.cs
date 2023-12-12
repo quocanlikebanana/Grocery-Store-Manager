@@ -29,7 +29,7 @@ namespace GroceryStore.Domain.Model
 
         public int? CustomerID { get; set; } = null;
         public virtual Customer? Customer { get; set; } = null;
-        public virtual List<OrderDetail>? details { get; set; } = null;
+        public virtual List<OrderDetail> details { get; set; } = new List<OrderDetail>();
         public DateTime OrderDate { get; set; }
         public double TotalPrice { get; set; }
         public double TotalDiscount { get; set; }

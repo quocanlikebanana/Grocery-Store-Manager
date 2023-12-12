@@ -57,15 +57,21 @@ namespace Test_ConsoleApp
             //}) ;
 
             IDataService<Order> orderdbs = new OrderDataService(connectionString);
+            await orderdbs.Delete(6);
             //Order? order = await orderdbs.Get(1);
-            //Console.WriteLine(order.Id);
-            //Console.WriteLine(order.Customer.Name);
-            //Console.WriteLine(order.TotalPrice);
-            //Console.WriteLine(order.TotalDiscount);
+            //Console.WriteLine(order?.Id);
+            //Console.WriteLine(order?.Customer?.Name);
+            //Console.WriteLine(order?.TotalPrice);
+            //Console.WriteLine(order?.TotalDiscount);
+            //if(order?.details != null)
+            //{
             //foreach (var item in order.details)
             //{
-            //    Console.WriteLine(item.Product.Name);
-            //    Console.WriteLine(item.Product.Quantity);
+            //    Console.WriteLine(item?.Product?.Name);
+            //    Console.WriteLine(item?.Product?.Quantity);
+            //    Console.WriteLine(item?.Product?.Type?.Name);
+            //}
+
             //}
 
             //Console.WriteLine(order);
@@ -75,39 +81,40 @@ namespace Test_ConsoleApp
             //    Console.WriteLine(item.Product.Name);
             //    Console.WriteLine(item.Quantity);
             //}
-            await orderdbs.Create(new Order()
-            {
+            //await orderdbs.Create(new Order()
+            //{
 
-                Customer = new Customer()
-                {
-                    Name = "Trung",
-                    MoneyForPromotion = 0,
-                    CouponCount = 12,
-                },
+            //    Customer = new Customer()
+            //    {
+            //        Name = "An",
+            //        MoneyForPromotion = 0,
+            //        CouponCount = 12,
+            //    },
 
-                OrderDate = DateTime.Now,
-                details = new List<OrderDetail>(){
-                    new OrderDetail() {
-                        Product = new Product() { 
-                            Name = "cac dai 8m",
-                            Type = new ProductType()
-                            {
-                                Name = "do truy",
+            //    OrderDate = DateTime.Now,
+            //    details = new List<OrderDetail>(){
+            //        new OrderDetail() {
+            //            Product = new Product() {
+            //                Name = "cac dai 8m",
+            //                Type = new ProductType()
+            //                {
+            //                    Name = "do truy",
 
-                            },
-                            Price = 100,
-                            Quantity = 100,
-                        },
-                        Quantity = 20,
-                    },
-                    new OrderDetail() {
-                        ProductId = 3,
-                        Quantity = 20,
-                    }
-                },
-                TotalPrice = 0,
-                TotalDiscount = 0,
-            });
+            //                },
+            //                Price = 100,
+            //                Quantity = 100,
+            //                BasePrice = 100,
+            //            },
+            //            Quantity = 20,
+            //        },
+            //        new OrderDetail() {
+            //            ProductId = 3,
+            //            Quantity = 20,
+            //        }
+            //    },
+            //    TotalPrice = 0,
+            //    TotalDiscount = 0,
+            //});
 
             //await orderdbs.create(new order()
             //{
@@ -118,26 +125,6 @@ namespace Test_ConsoleApp
 
         }
 
-        public static async Task testOrder(string connectionString) { 
-            IDataService<Order> orderdbs = new OrderDataService(connectionString);
-            IEnumerable<Order>? orders = await orderdbs.GetAll();
-            foreach (var order in orders)
-            {
-                Console.WriteLine(order.Customer.Name);
-            }
-        }
-
-        public static async Task testCustomer(string connectionString)
-        {
-            IDataService<Customer> cusDBC = new CustomerDataService(connectionString);
-            IEnumerable<Customer>? customers = await cusDBC.GetAll() ;
-
-            foreach (var cus in customers)
-            {
-                Console.WriteLine(cus.Name);
-            }
-    
-        }
         static async Task Main(string[] args)
         {
             try {

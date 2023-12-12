@@ -28,6 +28,6 @@ namespace GroceryStore.Domain.Service
 
         // Statictics
         Task<int> Count();
-        Task<double> TotalRevenue();
+
     }
 }

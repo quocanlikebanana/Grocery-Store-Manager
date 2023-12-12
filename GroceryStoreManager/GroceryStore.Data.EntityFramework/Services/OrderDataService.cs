@@ -58,7 +58,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).Include(o =>o.details).ThenInclude(d => d.Product).ThenInclude(d => d.Type).Where(o => o.OrderDate >= start && o.OrderDate <= end).ToListAsync();
+                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).Include(o =>o.details).ThenInclude(d => d.Product).ThenInclude(d => d != null ? d.Type : null).Where(o => o.OrderDate >= start && o.OrderDate <= end).ToListAsync();
                 return entities;
             }
         }
@@ -67,7 +67,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d => d.Type).Where(o => o.OrderDate >= start && o.OrderDate <= end).Skip((page - 1) * perPage).Take(perPage).ToListAsync();
+                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d => d != null ? d.Type : null).Where(o => o.OrderDate >= start && o.OrderDate <= end).Skip((page - 1) * perPage).Take(perPage).ToListAsync();
                 return entities;
             }
         }
@@ -85,7 +85,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<Order?> Get(int id)
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) { 
-                Order? order = await context.Set<Order>().Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d=> d.Type).FirstOrDefaultAsync(o => o.Id == id);
+                Order? order = await context.Set<Order>().Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d => d != null? d.Type : null).FirstOrDefaultAsync(o => o.Id == id);
                 return order;
             }
         }
@@ -98,14 +98,9 @@ namespace GroceryStore.Data.EntityFramework.Services
         public async Task<IEnumerable<Order>> GetAll()
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString)) {
-                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d => d.Type).ToListAsync();
+                IEnumerable<Order> entities = await context.Set<Order>().Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d => d != null ? d.Type : null).ToListAsync();
                 return entities;
             }
-        }
-
-        public Task<double> TotalRevenue()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<Order?> Update(int id, Order entity)
