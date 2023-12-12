@@ -27,7 +27,7 @@ namespace GroceryStore.Domain.Model
         [Key]
         public int? Id { get; set; } = null;
 
-        public int CustomerID { get; set; }
+        public int? CustomerID { get; set; } = null;
         public virtual Customer? Customer { get; set; } = null;
         public virtual List<OrderDetail>? details { get; set; } = null;
         public DateTime OrderDate { get; set; }

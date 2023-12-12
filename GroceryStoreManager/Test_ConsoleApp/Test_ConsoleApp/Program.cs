@@ -75,32 +75,39 @@ namespace Test_ConsoleApp
             //    Console.WriteLine(item.Product.Name);
             //    Console.WriteLine(item.Quantity);
             //}
-            //await orderdbs.Create(new Order()
-            //{
+            await orderdbs.Create(new Order()
+            {
 
-            //    Customer = new Customer()
-            //    {
-            //        Name = "Trung",
-            //        MoneyForPromotion = 0,
-            //        CouponCount = 12,
-            //    },
+                Customer = new Customer()
+                {
+                    Name = "Trung",
+                    MoneyForPromotion = 0,
+                    CouponCount = 12,
+                },
 
-            //    OrderDate = DateTime.Now,
-            //    details = new List<OrderDetail>(){
-            //        new OrderDetail() {
-            //            ProductId = 2,
-            //            OrderId = null, // tự động lấy
-            //            Quantity = 20,
-            //        },
-            //        new OrderDetail() {
-            //            ProductId = 3,
-            //            OrderId = null, // tự động lấy
-            //            Quantity = 20,
-            //        }
-            //    },
-            //    TotalPrice = 0,
-            //    TotalDiscount = 0,
-            //});
+                OrderDate = DateTime.Now,
+                details = new List<OrderDetail>(){
+                    new OrderDetail() {
+                        Product = new Product() { 
+                            Name = "cac dai 8m",
+                            Type = new ProductType()
+                            {
+                                Name = "do truy",
+
+                            },
+                            Price = 100,
+                            Quantity = 100,
+                        },
+                        Quantity = 20,
+                    },
+                    new OrderDetail() {
+                        ProductId = 3,
+                        Quantity = 20,
+                    }
+                },
+                TotalPrice = 0,
+                TotalDiscount = 0,
+            });
 
             //await orderdbs.create(new order()
             //{
