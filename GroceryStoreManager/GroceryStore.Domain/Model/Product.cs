@@ -13,7 +13,7 @@ namespace GroceryStore.Domain.Model
         {
         }
 
-        public Product(int id, string name, int typeId, ProductType type, double price, int quantity)
+        public Product(int? id, string name, int typeId, ProductType type, double price, int quantity, double basePrice)
         {
             Id = id;
             Name = name;
@@ -21,14 +21,17 @@ namespace GroceryStore.Domain.Model
             Type = type;
             Price = price;
             Quantity = quantity;
+            BasePrice = basePrice;
         }
 
         [Key]
         public int? Id { get; set; } = null;
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public int TypeId { get; set; }
         public ProductType? Type { get; set; } = null;
         public double Price { get; set; }
         public int Quantity { get; set; }
+
+        public double BasePrice { get; set; }
     }
 }
