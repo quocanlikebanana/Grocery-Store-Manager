@@ -25,7 +25,7 @@ public class PMOrder
     public List<OrderDetail> Details { get; set; } = new();
     public int CouponUsed { get; set; } = 0;
     public double DiscountPerCoupon { get; set; } = 0;
-    public DateTime? OrderDate { get; set; } = null;
+    public DateTime OrderDate { get; set; } = DateTime.Now;
     public double DiscountMoney => CouponUsed * DiscountPerCoupon;
     public double TotalPrice
     {
@@ -34,7 +34,7 @@ public class PMOrder
             var totalPrice = 0.0;
             foreach (var item in Details)
             {
-                totalPrice += (item.Product?.Price ?? 0) * (item.Quantity ?? 0);
+                totalPrice += (item.Product?.Price ?? 0) * item.Quantity;
             }
             totalPrice -= DiscountMoney;
             return totalPrice;
@@ -42,22 +42,37 @@ public class PMOrder
     }
 
     //TotalPrice = Math.Min( SelectedProduct?.Price ?? 0 * Quantity - SelectedCustomer?.Coupons.Count ?? 0 * SelectedCustomer?.MoneyForPromotion ?? 0, 0),
-    public Order GetOrder()
+    public Order Get()
     {
-
-
         var order = new Order()
         {
             Id = Id ?? -1,
             CustomerID = Customer?.Id ?? -1,
             Customer = Customer,
             details = Details,
-            OrderDate = OrderDate ?? DateTime.MinValue,
+            OrderDate = OrderDate,
             TotalPrice = TotalPrice,
-            // Coupon
-            // DisPerCoup
-            // Discount money = DiscountMoney
+            TotalDiscount = DiscountMoney,
         };
         return order;
     }
+
+
+    //public void Input(Customer customer, List<OrderDetail> details, DateTime orderDate, double totalPrice, double totalDiscount)
+    //{
+
+    //}
+
+    //public static Order? New(Customer customer, List<OrderDetail> details, DateTime orderDate, double totalPrice, double totalDiscount)
+    //{
+    //    var order = new Order()
+    //    {
+    //        CustomerID = customer.Id,
+    //        details = details,
+    //        OrderDate = orderDate,
+    //        TotalPrice = totalPrice,
+    //        TotalDiscount = totalDiscount,
+    //    };
+    //    return order;
+    //}
 }

@@ -19,8 +19,30 @@ using Windows.Foundation.Collections;
 namespace GroceryStore.MainApp.CustomControls;
 public sealed partial class ContentDialogBase : ContentDialog
 {
+    private bool _shoudClose = false;
     public ContentDialogBase()
     {
         this.InitializeComponent();
+        this.Closing += ContentDialogBase_Closing;
+    }
+
+    public void Close()
+    {
+        _shoudClose = true;
+        Hide();
+    }
+
+    // Prevent un-wanted Closing
+    private void ContentDialogBase_Closing(ContentDialog sender, ContentDialogClosingEventArgs args)
+    {
+        if (!_shoudClose)
+        {
+            args.Cancel = true;
+        }
+        else
+        {
+            _shoudClose = false;
+            // Closes
+        }
     }
 }

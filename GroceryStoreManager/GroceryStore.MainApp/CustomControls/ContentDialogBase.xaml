@@ -7,7 +7,9 @@
                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                mc:Ignorable="d">
     <ContentDialog.Resources>
-        <!--<Thickness x:Key="ContentDialogPadding">10,10,10,10</Thickness>-->
+        <Thickness x:Key="ContentDialogPadding">0</Thickness>
+        <x:Double x:Key="ContentDialogMaxWidth">945</x:Double>
+        <x:Double x:Key="ContentDialogMaxHeight">756</x:Double>
     </ContentDialog.Resources>
 
     <ContentPresenter />

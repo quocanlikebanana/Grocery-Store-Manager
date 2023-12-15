@@ -8,6 +8,7 @@ using GroceryStore.MainApp.Command;
 using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Contracts.ViewModels;
 using GroceryStore.MainApp.Factories;
+using GroceryStore.MainApp.Models.Extensions;
 using GroceryStore.MainApp.Views.DisplayObjects;
 
 namespace GroceryStore.MainApp.ViewModels;
@@ -15,29 +16,25 @@ namespace GroceryStore.MainApp.ViewModels;
 
 public partial class OrderViewModel : ObservableRecipient, INavigationAware
 {
-    private readonly IDataService<OrderDetail> _orderDetailDataService;
-    private readonly IPopupService _popupService;
+    private readonly IDataService<Order> _orderDataService;
+    public IPopupService _popupService;
 
-    public OrderViewModel(IDataService<OrderDetail> orderDetailDataService)
+    public OrderViewModel(IDataService<Order> orderDataService)
     {
-        _orderDetailDataService = orderDetailDataService;
+        _orderDataService = orderDataService;
         AddCommand = new DelegateCommand(AddRecord);
-        EditCommand = new DelegateCommand(obj => { TestFunctionDialog("Edit"); });
-        DeleteCommand = new DelegateCommand(obj => { TestFunctionDialog("Delete"); });
+        EditCommand = new DelegateCommand(EditRecord);
+        DeleteCommand = new DelegateCommand(DeleteRecord);
 
         _popupService = PopupServiceFactoryMethod.Get(PopupType.ContentDialog, PopupContent.Order);
     }
 
-    public ObservableCollection<OrderDisplay> Source { get; private set; } = new();
+    public ObservableCollection<Order> Source { get; private set; } = new();
 
     public async void OnNavigatedTo(object parameter)
     {
-        Source.Clear();
-        var data = await _orderDetailDataService.GetAll();
-        foreach (var item in data)
-        {
-            Source.Add(new(item));
-        }
+        var data = await _orderDataService.GetAll();
+        Source.Refresh(data);
     }
 
     public void OnNavigatedFrom()
@@ -47,11 +44,6 @@ public partial class OrderViewModel : ObservableRecipient, INavigationAware
     // =======================================
     // Commands
     // =======================================
-
-    private void TestFunctionDialog(string content)
-    {
-        Debug.WriteLine(content);
-    }
 
     public ICommand AddCommand
     {
@@ -65,8 +57,15 @@ public partial class OrderViewModel : ObservableRecipient, INavigationAware
     {
         get; private set;
     }
-
     private void AddRecord(object? obj)
+    {
+        _popupService.ShowWindow();
+    }
+    private void EditRecord(object? obj)
+    {
+        _popupService.ShowWindow();
+    }
+    private void DeleteRecord(object? obj)
     {
         _popupService.ShowWindow();
     }

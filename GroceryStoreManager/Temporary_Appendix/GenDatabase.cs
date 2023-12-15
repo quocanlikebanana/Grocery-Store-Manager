@@ -1,4 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
 using System.Text.RegularExpressions;
 
 namespace Temporary_Appendix;
@@ -13,7 +15,7 @@ public class GenDatabase
         // Split by "GO" statements
         var statements = Regex.Split(
                 sqlScript,
-                @"^[\t ]*GO[\t ]*\d*[\t ]*(?:--.*)?$",
+                @"^[\t ]*(GO|go)[\t ]*\d*[\t ]*(?:--.*)?$",
                 RegexOptions.Multiline |
                 RegexOptions.IgnorePatternWhitespace |
                 RegexOptions.IgnoreCase);
@@ -25,7 +27,22 @@ public class GenDatabase
     }
 
     // Exit Database before runing the script
+    // Exit Database before runing the script
+    // Exit Database before runing the script
+
     public static void run(string connectionString, string fileName)
+    {
+        using (SqlConnection conn = new SqlConnection(connectionString))
+        {
+            var script = System.IO.File.ReadAllText(fileName);
+            SqlConnection sqlConnection = new SqlConnection(connectionString);
+            Server server = new Server(new ServerConnection(sqlConnection));
+            server.ConnectionContext.ExecuteNonQuery(script);
+        }
+    }
+
+    // For script that has capitalize GO only (old version)
+    public static void run_CapGO(string connectionString, string fileName)
     {
         using (SqlConnection conn = new SqlConnection(connectionString))
         {

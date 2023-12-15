@@ -15,10 +15,14 @@
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Converters\Converters.xaml" />
     <None Remove="CustomControls\ContentDialogBase.xaml" />
     <None Remove="Styles\Controls.xaml" />
     <None Remove="Views\PopupView\ContentDialogBase.xaml" />
     <None Remove="Views\PopupView\OrderPopup.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="Themes\Generic.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +40,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.231008000" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
+    <PackageReference Include="Syncfusion.Editors.WinUI" Version="23.2.7" />
     <PackageReference Include="WinUIEx" Version="2.3.2" />
   </ItemGroup>
 
@@ -47,6 +52,12 @@
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Page Update="Converters\Converters.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <None Update="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </None>
     <Page Update="Styles\Controls.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -79,8 +90,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Themes\" />
     <Folder Include="_libs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
   
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">

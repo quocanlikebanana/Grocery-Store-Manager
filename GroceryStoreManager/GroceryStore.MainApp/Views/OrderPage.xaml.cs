@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using GroceryStore.MainApp.Factories;
 using GroceryStore.MainApp.ViewModels;
 
 using Microsoft.UI.Xaml.Controls;

@@ -4,6 +4,7 @@ using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Services.PopupServices;
 using GroceryStore.MainApp.ViewModels.SubWindowVM;
 using GroceryStore.MainApp.Views.PopupView;
+using Microsoft.UI.Xaml;
 
 namespace GroceryStore.MainApp.Factories;
 
@@ -26,6 +27,7 @@ public class PopupServiceFactoryMethod
         var _orderDataService = App.GetService<IDataService<Order>>();
         var _productDataService = App.GetService<IDataService<Product>>();
         var _customerDataService = App.GetService<IDataService<Customer>>();
+        var _couponDataService = App.GetService<IDataService<Coupon>>();
 
         Type contentType;
         Func<IPopupService, object?, PopupVMBase> contentCreate;
@@ -33,7 +35,7 @@ public class PopupServiceFactoryMethod
         {
             case PopupContent.Order:
                 contentType = typeof(OrderPopup);
-                contentCreate = (ps, obj) => new OrderPopupVM(ps, _orderDataService, _productDataService, _customerDataService, obj as Order);
+                contentCreate = (ps, obj) => new OrderPopupVM(ps, _orderDataService, _productDataService, _customerDataService, _couponDataService, obj as Order);
                 break;
             default:
                 throw new Exception();
@@ -44,8 +46,7 @@ public class PopupServiceFactoryMethod
                 return new WindowPopupService(contentType, contentCreate);
             case PopupType.ContentDialog:
                 return new ContentDialogPopupService(contentType, contentCreate);
-            default:
-                throw new Exception();
         }
+        throw new Exception();
     }
 }
