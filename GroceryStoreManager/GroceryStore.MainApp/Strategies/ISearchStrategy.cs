@@ -15,12 +15,12 @@ public interface ISearchStrategy<T>
 public class SearchByUniqueString<T> : ISearchStrategy<T>
 {
     private readonly List<T> _source;
-    private readonly Func<T, string> _toUniqueString;
+    private readonly Func<T, string> _toSearchString;
 
-    public SearchByUniqueString(List<T> source, Func<T, string> toUniqueString)
+    public SearchByUniqueString(List<T> source, Func<T, string> toSearchString)
     {
         _source = source;
-        _toUniqueString = toUniqueString;
+        _toSearchString = toSearchString;
     }
 
     public List<T> Search(string query)
@@ -29,7 +29,7 @@ public class SearchByUniqueString<T> : ISearchStrategy<T>
         query = query.TextNormalize();
         foreach (var cus in _source)
         {
-            var compareStr = _toUniqueString(cus);
+            var compareStr = _toSearchString(cus);
             if (!compareStr.Contains(query))
             {
                 continue;

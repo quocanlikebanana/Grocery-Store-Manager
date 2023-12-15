@@ -15,11 +15,15 @@
     <EnableMsixTooling>true</EnableMsixTooling>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="_legacy\WindowPopupService.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Converters\Converters.xaml" />
     <None Remove="CustomControls\ContentDialogBase.xaml" />
     <None Remove="Styles\Controls.xaml" />
     <None Remove="Views\PopupView\ContentDialogBase.xaml" />
     <None Remove="Views\PopupView\OrderPopup.xaml" />
+    <None Remove="_legacy\ASB_Ver1.txt" />
   </ItemGroup>
   <ItemGroup>
     <Page Remove="Themes\Generic.xaml" />
@@ -90,6 +94,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="_legacy\" />
     <Folder Include="_libs\" />
   </ItemGroup>
 

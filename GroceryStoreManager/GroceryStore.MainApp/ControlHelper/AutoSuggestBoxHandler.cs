@@ -1,45 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DevExpress.Pdf.Native.BouncyCastle.Asn1.X509;
-using GroceryStore.Domain.Model;
+﻿using GroceryStore.Domain.Model;
 using GroceryStore.MainApp.Helpers;
-using GroceryStore.MainApp.Models.PreModel;
 using GroceryStore.MainApp.Strategies;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using Windows.System;
 
 namespace GroceryStore.MainApp.ControlHelper;
 
-enum LostFocusSource
+enum ASBFlag
 {
-    QuerySubmit,
     None,
+    SuggestionChosen,
+    QuerySubmitted,
+    TextChanged,
+    LostFocus,
 }
 
 public class AutoSuggestBoxHandler<T>
 {
     private readonly ISearchStrategy<T> _searchStrategy;
     private readonly Action<T?> _onChoosen;
-    private readonly Func<T, string> _toString;
+    private readonly Func<T, string> _toDisplayString;
     private readonly Action? _onNotValid;
 
-    private LostFocusSource lostFocusSource = LostFocusSource.None;
-
-    public AutoSuggestBoxHandler(ISearchStrategy<T> searchStrategy, Action<T?> onChoosen, Func<T, string> toString, Action? onNotValid)
+    public AutoSuggestBoxHandler(ISearchStrategy<T> searchStrategy, Action<T?> onChoosen, Func<T, string> toDisplayString, Action? onNotValid)
     {
         _searchStrategy = searchStrategy;
         _onChoosen = onChoosen;
-        _toString = toString;
+        _toDisplayString = toDisplayString;
         _onNotValid = onNotValid;
     }
 
-    public void Assign(AutoSuggestBox target)
+    public void Assign(AutoSuggestBox target, T? initValue)
     {
         target.TextChanged += AutoSuggestBox_TextChanged;
         target.QuerySubmitted += AutoSuggestBox_QuerySubmitted;
@@ -55,93 +47,17 @@ public class AutoSuggestBoxHandler<T>
             target.KeyUp -= OnKeyUp;
             target.LostFocus -= OnLostFocus;
         };
-    }
 
-    // Route: TextChanged => SuggestionChosen => QuerySubmitted
-
-    private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-    {
-        switch (args.Reason)
+        // Some properties need to have
+        target.UpdateTextOnSelect = true;
+        // Only get the initial text
+        target.Loaded += (s, e) =>
         {
-            case AutoSuggestionBoxTextChangeReason.UserInput:
-                var suggestions = _searchStrategy.Search(sender.Text.TextNormalize());
-                if (suggestions.Count > 0)
-                {
-                    sender.ItemsSource = suggestions;
-                }
-                else
-                {
-                    sender.ItemsSource = new string[] { "No results found" };
-                }
-                Debug.Write("UI in");
-                break;
-            case AutoSuggestionBoxTextChangeReason.SuggestionChosen:
-                break;
-            case AutoSuggestionBoxTextChangeReason.ProgrammaticChange:
-                break;
-        }
-    }
-
-    private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
-    {
-        //Don't autocomplete the TextBox when we are showing "no results" (type string)
-        if (args.SelectedItem is T)
-        {
-            sender.Text = args.SelectedItem.ToString();
-            // All of these works (when args.SelectedItem.ToString return the same string (so it knows it the same item))
-            // Need to override ToString
-            // We use Decorator design pattern here
-            //sender.Text = args.SelectedItem.ToString();
-            //sender.Text = ((Customer)args.SelectedItem).ToString();
-            //var str = new StringBuilder();
-            //str.Append(args.SelectedItem.ToString());
-            //sender.Text = str.ToString();
-            //var displayText = _toString.Invoke(item);
-            //sender.Text = displayText;
-        }
-        else
-        {
-            //sender.Text = string.Empty;
-        }
-    }
-
-    private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-    {
-        lostFocusSource = LostFocusSource.QuerySubmit;
-        if (args.ChosenSuggestion != null)
-        {
-            //User selected an 'correct' item, take an action
-            if (args.ChosenSuggestion is T item)
+            if (s is AutoSuggestBox asb && initValue != null)
             {
-                _onChoosen.Invoke((T)args.ChosenSuggestion);
-                var displayText = _toString.Invoke((T)args.ChosenSuggestion);
-                sender.Text = displayText;
+                asb.Text = _toDisplayString.Invoke(initValue);
             }
-            else
-            {
-                _onChoosen.Invoke(default);
-                sender.Text = string.Empty;
-            }
-        }
-        //User submitted text (could be empty) (and not sure if we can find matched record)
-        else
-        {
-            EvalueateASBText(sender, args.QueryText);
-        }
-    }
-
-    private void OnLostFocus(object sender, RoutedEventArgs e)
-    {
-        if (lostFocusSource == LostFocusSource.QuerySubmit)
-        {
-            lostFocusSource = LostFocusSource.None;
-            return;
-        }
-        var asb = (sender as AutoSuggestBox);
-        if (asb is not null)
-        {
-            EvalueateASBText(asb, asb.Text);
-        }
+        };
     }
 
     private void OnKeyUp(object sender, KeyRoutedEventArgs e)
@@ -149,40 +65,13 @@ public class AutoSuggestBoxHandler<T>
         var asb = (AutoSuggestBox)sender;
         if (e.Key == Windows.System.VirtualKey.Enter)
         {
-            MakeLoseFocus(sender);
+            //MakeLoseFocus(sender);
         }
         else if (e.Key == Windows.System.VirtualKey.Escape)
         {
             asb.Text = string.Empty;
             MakeLoseFocus(sender);
         }
-    }
-
-    private void EvalueateASBText(AutoSuggestBox sender, string text)
-    {
-        string? displayText;
-        if (!string.IsNullOrEmpty(text))
-        {
-            var suggestions = _searchStrategy.Search(text);
-            if (suggestions.Count > 0)
-            {
-                _onChoosen.Invoke(suggestions.First());
-                displayText = _toString.Invoke(suggestions.First());
-            }
-            else
-            {
-                _onNotValid?.Invoke();
-                _onChoosen.Invoke(default);
-                displayText = string.Empty;
-            }
-        }
-        else
-        {
-            _onNotValid?.Invoke();
-            _onChoosen.Invoke(default);
-            displayText = string.Empty;
-        }
-        sender.Text = displayText;
     }
 
     /// <summary>
@@ -199,5 +88,145 @@ public class AutoSuggestBoxHandler<T>
         control.IsEnabled = false;
         control.IsEnabled = true;
         control.IsTabStop = isTabStop;
+    }
+
+    // =================== PROCESS ===================
+
+    // Thread controller
+    private ASBFlag _oneTimeTextChanged = ASBFlag.None; // sender.Text = ...
+    private ASBFlag _oneTimeLostFocus = ASBFlag.None;   // SC, QS will gonna trigger LostFocus
+
+    private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+        {
+            OnTextChanged(sender);
+        }
+        // Called when text changed during QuerySubmitted
+        else if (args.Reason == AutoSuggestionBoxTextChangeReason.ProgrammaticChange)
+        {
+        }
+        // Called when text changed during SuggestionChanged, and match the ToString() of the object
+        else if (args.Reason == AutoSuggestionBoxTextChangeReason.SuggestionChosen)
+        {
+        }
+    }
+
+    private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+    {
+        _oneTimeLostFocus = ASBFlag.SuggestionChosen;
+        _oneTimeTextChanged = ASBFlag.SuggestionChosen;
+        if (args.SelectedItem is T item)
+        {
+            var displayText = _toDisplayString.Invoke(item);
+            sender.Text = displayText;
+        }
+        else
+        {
+            // The selected item is not T, most likely the "Not found" string
+            sender.Text = string.Empty;
+        }
+    }
+
+    private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        _oneTimeLostFocus = ASBFlag.QuerySubmitted;
+        _oneTimeTextChanged = ASBFlag.QuerySubmitted;
+        if (args.ChosenSuggestion != null)
+        {
+            HandleSuggestSubmit(sender, args.ChosenSuggestion);
+        }
+        //User submitted text (could be empty) (and not sure if we can find matched record)
+        else
+        {
+            HandleTextSubmit(sender, args.QueryText);
+        }
+    }
+
+    private void OnLostFocus(object sender, RoutedEventArgs e)
+    {
+        if (_oneTimeLostFocus != ASBFlag.None)
+        {
+            _oneTimeLostFocus = ASBFlag.None;
+            return;
+        }
+        var asb = (AutoSuggestBox)sender;
+        HandleTextSubmit(asb, asb.Text);
+    }
+
+    private void OnTextChanged(AutoSuggestBox sender)
+    {
+        // There're special cases when sender.Text is the same as text setter value (like sender.Text = "", when its already "") so it won't fire TextChanged event, we need to set flag manually
+        // We not set for ProgrammaticChange manually, cause we don't know whether it gonna be fired somewhere else (so need to set flag manually where we think it gonna fire this event)
+        if (_oneTimeTextChanged != ASBFlag.None)
+        {
+            _oneTimeTextChanged = ASBFlag.None;
+            return;
+        }
+        var suggestions = _searchStrategy.Search(sender.Text.TextNormalize());
+        if (suggestions.Count > 0)
+        {
+            sender.ItemsSource = suggestions;
+        }
+        else
+        {
+            sender.ItemsSource = new string[] { "No results found" };
+        }
+    }
+
+    // ================= HELPER =================
+
+    private void HandleSuggestSubmit(AutoSuggestBox sender, object suggestObject)
+    {
+        string? displayText;
+        //User selected an 'correct' item, take an action
+        if (suggestObject is T item)
+        {
+            _onChoosen.Invoke((T)suggestObject);
+            displayText = _toDisplayString.Invoke((T)suggestObject);
+            _oneTimeTextChanged = ASBFlag.None;
+        }
+        // The suggest is "Not found"
+        else
+        {
+            // The SC has set sender.Text to "", when we set it again, it won't fire
+            _onChoosen.Invoke(default); // Set the SelectedItem to null
+            displayText = string.Empty;
+            _oneTimeTextChanged = ASBFlag.None;
+        }
+        sender.Text = displayText;
+    }
+
+    private void HandleTextSubmit(AutoSuggestBox sender, string text)
+    {
+        string? displayText;
+        if (!string.IsNullOrEmpty(text))
+        {
+            var suggestions = _searchStrategy.Search(text);
+            // Record exists
+            if (suggestions.Count > 0)
+            {
+                _onChoosen.Invoke(suggestions.First());
+                displayText = _toDisplayString.Invoke(suggestions.First());
+                _oneTimeTextChanged = ASBFlag.None;
+            }
+            else
+            {
+                // Record not exists
+                _onNotValid?.Invoke();
+                _onChoosen.Invoke(default);
+                displayText = string.Empty;
+                _oneTimeTextChanged = ASBFlag.None;
+            }
+        }
+        // Empty string, Record not exists
+        else
+        {
+            _onNotValid?.Invoke();
+            _onChoosen.Invoke(default);
+            displayText = string.Empty;
+            _oneTimeTextChanged = ASBFlag.None;
+        }
+        sender.Text = displayText;
     }
 }

@@ -19,19 +19,20 @@ public class ContentDialogPopupService : IPopupService
         _createVM = createVM;
     }
 
-    public event Action<object>? OnPopupAcceptSucess;
+    public event Action<object?>? OnPopupAcceptSucess;
 
     public void CloseWindow()
     {
         _contentDialog?.Close();
     }
 
-    public async void ShowWindow(object? content = null)
+    public async Task<object?> ShowWindow(object? content = null)
     {
+        object? result = null;
         var viewModel = _createVM.Invoke(this, content);
         if (Activator.CreateInstance(_tView, viewModel) is not Page view)
         {
-            return;
+            return result;
         }
         _contentDialog = new ContentDialogBase()
         {
@@ -42,10 +43,11 @@ public class ContentDialogPopupService : IPopupService
         {
             if (viewModel.Result == PopupResult.Suceed)
             {
-                var result = viewModel.GetFormData();
-                OnPopupAcceptSucess?.Invoke(result);
+                result = viewModel.GetFormData();
+                //OnPopupAcceptSucess?.Invoke(result);
             }
         };
         await _contentDialog.ShowAsync();
+        return result;
     }
 }

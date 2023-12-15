@@ -1,4 +1,8 @@
-﻿using System;
+﻿using GroceryStore.Data.EntityFramework.Services;
+using GroceryStore.Domain.Model;
+using GroceryStore.Domain.Service;
+using Microsoft.Data.SqlClient;
+using System;
 
 namespace Test_ConsoleApp
 {
@@ -11,7 +15,7 @@ namespace Test_ConsoleApp
             //await cusbd.Update(1,new Customer() { 
             //    Name = "vo chi trung",
             //    MoneyForPromotion= 999,
-             
+
             //});
 
 
@@ -119,18 +123,115 @@ namespace Test_ConsoleApp
 
         }
 
+        public static async Task testOrderInsert(string connectionString)
+        {
+            IDataService<Order> orderdbs = new OrderDataService(connectionString);
+            IDataService<Customer> customerdbs = new CustomerDataService(connectionString);
+            IDataService<Product> productdbs = new ProductDataService(connectionString);
+            //await orderdbs.Create(new Order()
+            //{
+            //    Customer = new Customer()
+            //    {
+            //        Name = "An",
+            //        MoneyForPromotion = 0,
+            //        CouponCount = 12,
+            //    },
+            //    OrderDate = DateTime.Now,
+            //    details = new List<OrderDetail>(){
+            //        new OrderDetail() {
+            //            Product = new Product() {
+            //                Name = "cac dai 8m",
+            //                Type = new ProductType()
+            //                {
+            //                    Name = "do truy",
+            //                },
+            //                Price = 100,
+            //                Quantity = 100,
+            //                BasePrice = 100,
+            //            },
+            //            Quantity = 20,
+            //        },
+            //        new OrderDetail() {
+            //            ProductId = 3,
+            //            Quantity = 20,
+            //        }
+            //    },
+            //    TotalPrice = 0,
+            //    TotalDiscount = 0,
+            //});
+            var productList = (await productdbs.GetAll()).ToList();
+            var customerList = (await customerdbs.GetAll()).ToList();
+
+            var choosenCustomer = customerList[1];
+            var details = new List<OrderDetail>()
+            {
+                new OrderDetail()
+                {
+                     ProductId = productList[0].Id??-1,
+                     Quantity = 1,
+                },
+                new OrderDetail()
+                {
+                    ProductId = productList[1].Id??-1,
+                    Quantity = 4,
+                }
+            };
+            var result = Task.Run(async () => await orderdbs.Create(new Order()
+            {
+                CustomerID = choosenCustomer.Id,
+                OrderDate = DateTime.Now,
+                details = details,
+                TotalPrice = 0,
+                TotalDiscount = 0,
+            }));
+            var result2 = await result;
+
+            //await orderdbs.Create(new Order()
+            //{
+            //    CustomerID = 1,
+            //    OrderDate = DateTime.Now,
+            //    details = new List<OrderDetail>(){
+            //        new OrderDetail() {
+            //            Product = new Product() {
+            //                Name = "cac dai 8m",
+            //                Type = new ProductType()
+            //                {
+            //                    Name = "do truy",
+            //                },
+            //                Price = 100,
+            //                Quantity = 100,
+            //                BasePrice = 100,
+            //            },
+            //            Quantity = 20,
+            //        },
+            //        new OrderDetail() {
+            //            ProductId = 3,
+            //            Quantity = 20,
+            //        }
+            //    },
+            //    TotalPrice = 0,
+            //    TotalDiscount = 0,
+            //});
+        }
+
         static async Task Main(string[] args)
         {
-            try {
+            try
+            {
                 var builder = new SqlConnectionStringBuilder();
                 builder.DataSource = "localhost\\SQLEXPRESS";
-                builder.InitialCatalog = "newestDataBase";
+                builder.InitialCatalog = "testDataWindow";
                 builder.IntegratedSecurity = true;
                 builder.TrustServerCertificate = true;
                 string connectionString = builder.ConnectionString;
 
-                await testOrderDetail(connectionString);
-            } catch (Exception ex)
+                //await testOrderDetail(connectionString);
+                //await testOrderInsert(connectionString);
+                IDataService<Order> orderdbs = new OrderDataService(connectionString);
+                await orderdbs.Delete(6);
+
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 Console.WriteLine($"{ex.InnerException?.Message}");

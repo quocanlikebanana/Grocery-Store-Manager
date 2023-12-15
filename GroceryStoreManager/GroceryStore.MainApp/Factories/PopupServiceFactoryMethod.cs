@@ -4,13 +4,12 @@ using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Services.PopupServices;
 using GroceryStore.MainApp.ViewModels.SubWindowVM;
 using GroceryStore.MainApp.Views.PopupView;
-using Microsoft.UI.Xaml;
 
 namespace GroceryStore.MainApp.Factories;
 
 public enum PopupType
 {
-    Window,
+    //Window,
     ContentDialog,
 }
 
@@ -42,8 +41,8 @@ public class PopupServiceFactoryMethod
         }
         switch (type)
         {
-            case PopupType.Window:
-                return new WindowPopupService(contentType, contentCreate);
+            //case PopupType.Window:
+            //    return new WindowPopupService(contentType, contentCreate);
             case PopupType.ContentDialog:
                 return new ContentDialogPopupService(contentType, contentCreate);
         }

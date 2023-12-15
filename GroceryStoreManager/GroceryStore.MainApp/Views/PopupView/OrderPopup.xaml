@@ -32,6 +32,7 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
 
                 <!--The auto focus when click on blank space problem: https://stackoverflow.com/questions/49917853/why-is-textbox-is-always-geting-focus-when-i-click-the-blank-area-of-the-page-->
@@ -50,12 +51,13 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <AutoSuggestBox Grid.Row="0"
                                     Grid.Column="0"
-                                    Grid.ColumnSpan="2"
+                                    Grid.ColumnSpan="3"
                                     x:Name="ProductASB"
                                     Margin="10"
                                     Header="Select Product:"
@@ -73,19 +75,33 @@
 
                     <dxe:SpinEdit Grid.Row="1"
                                   Grid.Column="0"
-                                  Margin="10"
                                   Header="Quantity:"
-                                  HorizontalAlignment="Stretch"
-                                  EditValue="{x:Bind ViewModel.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  MinValue="1">
+                                  Margin="10"
+                                  MinValue="1"
+                                  MaxValue="{x:Bind ViewModel.MaxQuantity}"
+                                  EditValue="{x:Bind ViewModel.Quantity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <dxe:SpinEdit.TextInputSettings>
                             <dxe:TextInputMaskSettings MaskType="Numeric"
                                                        Mask="n0" />
                         </dxe:SpinEdit.TextInputSettings>
                     </dxe:SpinEdit>
 
+                    <dxe:TextEdit Grid.Row="1"
+                                  Grid.Column="1"
+                                  Margin="10"
+                                  Header="Quantity left:"
+                                  IsReadOnly="True"
+                                  IsEnabled="{x:Bind ViewModel.HasProduct}"
+                                  IsEnabledChanged="SpineditIsEnabledChanged"
+                                  EditValue="{x:Bind ViewModel.MaxQuantity, Mode=OneWay}">
+                        <dxe:TextEdit.TextInputSettings>
+                            <dxe:TextInputMaskSettings MaskType="Numeric"
+                                                       Mask="n0" />
+                        </dxe:TextEdit.TextInputSettings>
+                    </dxe:TextEdit>
+
                     <Button Grid.Row="1"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Margin="10"
                             Content="Add to Order"
                             HorizontalAlignment="Right"
@@ -94,7 +110,7 @@
                             Command="{x:Bind ViewModel.AddToOrderCommand}" />
 
                     <ScrollViewer Grid.Row="2"
-                                  Grid.ColumnSpan="2"
+                                  Grid.ColumnSpan="3"
                                   Margin="10"
                                   HorizontalAlignment="Center"
                                   HorizontalScrollMode="Auto"
@@ -159,7 +175,8 @@
                       Grid.Row="1"
                       Padding="10"
                       BorderThickness="1"
-                      BorderBrush="{StaticResource SystemBaseMediumLowColor}">
+                      BorderBrush="{StaticResource SystemBaseMediumLowColor}"
+                      Visibility="{x:Bind ViewModel.CustomerSection, Converter={StaticResource BoolToVisibility}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
@@ -176,7 +193,8 @@
                                     Header="Select Customer:"
                                     Margin="10"
                                     PlaceholderText="Choose a Customer"
-                                    QueryIcon="People">
+                                    QueryIcon="People"
+                                    IsEnabled="{x:Bind ViewModel.CustomerSection}">
                         <AutoSuggestBox.ItemTemplate>
                             <DataTemplate x:DataType="model:Customer">
                                 <!--NO COMMA WHEN BINDING IS EMPTY (SELF BIND)-->
@@ -194,8 +212,7 @@
                                   MinValue="0"
                                   MaxValue="{x:Bind ViewModel.CouponCustomerHas}"
                                   EditValue="{x:Bind ViewModel.CouponUsed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  IsEnabled="{x:Bind ViewModel.HasCustomer}"
-                                  IsEnabledChanged="CouponIsEnabledChanged">
+                                  IsEnabled="{x:Bind ViewModel.CustomerSection}">
                         <dxe:SpinEdit.TextInputSettings>
                             <dxe:TextInputMaskSettings MaskType="Numeric"
                                                        Mask="n0" />
@@ -209,7 +226,7 @@
                                   IsReadOnly="True"
                                   EditValue="{x:Bind ViewModel.CouponCustomerHas}"
                                   IsEnabled="{x:Bind ViewModel.HasCustomer}"
-                                  IsEnabledChanged="CouponIsEnabledChanged">
+                                  IsEnabledChanged="SpineditIsEnabledChanged">
                         <dxe:TextEdit.TextInputSettings>
                             <dxe:TextInputMaskSettings Mask="n0"
                                                        MaskType="Numeric" />
@@ -221,7 +238,8 @@
                                   Header="Current Coupon Value: "
                                   Margin="10"
                                   EditValue="{x:Bind ViewModel.CurrentCouponValue, Mode=OneTime, Converter={StaticResource CurrencyVNDConverter}}"
-                                  IsReadOnly="True">
+                                  IsReadOnly="True"
+                                  IsEnabled="{x:Bind ViewModel.CustomerSection}">
                     </dxe:TextEdit>
                 </Grid>
                 <!--Coupon Section === End-->
@@ -230,10 +248,17 @@
                               Header="Order date:"
                               Margin="20 10"
                               NullValue="Enter a date"
-                              EditValue="{x:Bind ViewModel.OrderDate}"
+                              EditValue="{x:Bind ViewModel.OrderDate, Mode=TwoWay}"
                               MaxValue="{x:Bind ViewModel.DateTimeNow, Mode=OneTime}" />
 
                 <dxe:TextEdit Grid.Row="3"
+                              Header="Total Discount:"
+                              Margin="20 10"
+                              EditValue="{x:Bind ViewModel.TotalDiscount, Mode=OneWay, Converter={StaticResource CurrencyVNDConverter}}"
+                              IsReadOnly="True">
+                </dxe:TextEdit>
+
+                <dxe:TextEdit Grid.Row="4"
                               Header="Total Price:"
                               Margin="20 10"
                               EditValue="{x:Bind ViewModel.TotalPrice, Mode=OneWay, Converter={StaticResource CurrencyVNDConverter}}"
@@ -247,21 +272,37 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
 
-                <Button Grid.Column="0"
+                <Border Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        Margin="10"
+                        Padding="20 10"
+                        Visibility="{x:Bind ViewModel.ShouldDisplayError}">
+                    <TextBlock Text="{x:Bind ViewModel.ErrorMessage}"
+                               Foreground="{StaticResource SystemErrorTextColor}" />
+                </Border>
+
+                <Button Grid.Row="1"
+                        Grid.Column="0"
                         Style="{StaticResource DefaultButtonStyle}"
                         HorizontalAlignment="Stretch"
                         Content="Cancel"
                         Margin="20 10 10 10"
                         Padding="0 10"
                         Command="{x:Bind ViewModel.DeclineCommand}" />
-                <Button Grid.Column="1"
+                <Button Grid.Row="1"
+                        Grid.Column="1"
                         Style="{StaticResource AccentButtonStyle}"
                         HorizontalAlignment="Stretch"
                         Content="Confirm"
                         Margin="10 10 20 10"
                         Padding="0 10"
                         Command="{x:Bind ViewModel.AcceptCommand}" />
+
             </Grid>
         </Grid>
     </ScrollViewer>

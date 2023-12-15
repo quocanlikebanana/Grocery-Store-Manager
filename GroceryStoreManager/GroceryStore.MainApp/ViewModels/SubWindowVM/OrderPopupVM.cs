@@ -1,42 +1,52 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DevExpress.Data.Extensions;
 using GroceryStore.Domain.Model;
 using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Command;
 using GroceryStore.MainApp.Contracts.Services;
+using GroceryStore.MainApp.Decorators;
 using GroceryStore.MainApp.Models.Extensions;
 using GroceryStore.MainApp.Models.PreModel;
+using Microsoft.UI.Xaml;
 
 namespace GroceryStore.MainApp.ViewModels.SubWindowVM;
 
 public partial class OrderPopupVM : PopupVMBase
 {
-    private readonly IDataService<Order> _orderDeatailDataService;
+    private readonly IDataService<Order> _orderDataService;
     private readonly IDataService<Product> _productDataService;
     private readonly IDataService<Customer> _customerDataService;
     private readonly IDataService<Coupon> _couponDataService;
-    private readonly PMOrder _order;
 
-    public OrderPopupVM(IPopupService dialogService, IDataService<Order> dataService, IDataService<Product> productDataService, IDataService<Customer> customerDataService, IDataService<Coupon> couponDataService, Order? order = null) : base(dialogService, order)
+    private int? _id = null;
+
+    public OrderPopupVM(IPopupService dialogService, IDataService<Order> orderDataService, IDataService<Product> productDataService, IDataService<Customer> customerDataService, IDataService<Coupon> couponDataService, Order? order = null) : base(dialogService, order)
     {
-        _orderDeatailDataService = dataService;
+        _orderDataService = orderDataService;
         _productDataService = productDataService;
         _customerDataService = customerDataService;
         _couponDataService = couponDataService;
 
-        _order = new PMOrder(order);
-        _orderDate = _order.OrderDate;
-        _selectedCustomer = _order.Customer;
-        _couponUsed = _order.CouponUsed;
-        _totalPrice = _order.TotalPrice;
-        OnLoad();
-        Details.Refresh(_order.Details);
+        LoadData();
+        OrderResult = null;
+        CustomerSection = true;
+        // Should loaded all resource
 
+        // Edit
+        if (order != null)
+        {
+            _id = order.Id;
+            OrderDate = order.OrderDate;
+            SelectedCustomer = AvailibleCustomer.Find(cus => CustomerDecorator.Equal(cus, order.Customer));
+            TotalPrice = order.TotalPrice;
+            Details.Refresh(order.details);
+            CustomerSection = false;
+            _baseTotalDiscount = order.TotalDiscount;
+        }
         AddToOrderCommand = new DelegateCommand(AddToOrder);
         DeleteFromOrderCommand = new DelegateCommand(DeleteFromOrder);
-
-        //DeclineCommand = new DelegateCommand(Decline);
     }
 
     // >>>> Customer
@@ -49,11 +59,15 @@ public partial class OrderPopupVM : PopupVMBase
     // >>>> Sub section: Order Details
     // >>>>>>>> Product
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(MaxQuantity), nameof(HasProduct))]
     private Product? _selectedProduct;
     public List<Product> AvailbleProduct { get; } = new();
     // <<<<<<<< Product
     [ObservableProperty]
     private double _quantity = 1;
+
+    public double MaxQuantity => _selectedProduct?.Quantity ?? 1;
+    public bool HasProduct => SelectedProduct is not null;
     public ICommand AddToOrderCommand
     {
         get;
@@ -65,33 +79,44 @@ public partial class OrderPopupVM : PopupVMBase
     public ObservableCollection<OrderDetail> Details { get; private set; } = new();
     private void AddToOrder(object? param)
     {
-        if (SelectedProduct == null || Quantity < 1)
+        if (SelectedProduct == null || Quantity < 1 || Quantity > MaxQuantity)
         {
             return;
         }
         var orderDetail = new OrderDetail()
         {
+            ProductId = SelectedProduct.Id ?? -1,
             Product = SelectedProduct,
             Quantity = (int)Quantity,
         };
         Details.Add(orderDetail);
+        // trigger
         TotalPrice += Quantity * SelectedProduct.Price;
+        SelectedProduct.Quantity -= (int)Quantity;
+        OnPropertyChanged(nameof(MaxQuantity));
     }
     private void DeleteFromOrder(object? param)
     {
-        var orderDetail = (OrderDetail)param!;
-        Details.Remove(orderDetail);
-        TotalPrice -= orderDetail.Quantity * orderDetail.Product!.Price;
+        var odParam = (OrderDetail)param!;
+        // For the edit case (when previous product is not in the list)
+        var productInList = AvailbleProduct.Find(x => x.Id == odParam.ProductId);
+        Details.Remove(odParam);
+        // trigger
+        TotalPrice -= odParam.Quantity * odParam.Product!.Price;
+        productInList!.Quantity += odParam.Quantity;
+        OnPropertyChanged(nameof(MaxQuantity));
     }
     // <<<< Sub section: Order Details
 
     // <<<< Date
     [ObservableProperty]
-    private DateTime _orderDate;
+    private DateTime _orderDate = DateTime.Now;
+    public DateTime DateTimeNow => DateTime.Now;
     // >>>> Date
 
     // >>>> Coupon
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(TotalDiscount))]
     private double _couponUsed;
     private double temCouponUsed = 0;
     partial void OnCouponUsedChanging(double value)
@@ -103,100 +128,175 @@ public partial class OrderPopupVM : PopupVMBase
         TotalPrice -= temCouponUsed * CurrentCouponValue;
     }
 
-    public bool HasCustomer => SelectedCustomer is not null;
+    public bool HasCustomer => SelectedCustomer is not null && CustomerSection;
     public double CouponCustomerHas => SelectedCustomer?.CouponCount ?? 0;
-    public double CurrentCouponValue
+    private double _currentCouponValue = -9999;
+    public double CurrentCouponValue => _currentCouponValue;
+    private double _baseTotalDiscount = 0;
+    public double TotalDiscount
     {
         get
         {
-            var queryRes = Task.Run(async () => (await _couponDataService.GetAll()).First().perCoupon).Result;
-            return queryRes;
+            if (CustomerSection)
+            {
+                return CouponUsed * CurrentCouponValue;
+            }
+            return _baseTotalDiscount;
         }
     }
     // <<<< Coupon
 
-    public DateTime DateTimeNow => DateTime.Now;
+    private double _temBorrow = 0;
     [ObservableProperty]
     private double _totalPrice;
     partial void OnTotalPriceChanged(double value)
     {
-        if (value < 0)
+        if (CustomerSection == true)
         {
-            if (CouponUsed > 0)
+            if (value < 0)
             {
-                CouponUsed--;
+
+                if (CouponUsed > 0)
+                {
+                    CouponUsed--;
+                }
+                else
+                {
+                    // System error
+                }
+            }
+        }
+        // Edit mode
+        else
+        {
+            if (value >= 0)
+            {
+                _totalPrice += _temBorrow;
+                _temBorrow = 0;
             }
             else
             {
-                // System error
+                _totalPrice = 0;
+                _temBorrow += value;
             }
         }
     }
 
-    //public ICommand AcceptCommand => new DelegateCommand(Accept);
-    //public ICommand DeclineCommand { get; }
 
     // >>>> ===========================
     // >>>> ===========================
 
-    private bool valid
+    private string? _errorMessage = null;
+    // Only update when called
+    public string? ErrorMessage => _errorMessage;
+    public Visibility ShouldDisplayError
     {
         get
         {
-            var res = true;
+            if (_errorMessage != null || _errorMessage == string.Empty)
+            {
+                return Visibility.Visible;
+            }
+            return Visibility.Collapsed;
+        }
+    }
+
+    private bool Valid
+    {
+        get
+        {
             if (TotalPrice < 0)
             {
-                res = false;
+                _errorMessage = "Negative total price";
+                return false;
             }
-            else if (SelectedCustomer is null)
+            if (SelectedCustomer is null)
             {
-                res = false;
+                _errorMessage = "Customer not yet selected";
+                return false;
             }
-            else if (Details.Count == 0)
+            if (CouponUsed < 0 || CouponUsed > CouponCustomerHas)
             {
-                res = false;
+                _errorMessage = "Invalid coupon amount";
+                return false;
             }
-            return res;
+            if (Details.Count == 0)
+            {
+                _errorMessage = "Order has no product";
+                return false;
+            }
+            var testTotalPrice = 0.0;
+            foreach (var item in Details)
+            {
+                testTotalPrice += (item.Product?.Price ?? 0) * item.Quantity;
+            }
+            testTotalPrice -= TotalDiscount;
+            if (testTotalPrice != TotalPrice)
+            {
+                // TODO: hide this, because its system error
+                _errorMessage = "Total price is incorrect";
+                return false;
+            }
+            _errorMessage = null;
+            return true;
         }
     }
 
     // >>>> ===========================
     // >>>> ===========================
 
-    private void OnLoad()
+    public bool CustomerSection { get; private set; }
+
+    // >>>> ===========================
+    // >>>> ===========================
+
+    private void LoadData()
     {
+        _currentCouponValue = Task.Run(async () => (await _couponDataService.GetAll()).First().perCoupon).Result;
         var customerData = Task.Run(_customerDataService.GetAll).Result;
         AvailibleCustomer.Refresh(customerData);
         var productData = Task.Run(_productDataService.GetAll).Result;
         AvailbleProduct.Refresh(productData);
     }
 
-    protected override bool AcceptResultCheck(object formData)
+    protected override bool OnAccepting(object? formData)
     {
-        if (valid == false)
+        if (Valid == false)
         {
             return false;
         }
-        // Bug o day 
-        var result = Task.Run(async () => await _orderDeatailDataService.Create((Order)GetFormData()));
-        if (result.Result == null)
-        {
-            return false;
-        }
+        // Accepted
+        RenewOrderResult();
+        SelectedCustomer!.CouponCount -= (int)CouponUsed;
         return true;
     }
 
-    public override object GetFormData()
+    protected override void OnInvalid()
     {
-        var pmOrder = new PMOrder()
+        base.OnInvalid();
+        OnPropertyChanged(nameof(ErrorMessage));
+        OnPropertyChanged(nameof(ShouldDisplayError));
+    }
+
+    private PMOrder? OrderResult { get; set; }
+    private void RenewOrderResult()
+    {
+        var order = new Order()
         {
-            OrderDate = OrderDate,
-            CouponUsed = (int)CouponUsed,
-            DiscountPerCoupon = CurrentCouponValue,
+            Id = _id,
             Customer = SelectedCustomer,
-            Details = Details.ToList(),
+            CustomerID = SelectedCustomer?.Id,
+            details = Details.ToList(),
+            OrderDate = OrderDate,
+            TotalDiscount = TotalDiscount,
+            TotalPrice = TotalPrice,
         };
-        return pmOrder.Get();
+        OrderResult = new PMOrder(order, (int)CouponUsed);
+    }
+
+    public override object? GetFormData()
+    {
+        return OrderResult;
     }
 }
 

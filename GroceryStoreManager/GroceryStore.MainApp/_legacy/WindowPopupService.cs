@@ -5,7 +5,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace GroceryStore.MainApp.Services.PopupServices;
+namespace GroceryStore.MainApp._legacy;
 
 
 public class WindowPopupService : IPopupService
@@ -21,7 +21,7 @@ public class WindowPopupService : IPopupService
         _createVM = createVM;
     }
 
-    public event Action<object>? OnPopupAcceptSucess;
+    public event Action<object?>? OnPopupAcceptSucess;
 
     public void CloseWindow()
     {

@@ -1,4 +1,5 @@
 using DevExpress.WinUI.Editors;
+using GroceryStore.Domain.Model;
 using GroceryStore.MainApp.ControlHelper;
 using GroceryStore.MainApp.Decorators;
 using GroceryStore.MainApp.Strategies;
@@ -16,22 +17,19 @@ namespace GroceryStore.MainApp.Views.PopupView;
 /// </summary>
 public sealed partial class OrderPopup : Page
 {
-    private readonly AutoSuggestBoxHandler<DecASBCustomer> customerAutoSuggestBoxHandler;
-    private readonly AutoSuggestBoxHandler<DecASBProduct> productAutoSuggestBoxHandler;
+    private readonly AutoSuggestBoxHandler<Customer> _customerAutoSuggestBoxHandler;
+    private readonly AutoSuggestBoxHandler<Product> _productAutoSuggestBoxHandler;
 
     public OrderPopup(PopupVMBase formVM)
     {
         ViewModel = (OrderPopupVM)formVM;
         InitializeComponent();
 
-        var availibleCustomerASB = ViewModel.AvailibleCustomer.Select(x => new DecASBCustomer(x)).ToList();
-        var availibleProductASB = ViewModel.AvailbleProduct.Select(x => new DecASBProduct(x)).ToList();
+        _customerAutoSuggestBoxHandler = new(new SearchByUniqueString<Customer>(ViewModel.AvailibleCustomer, CustomerDecorator.ToSearchString), OnSelectedCustomer, CustomerDecorator.ToDisplayString, null);
+        _customerAutoSuggestBoxHandler.Assign(CustomerASB, ViewModel.SelectedCustomer);
 
-        customerAutoSuggestBoxHandler = new(new SearchByUniqueString<DecASBCustomer>(availibleCustomerASB, DecASBCustomer.ToUniqueString), OnSelectedCustomer, DecASBCustomer.ToDisplayString, null);
-        customerAutoSuggestBoxHandler.Assign(CustomerASB);
-
-        productAutoSuggestBoxHandler = new(new SearchByUniqueString<DecASBProduct>(availibleProductASB, DecASBProduct.ToUniqueString), OnSelectedProduct, DecASBProduct.ToDisplayString, null);
-        productAutoSuggestBoxHandler.Assign(ProductASB);
+        _productAutoSuggestBoxHandler = new(new SearchByUniqueString<Product>(ViewModel.AvailbleProduct, ProductDecorator.ToSearchString), OnSelectedProduct, ProductDecorator.ToDisplayString, null);
+        _productAutoSuggestBoxHandler.Assign(ProductASB, ViewModel.SelectedProduct);
     }
 
     public OrderPopupVM ViewModel
@@ -39,17 +37,17 @@ public sealed partial class OrderPopup : Page
         get; private set;
     }
 
-    private void OnSelectedCustomer(DecASBCustomer? selected)
+    private void OnSelectedCustomer(Customer? selected)
     {
-        ViewModel.SelectedCustomer = selected?.Get();
+        ViewModel.SelectedCustomer = selected;
     }
 
-    private void OnSelectedProduct(DecASBProduct? selected)
+    private void OnSelectedProduct(Product? selected)
     {
-        ViewModel.SelectedProduct = selected?.Get();
+        ViewModel.SelectedProduct = selected;
     }
 
-    private void CouponIsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+    private void SpineditIsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
         // SpinEdit : TextEdit
         if (sender is not TextEdit textEdit)

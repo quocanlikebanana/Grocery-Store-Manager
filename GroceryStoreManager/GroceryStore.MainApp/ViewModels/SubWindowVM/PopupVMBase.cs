@@ -41,10 +41,17 @@ public abstract class PopupVMBase : ObservableRecipient
     // When data is validated, perform submit to the system
     public void Accept(object? obj)
     {
-        var data = GetFormData();
-        var check = AcceptResultCheck(data);
-        Result = check ? PopupResult.Suceed : PopupResult.Failed;
-        _dialogService?.CloseWindow();
+        var check = OnAccepting(null);
+        if (check)
+        {
+            Result = PopupResult.Suceed;
+            _dialogService?.CloseWindow();
+        }
+        else
+        {
+            Result = PopupResult.Failed;
+            OnInvalid();
+        }
     }
 
     public void Decline(object? obj)
@@ -53,10 +60,14 @@ public abstract class PopupVMBase : ObservableRecipient
         _dialogService?.CloseWindow();
     }
 
-    public abstract object GetFormData();
+    public abstract object? GetFormData();
 
-    protected virtual bool AcceptResultCheck(object formData)
+    protected virtual bool OnAccepting(object? formData)
     {
         return true;
+    }
+
+    protected virtual void OnInvalid()
+    {
     }
 }
