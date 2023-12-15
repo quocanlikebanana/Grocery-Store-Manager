@@ -1,18 +1,12 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using System.Configuration;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GroceryStore.Domain.Model;
 using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Command;
 using GroceryStore.MainApp.Contracts.Services;
-using GroceryStore.MainApp.ControlHelper;
-using GroceryStore.MainApp.Decorators;
 using GroceryStore.MainApp.Models.Extensions;
 using GroceryStore.MainApp.Models.PreModel;
-using GroceryStore.MainApp.Strategies;
-using Microsoft.UI.Xaml.Controls;
 
 namespace GroceryStore.MainApp.ViewModels.SubWindowVM;
 
@@ -177,23 +171,19 @@ public partial class OrderPopupVM : PopupVMBase
         AvailbleProduct.Refresh(productData);
     }
 
-    protected override bool ContinueAccept(object formData)
+    protected override bool AcceptResultCheck(object formData)
     {
         if (valid == false)
         {
             return false;
         }
+        // Bug o day 
         var result = Task.Run(async () => await _orderDeatailDataService.Create((Order)GetFormData()));
         if (result.Result == null)
         {
             return false;
         }
         return true;
-    }
-
-    protected override void OnInvalid()
-    {
-        // Action on invalid
     }
 
     public override object GetFormData()

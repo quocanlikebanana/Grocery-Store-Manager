@@ -19,7 +19,7 @@ public class ContentDialogPopupService : IPopupService
         _createVM = createVM;
     }
 
-    public event Action? OnWindowClose;
+    public event Action<object>? OnPopupAcceptSucess;
 
     public void CloseWindow()
     {
@@ -37,6 +37,14 @@ public class ContentDialogPopupService : IPopupService
         {
             Content = view,
             XamlRoot = App.MainWindow.Content.XamlRoot,
+        };
+        _contentDialog.Closed += (s, e) =>
+        {
+            if (viewModel.Result == PopupResult.Suceed)
+            {
+                var result = viewModel.GetFormData();
+                OnPopupAcceptSucess?.Invoke(result);
+            }
         };
         await _contentDialog.ShowAsync();
     }

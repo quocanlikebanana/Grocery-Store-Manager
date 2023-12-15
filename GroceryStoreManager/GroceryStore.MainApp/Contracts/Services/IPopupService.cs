@@ -8,7 +8,7 @@ namespace GroceryStore.MainApp.Contracts.Services;
 
 public interface IPopupService
 {
-    event Action? OnWindowClose;
+    event Action<object>? OnPopupAcceptSucess;
     void ShowWindow(object? content = null);
     void CloseWindow();
 }

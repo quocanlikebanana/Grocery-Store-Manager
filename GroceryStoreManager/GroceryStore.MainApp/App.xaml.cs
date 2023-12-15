@@ -75,7 +75,8 @@ public partial class App : Application
             // TODO2: Connection string configuration
             var builder = new SqlConnectionStringBuilder();
             builder.DataSource = "localhost\\SQLEXPRESS";
-            builder.InitialCatalog = "newestDataBase";
+            //builder.InitialCatalog = "newestDataBase";
+            builder.InitialCatalog = "testDataWindow";
             builder.IntegratedSecurity = true;
             builder.TrustServerCertificate = true;
             var connectionString = builder.ConnectionString;

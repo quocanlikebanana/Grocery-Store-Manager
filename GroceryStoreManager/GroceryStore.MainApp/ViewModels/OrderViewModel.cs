@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using GroceryStore.Domain.Model;
@@ -9,7 +8,6 @@ using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Contracts.ViewModels;
 using GroceryStore.MainApp.Factories;
 using GroceryStore.MainApp.Models.Extensions;
-using GroceryStore.MainApp.Views.DisplayObjects;
 
 namespace GroceryStore.MainApp.ViewModels;
 
@@ -27,6 +25,13 @@ public partial class OrderViewModel : ObservableRecipient, INavigationAware
         DeleteCommand = new DelegateCommand(DeleteRecord);
 
         _popupService = PopupServiceFactoryMethod.Get(PopupType.ContentDialog, PopupContent.Order);
+        _popupService.OnPopupAcceptSucess += PopupDataSubmit;
+    }
+
+    private void PopupDataSubmit(object obj)
+    {
+        var order = (Order)obj;
+        Source.Add(order);
     }
 
     public ObservableCollection<Order> Source { get; private set; } = new();

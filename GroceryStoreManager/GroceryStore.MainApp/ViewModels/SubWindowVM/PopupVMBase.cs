@@ -11,10 +11,17 @@ using GroceryStore.MainApp.Contracts.ViewModels;
 
 namespace GroceryStore.MainApp.ViewModels.SubWindowVM;
 
+public enum PopupResult
+{
+    None,
+    Failed,
+    Canceled,
+    Suceed,
+}
+
 public abstract class PopupVMBase : ObservableRecipient
 {
     private readonly IPopupService _dialogService;
-
     protected object? _content = null;
 
     protected PopupVMBase(IPopupService dialogService, object? content = null)
@@ -29,31 +36,27 @@ public abstract class PopupVMBase : ObservableRecipient
     public ICommand AcceptCommand { get; }
     public ICommand DeclineCommand { get; }
 
+    public PopupResult Result { get; private set; } = PopupResult.None;
+
+    // When data is validated, perform submit to the system
     public void Accept(object? obj)
     {
         var data = GetFormData();
-        var result = ContinueAccept(data);
-        if (result == true)
-        {
-            _dialogService?.CloseWindow();
-        }
-        else
-        {
-            OnInvalid();
-        }
+        var check = AcceptResultCheck(data);
+        Result = check ? PopupResult.Suceed : PopupResult.Failed;
+        _dialogService?.CloseWindow();
     }
 
     public void Decline(object? obj)
     {
+        Result = PopupResult.Canceled;
         _dialogService?.CloseWindow();
     }
 
-    protected virtual bool ContinueAccept(object formData)
+    public abstract object GetFormData();
+
+    protected virtual bool AcceptResultCheck(object formData)
     {
         return true;
     }
-
-    protected abstract void OnInvalid();
-
-    public abstract object GetFormData();
 }

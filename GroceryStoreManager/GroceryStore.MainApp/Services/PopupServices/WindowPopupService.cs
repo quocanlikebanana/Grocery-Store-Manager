@@ -15,13 +15,13 @@ public class WindowPopupService : IPopupService
 
     private Window? _subWindow = null;
 
-    public WindowPopupService(Type TView, Func<IPopupService, object? , PopupVMBase> createVM)
+    public WindowPopupService(Type TView, Func<IPopupService, object?, PopupVMBase> createVM)
     {
         _tView = TView;
         _createVM = createVM;
     }
 
-    public event Action? OnWindowClose;
+    public event Action<object>? OnPopupAcceptSucess;
 
     public void CloseWindow()
     {
@@ -63,7 +63,11 @@ public class WindowPopupService : IPopupService
         {
             // Prevent main window auto close when child close
             IntPrHelper.EnableWindow(hWnd, true);
-            OnWindowClose?.Invoke();
+            if (viewModel.Result == PopupResult.Suceed)
+            {
+                var data = viewModel.GetFormData();
+                OnPopupAcceptSucess?.Invoke(data);
+            }
         };
 
         _subWindow.Activate();
