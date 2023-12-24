@@ -48,7 +48,7 @@
                     </dxr:RibbonGroup>
                     <!--Options-->
                     <dxr:RibbonGroup Caption="Options">
-                        <dxr:RibbonCustomItem DisplayMode="Large">
+                        <!--<dxr:RibbonCustomItem DisplayMode="Large">
                             <Grid Margin="10 0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto" />
@@ -67,12 +67,12 @@
                                              Content="Bottom"
                                              GroupName="NewItemRowPositionGroup" />
                             </Grid>
-                        </dxr:RibbonCustomItem>
-                        <dxr:RibbonCheckBox Text="Allow edit"
-                                            ToolTipDescription="Show or hide ruler.">
+                        </dxr:RibbonCustomItem>-->
+                        <dxr:RibbonCheckBox Text="Disable edit"
+                                            ToolTipDescription="Disable edit">
                         </dxr:RibbonCheckBox>
-                        <dxr:RibbonCheckBox Text="Allow delete"
-                                            ToolTipDescription="Show or hide grid lines.">
+                        <dxr:RibbonCheckBox Text="Disable delete"
+                                            ToolTipDescription="Disable delete">
                         </dxr:RibbonCheckBox>
                         <!--<dxr:RibbonCheckBox Text="Status bar"
                                              ToolTipDescription="Show or hide status bar.">
@@ -149,6 +149,8 @@
                              SelectedItem="{x:Bind ViewModel.SelectedOrder, Mode=TwoWay}"
                              NavigationStyle="Row"
                              AutoGenerateColumns="False"
+                             SearchPanelClearOnClose="True"
+                             ShowSearchPanelMode="Always"
                              x:Name="Test">
                 <dxg:GridControl.Columns>
                     <dxg:GridTextColumn Header="Order ID"
