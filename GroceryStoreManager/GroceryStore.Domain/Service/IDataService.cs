@@ -6,6 +6,17 @@ using System.Threading.Tasks;
 
 namespace GroceryStore.Domain.Service
 {
+    public class Result<T>
+    {
+        IEnumerable<T> Items { get; }
+        int TotalPage { get; }
+        public Result(IEnumerable<T> items, int totalPage)
+        {
+            Items = items;
+            TotalPage = totalPage;
+        }
+    }
+
     public interface IDataService<T>
     {
         // Basic 
@@ -19,6 +30,7 @@ namespace GroceryStore.Domain.Service
         Task<bool> Delete(int id1,int id2);
 
         // Filter + paging
+        Task<Result<T>> GetFull(string search = "", string sort = "", bool asc = true, object? lowerLimit = null, object? upperLimit = null, int perPage = 5, int pageNum = 1);
         Task<IEnumerable<T>> FilterPrice(double min, double max);
         Task<IEnumerable<T>> FilterPrice(double min, double max, int page, int perPage);
 

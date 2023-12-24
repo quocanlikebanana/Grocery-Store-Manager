@@ -32,10 +32,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                var result = await context
-                    .Set<Order>()
-                    .Where(o => o.OrderDate >= start && o.OrderDate <= end)
-                    .SumAsync(o => o.TotalPrice);
+                var result = await context.Set<Order>().Where(o => o.OrderDate >= start && o.OrderDate <= end).SumAsync(o => o.TotalPrice);
                 return result;
             }
         }
@@ -66,9 +63,7 @@ namespace GroceryStore.Data.EntityFramework.Services
         {
             using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
             {
-                var result = await context.Set<OrderDetail>()
-                    .Include(d => d.Product)
-                    .SumAsync(d => d.Product.BasePrice * d.Quantity);
+                var result = await context.Set<OrderDetail>().Include(d => d.Product).Where(d => d.Product != null).SumAsync(d => d.Product.BasePrice * d.Quantity);
                 return result;
             }
         }
@@ -84,7 +79,10 @@ namespace GroceryStore.Data.EntityFramework.Services
                 {
                     foreach (var detail in entity.details)
                     {
-                        totalFund += detail.Product.BasePrice * detail.Quantity;
+                        if (detail.Product != null)
+                        {
+                            totalFund += detail.Product.BasePrice * detail.Quantity;
+                        }
                     }
                 }
 
