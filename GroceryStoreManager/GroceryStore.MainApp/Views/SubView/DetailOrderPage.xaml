@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="GroceryStore.MainApp.Views.SubView.DetailOrderPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GroceryStore.MainApp.Views.SubView"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:tk="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:cc="using:GroceryStore.MainApp.CustomControls"
+    x:DefaultBindMode="OneTime">
+
+    <!--One time binding-->
+
+    <Grid
+        Padding="10 50">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style
+                TargetType="cc:Separator">
+                <Setter
+                    Property="Color"
+                    Value="{StaticResource AccentAAFillColorSecondaryBrush}" />
+            </Style>
+        </Grid.Resources>
+
+        <!--Order info + Customer-->
+        <Grid
+            Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style
+                    TargetType="TextBlock">
+                    <Setter
+                        Property="Margin"
+                        Value="5 10" />
+                </Style>
+            </Grid.Resources>
+
+            <!--Order info-->
+            <TextBlock
+                Grid.Row="1">
+                <TextBlock.Inlines>
+                    <Run
+                        Text="Order ID: " />
+                    <Run
+                        Text="{x:Bind ViewModel.Id}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+            <TextBlock
+                Grid.Row="2">
+                <TextBlock.Inlines>
+                    <Run
+                        Text="Order Date: " />
+                    <Run
+                        Text="{x:Bind ViewModel.OrderDate}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+
+            <cc:Separator
+                Grid.Row="3"
+                IsHorizontal="True"
+                Margin="5" />
+
+            <!--Customer-->
+            <TextBlock
+                Grid.Row="4"
+                Text="Customer"
+                FontSize="{StaticResource SubtitleTextBlockFontSize}"
+                FontWeight="SemiBold" />
+            <TextBlock
+                Grid.Row="5">
+                <TextBlock.Inlines>
+                    <Run
+                        Text="ID: " />
+                    <Run
+                        Text="{x:Bind ViewModel.Customer.Id}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+            <TextBlock
+                Grid.Row="6">
+                <TextBlock.Inlines>
+                    <Run
+                        Text="Name: " />
+                    <Run
+                        Text="{x:Bind ViewModel.Customer.Name}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+            <TextBlock
+                Grid.Row="7">
+                <TextBlock.Inlines>
+                    <Run
+                        Text="Telephone Number: " />
+                    <Run
+                        Text="{x:Bind ViewModel.Customer.Tel}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+            <TextBlock
+                Grid.Row="8">
+                <TextBlock.Inlines>
+                    <Run
+                        Text="Address: " />
+                    <Run
+                        Text="{x:Bind ViewModel.Customer.Address}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+
+            <Button
+                Grid.Row="9"
+                Margin="10"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Left"
+                Style="{StaticResource DefaultButtonStyle}"
+                Background="{StaticResource LayerFillColorDefaultBrush}"
+                Content="Back"
+                Command="{x:Bind ViewModel.GoBackCommand}" />
+        </Grid>
+
+        <!--Product list-->
+        <Grid
+            Grid.Column="1"
+            x:Name="productContainer">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Text="Details"
+                FontSize="{StaticResource SubtitleTextBlockFontSize}"
+                FontWeight="SemiBold"
+                Margin="5 20" />
+            <ScrollViewer
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                HorizontalScrollMode="Auto"
+                HorizontalScrollBarVisibility="Auto"
+                VerticalAlignment="Stretch"
+                MaxWidth="{Binding ElementName=productContainer, Path=ActualWidth}">
+
+                <tk:DataGrid
+                    ItemsSource="{x:Bind ViewModel.Details}"
+                    AutoGenerateColumns="False"
+                    HorizontalAlignment="Stretch"
+                    IsReadOnly="True"
+                    IsTabStop="False"
+                    AllowFocusOnInteraction="False"
+                    Width="{Binding ElementName=productContainer, Path=ActualWidth}">
+                    <!--Trick: change the static resource key, works for elements which don't have Dependency Property and you want to use other static resource-->
+                    <!--https://github.com/CommunityToolkit/WindowsCommunityToolkit/issues/3393-->
+                    <tk:DataGrid.Resources>
+                        <!--Can't use static resource with this-->
+                        <!--Also, this thing use color not brush-->
+                        <!--<Color x:Key="DataGridColumnHeaderBackgroundColor">#FF60B560</Color>
+                        <Color x:Key="DataGridColumnHeaderHoveredBackgroundColor">#FFFFF700</Color>
+                        <Color x:Key="DataGridColumnHeaderPressedBackgroundColor">#FF00e5ff</Color>-->
+                        <StaticResource
+                            x:Key="DataGridColumnHeaderBackgroundColor"
+                            ResourceKey="LayerFillColorDefault" />
+                        <StaticResource
+                            x:Key="DataGridColumnHeaderHoveredBackgroundColor"
+                            ResourceKey="SmokeFillColorDefault" />
+                        <StaticResource
+                            x:Key="DataGridColumnHeaderPressedBackgroundColor"
+                            ResourceKey="ControlAltFillColorSecondary" />
+                    </tk:DataGrid.Resources>
+
+                    <tk:DataGrid.Columns>
+                        <tk:DataGridTextColumn
+                            Header="Product"
+                            Binding="{Binding Path=Product.Name}"
+                            Width="2*">
+                            <tk:DataGridTextColumn.ElementStyle>
+                                <Style
+                                    TargetType="TextBlock">
+                                    <Setter
+                                        Property="TextWrapping"
+                                        Value="Wrap" />
+                                </Style>
+                            </tk:DataGridTextColumn.ElementStyle>
+                        </tk:DataGridTextColumn>
+                        <tk:DataGridTextColumn
+                            Header="Type"
+                            Binding="{Binding Path=Product.Type.Name}"
+                            Width="*" />
+                        <tk:DataGridTextColumn
+                            Header="Quantity"
+                            Binding="{Binding Path=Quantity}"
+                            Width="auto" />
+                        <tk:DataGridTextColumn
+                            Header="Price"
+                            Binding="{Binding Path=Product.Price, Converter={StaticResource CurrencyVNDConverter}}"
+                            Width="auto" />
+                    </tk:DataGrid.Columns>
+                </tk:DataGrid>
+            </ScrollViewer>
+            <Grid
+                Grid.Row="2"
+                VerticalAlignment="Bottom">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="auto" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="auto" />
+                    <RowDefinition
+                        Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style
+                        TargetType="TextBlock">
+                        <Setter
+                            Property="Margin"
+                            Value="10 15" />
+                    </Style>
+                    <Style
+                        TargetType="TextBox">
+                        <Setter
+                            Property="VerticalAlignment"
+                            Value="Center" />
+                        <Setter
+                            Property="CornerRadius"
+                            Value="4" />
+                    </Style>
+                </Grid.Resources>
+
+                <!--Total Discount-->
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Text="Total Discount:"
+                    FontWeight="SemiBold" />
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Text="{x:Bind ViewModel.TotalDiscount, Converter={StaticResource CurrencyVNDConverter}}"
+                    IsReadOnly="True" />
+
+                <!--Total Price-->
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Text="Total Price:"
+                    FontWeight="SemiBold" />
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Text="{x:Bind ViewModel.TotalPrice, Converter={StaticResource CurrencyVNDConverter}}"
+                    IsReadOnly="True" />
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

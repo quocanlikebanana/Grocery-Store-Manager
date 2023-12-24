@@ -103,7 +103,39 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
-  
+        public async Task<Result<ProductType>> GetFull(string search = "", string sort = "", bool asc = true, object? lowerLimit = null, object? upperLimit = null, int perPage = 5, int pageNum = 1)
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                IQueryable<ProductType> query = context.Set<ProductType>();
+
+                int totalCount = await query.CountAsync();
+                int totalPage = (int)Math.Ceiling((double)totalCount / perPage);
+
+                if (!string.IsNullOrEmpty(search))
+                {
+                    query = query.Where(c => c.Name.Contains(search));
+                }
+
+                if (!string.IsNullOrEmpty(sort))
+                {
+                    if (asc)
+                    {
+                        query = query.OrderBy(c => EF.Property<object>(c, sort));
+                    }
+                    else
+                    {
+                        query = query.OrderByDescending(c => EF.Property<object>(c, sort));
+                    }
+                }
+
+                query = query.Skip((pageNum - 1) * perPage).Take(perPage);
+
+                IEnumerable<ProductType> entities = await query.ToListAsync();
+                return new Result<ProductType>(entities, totalPage);
+            }
+        }
+
         public async Task<ProductType?> Update(int id, ProductType entity)
         {
             entity.Id = id;

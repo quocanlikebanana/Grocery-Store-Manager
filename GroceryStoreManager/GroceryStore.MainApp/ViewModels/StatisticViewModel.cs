@@ -2,9 +2,9 @@
 
 namespace GroceryStore.MainApp.ViewModels;
 
-public partial class ProductViewModel : ObservableRecipient
+public partial class StatisticViewModel : ObservableRecipient
 {
-    public ProductViewModel()
+    public StatisticViewModel()
     {
     }
 }

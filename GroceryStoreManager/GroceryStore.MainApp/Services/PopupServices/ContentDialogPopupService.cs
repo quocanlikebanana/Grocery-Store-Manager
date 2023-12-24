@@ -1,7 +1,7 @@
 ﻿using DevExpress.WinUI.Core.Internal;
 using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.CustomControls;
-using GroceryStore.MainApp.ViewModels.SubWindowVM;
+using GroceryStore.MainApp.ViewModels.PopupVM;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 

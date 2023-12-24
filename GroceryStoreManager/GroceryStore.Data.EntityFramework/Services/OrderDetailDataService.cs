@@ -98,7 +98,10 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
-      
+        public Task<Result<OrderDetail>> GetFull(string search = "", string sort = "", bool asc = true, object? lowerLimit = null, object? upperLimit = null, int perPage = 5, int pageNum = 1)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task<OrderDetail?> Update(int id, OrderDetail entity)
         {

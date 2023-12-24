@@ -1,7 +1,9 @@
 ﻿using System.Globalization;
+using DevExpress.WinUI.Grid;
 using GroceryStore.MainApp.Factories;
 using GroceryStore.MainApp.ViewModels;
-
+using GroceryStore.MainApp.ViewModels.SubVM;
+using GroceryStore.MainApp.Views.SubView;
 using Microsoft.UI.Xaml.Controls;
 using Newtonsoft.Json.Linq;
 
@@ -20,16 +22,32 @@ public sealed partial class OrderPage : Page
     {
         ViewModel = App.GetService<OrderViewModel>();
         InitializeComponent();
-        CurrencyColumn.MaskCulture = new CultureInfo("vi-VN")
+
+        // https://learn.microsoft.com/en-us/dotnet/api/system.globalization.numberformatinfo.currencypositivepattern?view=net-8.0&redirectedfrom=MSDN#System_Globalization_NumberFormatInfo_CurrencyPositivePattern
+        var currencyControls = new List<GridMaskColumn>()
         {
-            NumberFormat = new NumberFormatInfo()
+            TotalPrice_GMC,
+            TotalDiscount_GMC,
+        };
+        foreach (var gmc in currencyControls)
+        {
+            gmc.MaskCulture = new CultureInfo("vi-VN")
             {
-                CurrencySymbol = "đ",
-                CurrencyDecimalDigits = 0,
-                CurrencyGroupSeparator = ",",
-                // https://learn.microsoft.com/en-us/dotnet/api/system.globalization.numberformatinfo.currencypositivepattern?view=net-8.0&redirectedfrom=MSDN#System_Globalization_NumberFormatInfo_CurrencyPositivePattern
-                CurrencyPositivePattern = 3,
-            },
+                NumberFormat = new NumberFormatInfo()
+                {
+                    CurrencySymbol = "đ",
+                    CurrencyDecimalDigits = 0,
+                    CurrencyGroupSeparator = ",",
+
+                    CurrencyPositivePattern = 3,
+                },
+            };
+        }
+
+        ViewModel.GoToDetail = (id) =>
+        {
+            var vm = new DetailOrderVM(id);
+            Frame.Navigate(typeof(DetailOrderPage), vm);
         };
     }
 }

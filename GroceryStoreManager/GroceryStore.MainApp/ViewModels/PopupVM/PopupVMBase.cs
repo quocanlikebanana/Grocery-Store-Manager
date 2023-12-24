@@ -9,7 +9,7 @@ using GroceryStore.MainApp.Command;
 using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Contracts.ViewModels;
 
-namespace GroceryStore.MainApp.ViewModels.SubWindowVM;
+namespace GroceryStore.MainApp.ViewModels.PopupVM;
 
 public enum PopupResult
 {

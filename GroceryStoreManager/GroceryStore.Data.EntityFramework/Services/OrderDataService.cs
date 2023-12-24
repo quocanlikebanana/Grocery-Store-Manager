@@ -1,4 +1,5 @@
-﻿using GroceryStore.Domain.Model;
+﻿using Azure;
+using GroceryStore.Domain.Model;
 using GroceryStore.Domain.Service;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -103,16 +104,58 @@ namespace GroceryStore.Data.EntityFramework.Services
             }
         }
 
-    public async Task<Order?> Update(int id, Order entity)
-    {
-        entity.Id = id;
-        using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+        public async Task<Result<Order>> GetFull(string search = "", string sort = "", bool asc = true, object? lowerLimit = null, object? upperLimit = null, int perPage = 5, int pageNum = 1)
         {
-            context.Set<Order>().Update(entity);
-            await context.SaveChangesAsync();
-            return entity;
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                IQueryable<Order> query = context.Set<Order>();
+
+                query = query.Include(o => o.Customer).Include(o => o.details).ThenInclude(d => d.Product).ThenInclude(d => d != null ? d.Type : null);
+
+                query = query.Where(o => o.Customer != null);
+
+                if (!string.IsNullOrEmpty(search))
+                {
+                    query = query.Where(o => o.Customer.Name.Contains(search));
+                }
+
+                if (lowerLimit != null && upperLimit != null)
+                {
+                    query = query.Where(o => o.OrderDate >= (DateTime)lowerLimit && o.OrderDate <= (DateTime)upperLimit);
+                }
+
+                if (!string.IsNullOrEmpty(sort))
+                {
+                    if (asc)
+                    {
+                        query = query.OrderBy(o => EF.Property<object>(o, sort));
+                    }
+                    else
+                    {
+                        query = query.OrderByDescending(o => EF.Property<object>(o, sort));
+                    }
+                }
+                
+                int totalCount = await query.CountAsync();
+                int totalPage = (int)Math.Ceiling((double)totalCount / perPage);
+
+                query = query.Skip((pageNum - 1) * perPage).Take(perPage);
+
+                IEnumerable<Order> entities = await query.ToListAsync();
+                return new Result<Order>(entities, totalPage);
+            }
         }
-    }
+
+        public async Task<Order?> Update(int id, Order entity)
+        {
+            entity.Id = id;
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                context.Set<Order>().Update(entity);
+                await context.SaveChangesAsync();
+                return entity;
+            }
+        }
 
         public Task<Order?> Update(int id1, int id2, Order entity)
         {

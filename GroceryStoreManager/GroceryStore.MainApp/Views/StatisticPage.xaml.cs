@@ -4,16 +4,16 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace GroceryStore.MainApp.Views;
 
-public sealed partial class ProductPage : Page
+public sealed partial class StatisticPage : Page
 {
-    public ProductViewModel ViewModel
+    public StatisticViewModel ViewModel
     {
         get;
     }
 
-    public ProductPage()
+    public StatisticPage()
     {
-        ViewModel = App.GetService<ProductViewModel>();
+        ViewModel = App.GetService<StatisticViewModel>();
         InitializeComponent();
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using DevExpress.Data.Extensions;
 using GroceryStore.Domain.Model;
 using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Command;
@@ -9,9 +8,10 @@ using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Decorators;
 using GroceryStore.MainApp.Models.Extensions;
 using GroceryStore.MainApp.Models.PreModel;
+using GroceryStore.MainApp.ViewModels.PopupVM;
 using Microsoft.UI.Xaml;
 
-namespace GroceryStore.MainApp.ViewModels.SubWindowVM;
+namespace GroceryStore.MainApp.ViewModels.PopupVM;
 
 public partial class OrderPopupVM : PopupVMBase
 {
