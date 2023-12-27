@@ -109,9 +109,6 @@ namespace GroceryStore.Data.EntityFramework.Services
             {
                 IQueryable<ProductType> query = context.Set<ProductType>();
 
-                int totalCount = await query.CountAsync();
-                int totalPage = (int)Math.Ceiling((double)totalCount / perPage);
-
                 if (!string.IsNullOrEmpty(search))
                 {
                     query = query.Where(c => c.Name.Contains(search));
@@ -128,6 +125,9 @@ namespace GroceryStore.Data.EntityFramework.Services
                         query = query.OrderByDescending(c => EF.Property<object>(c, sort));
                     }
                 }
+
+                int totalCount = await query.CountAsync();
+                int totalPage = (int)Math.Ceiling((double)totalCount / perPage);
 
                 query = query.Skip((pageNum - 1) * perPage).Take(perPage);
 
