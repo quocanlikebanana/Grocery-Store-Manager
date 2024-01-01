@@ -1,4 +1,5 @@
-﻿using GroceryStore.MainApp.Activation;
+﻿using DevExpress.WinUI.Core.Internal;
+using GroceryStore.MainApp.Activation;
 using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Views;
 
@@ -21,6 +22,8 @@ public class ActivationService : IActivationService
         _themeSelectorService = themeSelectorService;
     }
 
+    // this is where the Window get its initialize content and open
+
     public async Task ActivateAsync(object activationArgs)
     {
         // Execute tasks before activation.
@@ -31,6 +34,7 @@ public class ActivationService : IActivationService
         {
             _shell = App.GetService<ShellPage>();
             App.MainWindow.Content = _shell ?? new Frame();
+            App.MainWindow.Content.SetXamlRoot(_shell?.XamlRoot);
         }
 
         // Handle activation via ActivationHandlers.

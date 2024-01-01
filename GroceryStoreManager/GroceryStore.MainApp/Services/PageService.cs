@@ -14,6 +14,9 @@ public class PageService : IPageService
 
     public PageService()
     {
+        // Theme page
+        _pages.Add("", typeof(BlankPage));
+
         Configure<DashboardViewModel, DashboardPage>();
         Configure<OrderViewModel, OrderPage>();
         Configure<CategoryViewModel, CategoryPage>();
@@ -21,6 +24,7 @@ public class PageService : IPageService
         Configure<ReportViewModel, ReportPage>();
         Configure<SettingsViewModel, SettingsPage>();
         Configure<StatisticViewModel, StatisticPage>();
+        Configure<CustomerViewModel, CustomerPage>();
     }
 
     public Type GetPageType(string key)

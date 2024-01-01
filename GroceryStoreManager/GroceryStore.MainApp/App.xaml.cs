@@ -1,4 +1,5 @@
 ﻿using DynamicPluginSupport;
+using GroceryStore.Data.EntityFramework.Services;
 using GroceryStore.Domain.Model;
 using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Activation;
@@ -70,37 +71,38 @@ public partial class App : Application
             services.AddSingleton<IActivationService, ActivationService>();
             services.AddSingleton<IPageService, PageService>();
             services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<IStatePreserveService, StatePreserveService>();
+
+            services.AddSingleton<ILoginService, LoginService>();
+            services.AddSingleton<IFileService, FileService>();
+
+            //var order_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Order>>().ToList();
+            //var coupon_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Coupon>>().ToList();
+            //var customer_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Customer>>().ToList();
+            //var orderDetail_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<OrderDetail>>().ToList();
+            //var product_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Product>>().ToList();
+            //var productType_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<ProductType>>().ToList();
+
+            //coupon_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Coupon>), x => ActivatorUtilities.CreateInstance(x, ServiceType, App.GetService<ILoginService>().ConnectionString())));
+
+            //customer_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Customer>), x => ActivatorUtilities.CreateInstance(x, ServiceType, App.GetService<ILoginService>().ConnectionString())));
+
+            //order_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Order>), x => ActivatorUtilities.CreateInstance(x, ServiceType, App.GetService<ILoginService>().ConnectionString())));
+
+            //orderDetail_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<OrderDetail>), x => ActivatorUtilities.CreateInstance(x, ServiceType, App.GetService<ILoginService>().ConnectionString())));
+
+            //product_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Product>), x => ActivatorUtilities.CreateInstance(x, ServiceType, App.GetService<ILoginService>().ConnectionString())));
+
+            //productType_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<ProductType>), x => ActivatorUtilities.CreateInstance(x, ServiceType, App.GetService<ILoginService>().ConnectionString())));
 
             // Domain Services
-            // TODO2: Connection string configuration
-            var builder = new SqlConnectionStringBuilder();
-            builder.DataSource = "localhost\\SQLEXPRESS";
-            //builder.InitialCatalog = "newestDataBase";
-            builder.InitialCatalog = "testDataWindow";
-            builder.IntegratedSecurity = true;
-            builder.TrustServerCertificate = true;
-            var connectionString = builder.ConnectionString;
-
-            var order_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Order>>().ToList();
-            var coupon_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Coupon>>().ToList();
-            var customer_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Customer>>().ToList();
-            var orderDetail_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<OrderDetail>>().ToList();
-            var product_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Product>>().ToList();
-            var productType_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<ProductType>>().ToList();
-
-            coupon_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Coupon>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
-
-            customer_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Customer>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
-
-            order_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Order>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
-
-            orderDetail_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<OrderDetail>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
-
-            product_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<Product>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
-
-            productType_DataServiceImplements.ForEach(ServiceType => services.AddSingleton(typeof(IDataService<ProductType>), x => ActivatorUtilities.CreateInstance(x, ServiceType, connectionString)));
-
-            services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton(typeof(IDataService<Coupon>), x => ActivatorUtilities.CreateInstance(x, typeof(CouponDataService), GetService<ILoginService>().ConnectionString()));
+            services.AddSingleton(typeof(IDataService<Customer>), x => ActivatorUtilities.CreateInstance(x, typeof(CustomerDataService), GetService<ILoginService>().ConnectionString()));
+            services.AddSingleton(typeof(IDataService<Order>), x => ActivatorUtilities.CreateInstance(x, typeof(OrderDataService), GetService<ILoginService>().ConnectionString()));
+            services.AddSingleton(typeof(IDataService<OrderDetail>), x => ActivatorUtilities.CreateInstance(x, typeof(OrderDetailDataService), GetService<ILoginService>().ConnectionString()));
+            services.AddSingleton(typeof(IDataService<Product>), x => ActivatorUtilities.CreateInstance(x, typeof(ProductDataService), GetService<ILoginService>().ConnectionString()));
+            services.AddSingleton(typeof(IDataService<ProductType>), x => ActivatorUtilities.CreateInstance(x, typeof(ProductType), GetService<ILoginService>().ConnectionString()));
+            services.AddSingleton<IStatisticService, StatisticService>();
 
             // Views and ViewModels
             services.AddTransient<SettingsViewModel>();
@@ -119,6 +121,8 @@ public partial class App : Application
             services.AddTransient<ShellViewModel>();
             services.AddTransient<StatisticViewModel>();
             services.AddTransient<StatisticPage>();
+            services.AddTransient<CustomerViewModel>();
+            services.AddTransient<CustomerPage>();
 
             // Configuration
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
@@ -132,6 +136,7 @@ public partial class App : Application
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
     {
         // TODO2: Log and handle exceptions as appropriate.
+        // Update: this is still under improvement
         // https://docs.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.application.unhandledexception.
         DisplayErrorDialog(e.Exception);
     }
@@ -156,5 +161,8 @@ public partial class App : Application
         base.OnLaunched(args);
 
         await GetService<IActivationService>().ActivateAsync(args);
+
+        // Eventhough the app loaded but there's still no XamlRoot, go to the ShellPage OnLoad event
+        //await GetService<ILoginService>().Authenticate();
     }
 }

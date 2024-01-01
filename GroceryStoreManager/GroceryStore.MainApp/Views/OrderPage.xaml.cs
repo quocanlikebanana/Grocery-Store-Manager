@@ -38,7 +38,6 @@ public sealed partial class OrderPage : Page
                     CurrencySymbol = "đ",
                     CurrencyDecimalDigits = 0,
                     CurrencyGroupSeparator = ",",
-
                     CurrencyPositivePattern = 3,
                 },
             };

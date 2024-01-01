@@ -4,9 +4,426 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    xmlns:dxg="using:DevExpress.WinUI.Grid"
+    xmlns:dxr="using:DevExpress.WinUI.Ribbon"
+    xmlns:dx="using:DevExpress.WinUI.Core"
+    xmlns:dxe="using:DevExpress.WinUI.Editors">
 
-    <Grid x:Name="ContentArea">
-        
+    <Grid
+        x:Name="ContentArea">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="*" />
+            <!--For paging-->
+            <RowDefinition
+                Height="auto" />
+        </Grid.RowDefinitions>
+
+        <dxr:RibbonControl
+            Padding="10,0,10,10">
+            <dxr:RibbonControl.Tabs>
+                <!--General-->
+                <dxr:RibbonTab
+                    Caption="General">
+                    <dxr:RibbonGroup Caption="">
+                        <dxr:RibbonCustomItem
+                            DisplayMode="Large">
+                            <FontIcon
+                                FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                Glyph="&#xE719;"
+                                FontSize="40"
+                                FontWeight="SemiBold"
+                                Margin="20 0 20 0" />
+                        </dxr:RibbonCustomItem>
+                    </dxr:RibbonGroup>
+
+                    <!--Record-->
+                    <dxr:RibbonGroup
+                        Caption="Record">
+
+                        <!--Add-->
+                        <dxr:RibbonButton
+                            Content="Add"
+                            DisplayMode="Large"
+                            Command="{x:Bind ViewModel.AddCommand}"
+                            IsEnabled="{x:Bind ViewModel.AllowAddEdit, Mode=TwoWay}"
+                            ToolTipDescription="Add record">
+                            <dxr:RibbonButton.LargeIcon>
+                                <dx:DXSymbolIconSource
+                                    FontSize="28"
+                                    Symbol="Add" />
+                            </dxr:RibbonButton.LargeIcon>
+                        </dxr:RibbonButton>
+
+                        <!--Edit-->
+                        <dxr:RibbonButton
+                            Content="Edit"
+                            DisplayMode="Large"
+                            Command="{x:Bind ViewModel.EditCommand}"
+                            IsEnabled="{x:Bind ViewModel.AllowAddEdit, Mode=TwoWay}"
+                            ToolTipDescription="Edit record">
+                            <dxr:RibbonButton.LargeIcon>
+                                <dx:DXSymbolIconSource
+                                    FontSize="28"
+                                    Symbol="Edit" />
+                            </dxr:RibbonButton.LargeIcon>
+                        </dxr:RibbonButton>
+
+                        <!--Delete-->
+                        <dxr:RibbonButton
+                            Content="Delete"
+                            DisplayMode="Large"
+                            Command="{x:Bind ViewModel.DeleteCommand}"
+                            IsEnabled="{x:Bind ViewModel.AllowDelete, Mode=TwoWay}"
+                            ToolTipDescription="Delete record">
+                            <dxr:RibbonButton.LargeIcon>
+                                <dx:DXSymbolIconSource
+                                    FontSize="28"
+                                    Symbol="Delete" />
+                            </dxr:RibbonButton.LargeIcon>
+                        </dxr:RibbonButton>
+                    </dxr:RibbonGroup>
+
+                    <!--<dxr:RibbonGroup
+                        Caption="Quick edit">
+                        <dxr:RibbonCustomItem>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="auto" />
+                                    <RowDefinition
+                                        Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Grid.ColumnSpan="2"
+                                    Text="Product's quantity:" />
+                                <dxe:SpinEdit
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    IsEnabled="{x:Bind ViewModel.AllowQuickEdit}"
+                                    EditValue="{x:Bind ViewModel.SelectedProductQuantity}" />
+                                <Button
+                                    Content="Save"
+                                    Style="{StaticResource DefaultButtonStyle}" />
+                            </Grid>
+                        </dxr:RibbonCustomItem>
+                    </dxr:RibbonGroup>-->
+
+                    <!--Search-->
+                    <dxr:RibbonGroup
+                        Caption="Search">
+                        <dxr:RibbonCustomItem>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="200" />
+                                    <ColumnDefinition
+                                        Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="auto" />
+                                    <RowDefinition
+                                        Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <TextBox
+                                    Grid.Column="0"
+                                    PlaceholderText="Search"
+                                    VerticalAlignment="Bottom"
+                                    Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
+                                    Header="Product's name:" />
+                                <Button
+                                    Grid.Column="1"
+                                    VerticalAlignment="Bottom"
+                                    Margin="2 0"
+                                    Content="Search"
+                                    Command="{x:Bind ViewModel.ReloadCommand}"
+                                    Style="{StaticResource DefaultButtonStyle}" />
+                                <Button
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="2"
+                                    HorizontalAlignment="Center"
+                                    Content="Clear"
+                                    Command="{x:Bind ViewModel.ClearCriteriaCommand}"
+                                    CommandParameter="Search"
+                                    Style="{StaticResource TextBlockButtonStyle}" />
+                            </Grid>
+                        </dxr:RibbonCustomItem>
+                    </dxr:RibbonGroup>
+
+                    <!--Detail-->
+                    <dxr:RibbonGroup
+                        Caption="Detail">
+                        <dxr:RibbonButton
+                            Content="Detail"
+                            DisplayMode="Large"
+                            ToolTipDescription="View product detail"
+                            Command="{x:Bind ViewModel.DetailCommand}">
+                            <dxr:RibbonButton.LargeIcon>
+                                <dx:DXSymbolIconSource
+                                    Symbol="Zoom"
+                                    FontSize="28" />
+                            </dxr:RibbonButton.LargeIcon>
+                        </dxr:RibbonButton>
+                    </dxr:RibbonGroup>
+                </dxr:RibbonTab>
+
+                <!--View-->
+                <dxr:RibbonTab
+                    Caption="View">
+                    <!--Sort-->
+                    <dxr:RibbonGroup
+                        Caption="Sort">
+                        <dxr:RibbonCustomItem
+                            DisplayMode="Large"
+                            ToolTipDescription="Sort records in Ascending or Descending order">
+                            <Grid
+                                Margin="2 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="auto" />
+                                    <RowDefinition
+                                        Height="auto" />
+                                    <RowDefinition
+                                        Height="auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <CheckBox
+                                    Content="Ascending"
+                                    Grid.Row="0"
+                                    IsChecked="{x:Bind ViewModel.Asc, Mode=TwoWay}" />
+                                <!--Can only bind 1 in 2: SelectedItem or SelectedValue-->
+                                <ComboBox
+                                    MinWidth="100"
+                                    HorizontalAlignment="Stretch"
+                                    ItemsSource="{x:Bind ViewModel.SortColumns}"
+                                    DisplayMemberPath="Key"
+                                    SelectedValuePath="Value"
+                                    SelectedValue="{x:Bind ViewModel.SelectedSortColumn, Mode=TwoWay}"
+                                    Grid.Row="1" />
+                                <Button
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Content="Sort"
+                                    Margin="2 0"
+                                    Command="{x:Bind ViewModel.ReloadCommand}"
+                                    Style="{StaticResource DefaultButtonStyle}" />
+                                <Button
+                                    Grid.Row="2"
+                                    Grid.ColumnSpan="2"
+                                    HorizontalAlignment="Center"
+                                    Content="Clear"
+                                    Command="{x:Bind ViewModel.ClearCriteriaCommand}"
+                                    CommandParameter="Sort"
+                                    Style="{StaticResource TextBlockButtonStyle}" />
+                            </Grid>
+                        </dxr:RibbonCustomItem>
+                    </dxr:RibbonGroup>
+
+                    <!--Filter-->
+                    <dxr:RibbonGroup
+                        Caption="Filter">
+                        <dxr:RibbonCustomItem>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        MinWidth="100"
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        MinWidth="100"
+                                        Width="*" />
+                                    <ColumnDefinition
+                                        Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="auto" />
+                                    <RowDefinition
+                                        Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <dxe:TextEdit
+                                    Grid.Column="0"
+                                    VerticalAlignment="Top"
+                                    Header="From price:"
+                                    Margin="2"
+                                    EditValue="{x:Bind ViewModel.LowerLimit, Mode=TwoWay, Converter={StaticResource DoubleConverter}}" />
+                                <dxe:TextEdit
+                                    Grid.Column="1"
+                                    VerticalAlignment="Top"
+                                    Header="To price:"
+                                    Margin="2"
+                                    EditValue="{x:Bind ViewModel.UpperLimit, Mode=TwoWay, Converter={StaticResource DoubleConverter}}" />
+                                <CheckBox
+                                    Grid.Column="3"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Content="Use thousand unit"
+                                    Margin="2 0"
+                                    IsChecked="{x:Bind ViewModel.ThousandUnit}" />
+                                <Button
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Margin="2"
+                                    Grid.Column="3"
+                                    Content="Filter"
+                                    Command="{x:Bind ViewModel.ReloadCommand}"
+                                    Style="{StaticResource DefaultButtonStyle}" />
+                                <Button
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="3"
+                                    HorizontalAlignment="Center"
+                                    Content="Clear"
+                                    Command="{x:Bind ViewModel.ClearCriteriaCommand}"
+                                    CommandParameter="Filter"
+                                    Style="{StaticResource TextBlockButtonStyle}" />
+                            </Grid>
+                        </dxr:RibbonCustomItem>
+                    </dxr:RibbonGroup>
+                </dxr:RibbonTab>
+
+                <!--Options-->
+                <dxr:RibbonTab
+                    Caption="Options">
+                    <!--List view-->
+                    <dxr:RibbonGroup
+                        Caption="List view">
+                        <dxr:RibbonCustomItem
+                            DisplayMode="Large">
+                            <Grid
+                                Margin="10">
+                                <!--Per page edit-->
+                                <dxe:SpinEdit
+                                    Header="Record per page"
+                                    VerticalAlignment="Center"
+                                    EditValue="{x:Bind ViewModel.PerPage, Mode=TwoWay}"
+                                    Increment="1"
+                                    MaxValue="15"
+                                    MinValue="5" />
+                            </Grid>
+                        </dxr:RibbonCustomItem>
+                    </dxr:RibbonGroup>
+
+                    <!--CRUD-->
+                    <dxr:RibbonGroup
+                        Caption="Options">
+                        <dxr:RibbonCheckBox
+                            Text="Allow Add, Edit"
+                            ToolTipDescription="Allow user to add or edit record"
+                            IsChecked="{x:Bind ViewModel.AllowAddEdit, Mode=TwoWay}">
+                        </dxr:RibbonCheckBox>
+                        <dxr:RibbonCheckBox
+                            Text="Allow delete"
+                            IsChecked="{x:Bind ViewModel.AllowDelete, Mode=TwoWay}"
+                            ToolTipDescription="Allow user to delete record">
+                        </dxr:RibbonCheckBox>
+                    </dxr:RibbonGroup>
+
+                </dxr:RibbonTab>
+            </dxr:RibbonControl.Tabs>
+
+            <!--CONTENT-->
+            <!--CONTENT-->
+            <!--CONTENT-->
+
+            <dxg:GridControl
+                ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}"
+                SelectedItem="{x:Bind ViewModel.SelectedProduct, Mode=TwoWay}"
+                NavigationStyle="Row"
+                AutoGenerateColumns="False"
+                x:Name="Test">
+                <dxg:GridControl.Columns>
+                    <dxg:GridTextColumn
+                        Header="Product ID"
+                        FieldName="Id"
+                        AllowEditing="False" />
+                    <dxg:GridTextColumn
+                        Header="Name"
+                        FieldName="Name"
+                        AllowEditing="False" />
+                    <dxg:GridTextColumn
+                        Header="Product Type"
+                        FieldName="Type.Name"
+                        AllowEditing="False" />
+                    <dxg:GridTextColumn
+                        Header="Quantity"
+                        FieldName="Quantity"
+                        AllowEditing="False" />
+                    <dxg:GridMaskColumn
+                        x:Name="Price_GMC"
+                        Header="Price"
+                        FieldName="Price"
+                        AllowEditing="False"
+                        MaskUseAsDisplayFormat="True"
+                        Mask="c" />
+                    <dxg:GridMaskColumn
+                        x:Name="BasePrice_GMC"
+                        Header="Base Price"
+                        FieldName="BasePrice"
+                        AllowEditing="False"
+                        MaskUseAsDisplayFormat="True"
+                        Mask="c" />
+                </dxg:GridControl.Columns>
+            </dxg:GridControl>
+        </dxr:RibbonControl>
+
+        <CommandBar
+            Grid.Row="1"
+            DefaultLabelPosition="Collapsed">
+            <AppBarButton
+                ToolTipService.ToolTip="First"
+                Icon="Previous"
+                Command="{x:Bind ViewModel.PagingCommand}"
+                CommandParameter="-2" />
+            <AppBarButton
+                ToolTipService.ToolTip="Previous"
+                Command="{x:Bind ViewModel.PagingCommand}"
+                CommandParameter="-1"
+                Icon="Back" />
+            <AppBarElementContainer
+                VerticalAlignment="Center"
+                Margin="5">
+                <TextBlock>
+                    <TextBlock.Inlines>
+                        <Run
+                            Text="Page" />
+                        <Run
+                            FontWeight="Bold"
+                            Text="{x:Bind ViewModel.PageNum, Mode=OneWay}" />
+                        <Run
+                            Text="of" />
+                        <Run
+                            FontWeight="Bold"
+                            Text="{x:Bind ViewModel.TotalPage, Mode=OneWay}" />
+                    </TextBlock.Inlines>
+                </TextBlock>
+            </AppBarElementContainer>
+            <AppBarButton
+                ToolTipService.ToolTip="Next"
+                Command="{x:Bind ViewModel.PagingCommand}"
+                CommandParameter="1"
+                Icon="Forward" />
+            <AppBarButton
+                ToolTipService.ToolTip="Last"
+                Command="{x:Bind ViewModel.PagingCommand}"
+                CommandParameter="2"
+                Icon="Next" />
+        </CommandBar>
     </Grid>
 </Page>

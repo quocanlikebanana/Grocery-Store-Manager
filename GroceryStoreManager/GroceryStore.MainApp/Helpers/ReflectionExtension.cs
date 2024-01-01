@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Documents;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace GroceryStore.MainApp.Helpers;
 
 public static class ReflectionExtension
 {
-    public static void CopyProperties(this object source, object target)
+    public static void CopyProperties(this object source, object target, params string[] exceptions)
     {
         Type sourceType = source.GetType();
         Type targetType = target.GetType();
@@ -27,6 +28,18 @@ public static class ReflectionExtension
             if ((targetProp.GetSetMethod()!.Attributes
                 & System.Reflection.MethodAttributes.Static) != 0) continue;
             if (!targetProp.PropertyType.IsAssignableFrom(sourceProp.PropertyType)) continue;
+
+            // Custom test
+            var pass = true;
+            foreach (var ex in exceptions)
+            {
+                if (targetProp.Name == ex)
+                {
+                    pass = false; 
+                    break;
+                }
+            }
+            if (!pass) continue;
 
             // Pass all tests, let's assign
             targetProp.SetValue(target, sourceProp.GetValue(source, null), null);

@@ -1,0 +1,167 @@
+﻿<Page
+    x:Class="GroceryStore.MainApp.Views.CustomerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:models="using:GroceryStore.Domain.Model"
+    xmlns:views="using:GroceryStore.MainApp.Views"
+    xmlns:behaviors="using:GroceryStore.MainApp.Behaviors"
+    behaviors:NavigationViewHeaderBehavior.HeaderMode="Always"
+    mc:Ignorable="d">
+    
+    <!--Enable header:-->
+    <!--behaviors:NavigationViewHeaderBehavior.HeaderMode="Always"-->
+
+    <Page.Resources>
+        <DataTemplate
+            x:Key="ItemTemplate"
+            x:DataType="models:Customer">
+            <Grid
+                Height="60">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="Auto" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <FontIcon
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    FontSize="32"
+                    Glyph="{x:Bind Name, Converter={StaticResource RandomIconConverter}}"
+                    AutomationProperties.Name="{x:Bind Address}" />
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="{StaticResource SmallLeftMargin}"
+                    VerticalAlignment="Center">
+                    <TextBlock
+                        Text="{x:Bind Name}"
+                        Style="{StaticResource ListTitleStyle}" />
+                    <TextBlock
+                        Text="{x:Bind Tel}"
+                        Style="{StaticResource ListSubTitleStyle}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="DetailsTemplate">
+            <Grid>
+                <views:CustomerDetailControl
+                    ListDetailsMenuItem="{Binding}" />
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="NoSelectionContentTemplate">
+            <Grid>
+                <TextBlock
+                    x:Uid="Customer_NoSelection"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    TextAlignment="Center"
+                    Style="{ThemeResource SubtitleTextBlockStyle}" />
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="ListHeaderTemplate">
+            <Grid
+                Height="40">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Style="{StaticResource ListTitleStyle}"
+                    Text="{Binding}" />
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="MinimalListHeaderTemplate">
+            <Grid
+                Height="40">
+                <TextBlock
+                    Margin="96,0,0,0"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource ListTitleStyle}"
+                    Text="{Binding}" />
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid
+        x:Name="ContentArea">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="auto" />
+            <RowDefinition
+                Height="*" />
+        </Grid.RowDefinitions>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!--641 is the default CompactModeThresholdWidth in NavigationView -->
+                        <AdaptiveTrigger
+                            MinWindowWidth="641" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter
+                            Target="ListDetailsViewControl.ListHeaderTemplate"
+                            Value="{StaticResource ListHeaderTemplate}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <CommandBar
+            Margin="0 0 0 10"
+            DefaultLabelPosition="Right"
+            Grid.Row="0">
+            <CommandBar.Content>
+                <AutoSuggestBox
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    PlaceholderText="Search customer"
+                    QueryIcon="Find"
+                    MinWidth="300" />
+            </CommandBar.Content>
+
+            <AppBarButton
+                Command="{x:Bind ViewModel.ReloadCommand, Mode=OneWay}"
+                Icon="Refresh"
+                Label="Refresh" />
+            <AppBarSeparator />
+            <AppBarButton
+                Command="{x:Bind ViewModel.AddCommand , Mode=OneWay}"
+                Icon="Add"
+                Label="Add" />
+            <AppBarButton
+                Command="{x:Bind ViewModel.EditCommand, Mode=OneWay}"
+                Icon="Edit"
+                Label="Edit"
+                IsEnabled="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" />
+            <AppBarButton
+                Command="{x:Bind ViewModel.DeleteCommand}"
+                Icon="Delete"
+                Label="Delete"
+                IsEnabled="{x:Bind ViewModel.HasCurrent, Mode=OneWay}" />
+        </CommandBar>
+
+        <controls:ListDetailsView
+            Grid.Row="1"
+            x:Uid="Customer"
+            x:Name="ListDetailsViewControl"
+            BackButtonBehavior="Manual"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            DetailsTemplate="{StaticResource DetailsTemplate}"
+            ItemsSource="{x:Bind ViewModel.Customers}"
+            ItemTemplate="{StaticResource ItemTemplate}"
+            ListHeaderTemplate="{StaticResource MinimalListHeaderTemplate}"
+            NoSelectionContentTemplate="{StaticResource NoSelectionContentTemplate}"
+            SelectedItem="{x:Bind ViewModel.SelectedCustomer, Mode=TwoWay}" />
+    </Grid>
+</Page>

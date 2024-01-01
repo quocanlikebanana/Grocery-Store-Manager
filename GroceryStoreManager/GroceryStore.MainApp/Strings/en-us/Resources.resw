@@ -171,4 +171,10 @@
   <data name="Shell_Statistic.Content" xml:space="preserve">
     <value>Statistic</value>
   </data>
+  <data name="Customer_NoSelection.Text" xml:space="preserve">
+    <value>Select an item from the list.</value>
+  </data>
+  <data name="Shell_Customer.Content" xml:space="preserve">
+    <value>Customer</value>
+  </data>
 </root>

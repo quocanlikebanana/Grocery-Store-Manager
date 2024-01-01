@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="GroceryStore.MainApp.Views.SubView.DetailProductPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GroceryStore.MainApp.Views.SubView"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:DefaultBindMode="OneTime"
+    xmlns:tk="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:cc="using:GroceryStore.MainApp.CustomControls">
+
+    <!--One time binding-->
+
+    <Grid
+        Padding="10 50">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*" />
+            <ColumnDefinition
+                Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style
+                TargetType="cc:Separator">
+                <Setter
+                    Property="Color"
+                    Value="{StaticResource AccentAAFillColorSecondaryBrush}" />
+            </Style>
+        </Grid.Resources>
+
+        <!--Product Info-->
+        <Grid
+            Margin="10"
+            Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style
+                    TargetType="TextBlock">
+                    <Setter
+                        Property="Margin"
+                        Value="10" />
+                </Style>
+            </Grid.Resources>
+
+            <!--Product info-->
+            <TextBlock
+                Grid.Row="0">
+                <TextBlock.Inlines>
+                    <Run
+                        Text="Product ID: " />
+                    <Run
+                        Text="{x:Bind ViewModel.Id}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+            <TextBlock
+                Grid.Row="1"
+                FontWeight="SemiBold">
+                <TextBlock.Inlines>
+                    <Run
+                        Text="Name: " />
+                    <Run
+                        Text="{x:Bind ViewModel.Name}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+            <TextBlock
+                Grid.Row="2">
+                <TextBlock.Inlines>
+                    <Run
+                        Text="Quantity: " />
+                    <Run
+                        Text="{x:Bind ViewModel.Quantity}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+
+            <!--Pricing section === START-->
+            <Grid
+                Grid.Row="3"
+                VerticalAlignment="Bottom"
+                Margin="0 20 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="auto" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="auto" />
+                    <RowDefinition
+                        Height="auto" />
+                    <RowDefinition
+                        Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style
+                        TargetType="TextBlock">
+                        <Setter
+                            Property="Margin"
+                            Value="10 12" />
+                    </Style>
+                    <Style
+                        TargetType="TextBox">
+                        <Setter
+                            Property="VerticalAlignment"
+                            Value="Center" />
+                        <Setter
+                            Property="CornerRadius"
+                            Value="4" />
+                    </Style>
+                </Grid.Resources>
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Text="Price:"
+                    FontWeight="SemiBold" />
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Text="{x:Bind ViewModel.Price, Converter={StaticResource CurrencyVNDConverter}}"
+                    IsReadOnly="True" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Text="Base Price:"
+                    FontWeight="SemiBold" />
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Text="{x:Bind ViewModel.BasePrice, Converter={StaticResource CurrencyVNDConverter}}"
+                    IsReadOnly="True" />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Text="Profit:"
+                    FontWeight="SemiBold" />
+                <TextBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Text="{x:Bind ViewModel.Profit, Converter={StaticResource CurrencyVNDConverter}}"
+                    IsReadOnly="True" />
+            </Grid>
+            <!--Pricing section === END-->
+            <Button
+                Grid.Row="4"
+                Margin="10"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Left"
+                Style="{StaticResource DefaultButtonStyle}"
+                Background="{StaticResource LayerFillColorDefaultBrush}"
+                Content="Back"
+                Command="{x:Bind ViewModel.GoBackCommand}" />
+        </Grid>
+
+        <!--Product type-->
+        <Grid
+            Margin="10"
+            Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <Style
+                    TargetType="TextBlock">
+                    <Setter
+                        Property="Margin"
+                        Value="10" />
+                </Style>
+            </Grid.Resources>
+
+            <TextBlock
+                Grid.Row="0"
+                Text="Product Type"
+                FontSize="{StaticResource SubtitleTextBlockFontSize}"
+                FontWeight="SemiBold"
+                Margin="5 20" />
+            <TextBlock
+                Grid.Row="1">
+                <TextBlock.Inlines>
+                    <Run
+                        Text="Type ID: " />
+                    <Run
+                        Text="{x:Bind ViewModel.ProductType.Id}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+            <TextBlock
+                Grid.Row="2"
+                FontWeight="SemiBold">
+                <TextBlock.Inlines>
+                    <Run
+                        Text="Name: " />
+                    <Run
+                        Text="{x:Bind ViewModel.ProductType.Name}" />
+                </TextBlock.Inlines>
+            </TextBlock>
+        </Grid>
+    </Grid>
+</Page>

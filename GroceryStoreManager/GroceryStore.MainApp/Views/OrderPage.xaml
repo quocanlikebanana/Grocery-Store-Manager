@@ -23,12 +23,28 @@
         <dxr:RibbonControl
             Padding="10,0,10,10">
             <dxr:RibbonControl.Tabs>
-                <!--Modify-->
+                <!--General-->
                 <dxr:RibbonTab
-                    Caption="Modify">
+                    Caption="General">
+
+                    <!--Icon-->
+                    <dxr:RibbonGroup
+                        Caption="">
+                        <dxr:RibbonCustomItem
+                            DisplayMode="Large">
+                            <FontIcon
+                                FontFamily="{StaticResource SymbolThemeFontFamily}"
+                                Glyph="&#xEADF;"
+                                FontSize="40"
+                                FontWeight="SemiBold"
+                                Margin="20 0 20 0" />
+                        </dxr:RibbonCustomItem>
+                    </dxr:RibbonGroup>
+
                     <!--Record-->
                     <dxr:RibbonGroup
-                        Caption="Modify">
+                        Caption="Record">
+
                         <!--Add-->
                         <dxr:RibbonButton
                             Content="Add"
@@ -42,6 +58,7 @@
                                     Symbol="Add" />
                             </dxr:RibbonButton.LargeIcon>
                         </dxr:RibbonButton>
+
                         <!--Edit-->
                         <dxr:RibbonButton
                             Content="Edit"
@@ -55,6 +72,7 @@
                                     Symbol="Edit" />
                             </dxr:RibbonButton.LargeIcon>
                         </dxr:RibbonButton>
+
                         <!--Delete-->
                         <dxr:RibbonButton
                             Content="Delete"
@@ -70,6 +88,69 @@
                         </dxr:RibbonButton>
                     </dxr:RibbonGroup>
 
+                    <!--Search-->
+                    <dxr:RibbonGroup
+                        Caption="Search">
+                        <dxr:RibbonCustomItem>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                        Width="170" />
+                                    <ColumnDefinition
+                                        Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition
+                                        Height="auto" />
+                                    <RowDefinition
+                                        Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <TextBox
+                                    Grid.Column="0"
+                                    PlaceholderText="Search"
+                                    VerticalAlignment="Bottom"
+                                    Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
+                                    Header="Customer name:" />
+                                <Button
+                                    Grid.Column="1"
+                                    VerticalAlignment="Bottom"
+                                    Margin="2 0"
+                                    Content="Search"
+                                    Command="{x:Bind ViewModel.ReloadCommand}"
+                                    Style="{StaticResource DefaultButtonStyle}" />
+                                <Button
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="2"
+                                    HorizontalAlignment="Center"
+                                    Content="Clear"
+                                    Command="{x:Bind ViewModel.ClearCriteriaCommand}"
+                                    CommandParameter="Search"
+                                    Style="{StaticResource TextBlockButtonStyle}" />
+                            </Grid>
+                        </dxr:RibbonCustomItem>
+                    </dxr:RibbonGroup>
+
+                    <!--Detail-->
+                    <dxr:RibbonGroup
+                        Caption="Detail">
+                        <dxr:RibbonButton
+                            Content="Detail order"
+                            DisplayMode="Large"
+                            ToolTipDescription="View order detail"
+                            Command="{x:Bind ViewModel.DetailCommand}">
+                            <dxr:RibbonButton.LargeIcon>
+                                <dx:DXSymbolIconSource
+                                    Symbol="Zoom"
+                                    FontSize="28" />
+                            </dxr:RibbonButton.LargeIcon>
+                        </dxr:RibbonButton>
+                    </dxr:RibbonGroup>
+                </dxr:RibbonTab>
+
+                <!--View-->
+                <dxr:RibbonTab
+                    Caption="View">
                     <!--Sort-->
                     <dxr:RibbonGroup
                         Caption="Sort">
@@ -178,67 +259,6 @@
                             </Grid>
                         </dxr:RibbonCustomItem>
                     </dxr:RibbonGroup>
-
-                    <!--Search-->
-                    <dxr:RibbonGroup
-                        Caption="Search">
-                        <dxr:RibbonCustomItem>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition
-                                        Width="170" />
-                                    <ColumnDefinition
-                                        Width="auto" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition
-                                        Height="auto" />
-                                    <RowDefinition
-                                        Height="*" />
-                                </Grid.RowDefinitions>
-
-                                <TextBox
-                                    Grid.Column="0"
-                                    PlaceholderText="Search"
-                                    VerticalAlignment="Bottom"
-                                    Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
-                                    
-                                    Header="Customer name:" />
-                                <Button
-                                    Grid.Column="1"
-                                    VerticalAlignment="Bottom"
-                                    Margin="2 0"
-                                    Content="Search"
-                                    Command="{x:Bind ViewModel.ReloadCommand}"
-                                    Style="{StaticResource DefaultButtonStyle}" />
-                                <Button
-                                    Grid.Row="1"
-                                    Grid.ColumnSpan="2"
-                                    HorizontalAlignment="Center"
-                                    Content="Clear"
-                                    Command="{x:Bind ViewModel.ClearCriteriaCommand}"
-                                    CommandParameter="Search"
-                                    Style="{StaticResource TextBlockButtonStyle}" />
-                            </Grid>
-                        </dxr:RibbonCustomItem>
-                    </dxr:RibbonGroup>
-
-                    <!--Detail-->
-                    <dxr:RibbonGroup
-                        Caption="Detail">
-                        <dxr:RibbonButton
-                            Content="Detail order"
-                            DisplayMode="Large"
-                            ToolTipDescription="View order detail"
-                            Command="{x:Bind ViewModel.DetailCommand}">
-                            <dxr:RibbonButton.LargeIcon>
-                                <dx:DXSymbolIconSource
-                                    Symbol="Zoom"
-                                    FontSize="28" />
-                            </dxr:RibbonButton.LargeIcon>
-                        </dxr:RibbonButton>
-                    </dxr:RibbonGroup>
-
                 </dxr:RibbonTab>
 
                 <!--Options-->

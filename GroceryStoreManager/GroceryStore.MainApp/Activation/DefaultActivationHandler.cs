@@ -8,10 +8,12 @@ namespace GroceryStore.MainApp.Activation;
 public class DefaultActivationHandler : ActivationHandler<LaunchActivatedEventArgs>
 {
     private readonly INavigationService _navigationService;
+    private readonly IStatePreserveService _statePreserveService;
 
-    public DefaultActivationHandler(INavigationService navigationService)
+    public DefaultActivationHandler(INavigationService navigationService, IStatePreserveService statePreserveService)
     {
         _navigationService = navigationService;
+        _statePreserveService = statePreserveService;
     }
 
     protected override bool CanHandleInternal(LaunchActivatedEventArgs args)
@@ -20,9 +22,10 @@ public class DefaultActivationHandler : ActivationHandler<LaunchActivatedEventAr
         return _navigationService.Frame?.Content == null;
     }
 
+    // where first navigate begins (even before load)
     protected async override Task HandleInternalAsync(LaunchActivatedEventArgs args)
     {
-        _navigationService.NavigateTo(typeof(DashboardViewModel).FullName!, args.Arguments);
+        _navigationService.NavigateTo("", args.Arguments);
 
         await Task.CompletedTask;
     }

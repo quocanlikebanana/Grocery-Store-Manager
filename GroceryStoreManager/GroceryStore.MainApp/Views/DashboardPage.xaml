@@ -4,9 +4,299 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    xmlns:weathermodel="using:GroceryStore.MainApp.Services.REST"
+    xmlns:tk="using:CommunityToolkit.WinUI.UI.Controls">
 
-    <Grid x:Name="ContentArea">
-        
+    <Page.Resources>
+
+    </Page.Resources>
+
+    <Grid
+        x:Name="ContentArea">
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="12*" />
+            <RowDefinition
+                Height="10*" />
+            <RowDefinition
+                Height="10*" />
+        </Grid.RowDefinitions>
+
+        <Grid
+            Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="2*" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--Weather Forecast-->
+
+            <Grid.Resources>
+                <DataTemplate
+                    x:Key="WeatherTemplate"
+                    x:DataType="weathermodel:WeatherData">
+                    <StackPanel
+                        VerticalAlignment="Bottom"
+                        Margin="19 0 19 70">
+                        <TextBlock
+                            Text="{Binding Name}"
+                            FontWeight="Bold"
+                            Foreground="#113367"
+                            HorizontalAlignment="Center"
+                            HorizontalTextAlignment="Center"
+                            TextWrapping="WrapWholeWords"
+                            MaxWidth="120" />
+                        <TextBlock
+                            Foreground="#9e616b"
+                            FontSize="28"
+                            FontWeight="SemiBold"
+                            HorizontalAlignment="Center">
+                            <TextBlock.Inlines>
+                                <Run
+                                    Text="{Binding Temp}" />
+                                <Run
+                                    Text="°C" />
+                            </TextBlock.Inlines>
+                        </TextBlock>
+                        <TextBlock
+                            Text="{Binding Description}"
+                            HorizontalAlignment="Center" />
+                    </StackPanel>
+                </DataTemplate>
+            </Grid.Resources>
+
+            <ScrollViewer
+                Grid.Column="0"
+                Margin="5"
+                Background="#dcf0f0"
+                HorizontalScrollBarVisibility="Auto"
+                HorizontalScrollMode="Auto">
+                <ItemsRepeater
+                    VerticalAlignment="Bottom"
+                    ItemTemplate="{StaticResource WeatherTemplate}"
+                    ItemsSource="{x:Bind ViewModel.WeatherDatas,Mode=TwoWay}">
+                    <ItemsRepeater.Layout>
+                        <StackLayout
+                            Orientation="Horizontal"
+                            Spacing="10" />
+                    </ItemsRepeater.Layout>
+                </ItemsRepeater>
+            </ScrollViewer>
+
+            <!--Total Products-->
+
+            <Grid
+                Grid.Column="1"
+                Margin="5"
+                Background="#a4cdd2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="auto" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="2*" />
+                    <RowDefinition
+                        Height="auto" />
+                    <RowDefinition
+                        Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="10"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="SemiBold"
+                    Text="Currently Selling" />
+
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Orientation="Vertical">
+                    <FontIcon
+                        Glyph="&#xE719;"
+                        FontSize="40"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center" />
+                    <TextBlock
+                        FontSize="36"
+                        FontWeight="Black"
+                        Text="1300"
+                        Margin="0 10 0 0"
+                        HorizontalAlignment="Center" />
+                    <TextBlock
+                        Text="Products"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!--Exchange Rate-->
+
+        <Grid
+            Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="12*" />
+                <ColumnDefinition
+                    Width="20*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid
+                Grid.Column="0"
+                Margin="5"
+                Background="#dcf0f0">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="auto" />
+                    <RowDefinition
+                        Height="auto" />
+                    <RowDefinition
+                        Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Text="Current Exchange Rate"
+                    TextWrapping="WrapWholeWords"
+                    Margin="20 20 0 5"
+                    FontSize="22"
+                    FontWeight="Bold"
+                    Foreground="#113367" />
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="20 0 0 0"
+                    FontSize="12"
+                    Foreground="#9e616b"
+                    FontWeight="SemiBold"
+                    Text="1.000 VND unit" />
+                <ScrollViewer
+                    BorderBrush="White"
+                    BorderThickness="1"
+                    Grid.Row="2"
+                    HorizontalScrollMode="Auto"
+                    HorizontalScrollBarVisibility="Auto"
+                    Padding="20 10"
+                    Margin="10">
+                    <ItemsRepeater
+                        VerticalAlignment="Top"
+                        ItemsSource="{x:Bind ViewModel.ExchangeRates, Mode=OneWay}">
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate>
+                                <RelativePanel>
+                                    <TextBlock
+                                        Text="{Binding Key}" />
+                                    <TextBlock
+                                        Text="{Binding Value}"
+                                        RelativePanel.AlignRightWithPanel="True" />
+                                </RelativePanel>
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                        <ItemsRepeater.Layout>
+                            <StackLayout
+                                Orientation="Vertical" />
+                        </ItemsRepeater.Layout>
+                    </ItemsRepeater>
+                </ScrollViewer>
+            </Grid>
+
+            <!--Weekly / Monthly-->
+
+            <Grid
+                Grid.Column="1"
+                Margin="5"
+                Background="#aad4c3">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="4*" />
+                    <RowDefinition
+                        Height="5*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="*" />
+                </Grid.ColumnDefinitions>
+                <FontIcon
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Glyph="&#xEE93;"
+                    FontSize="36"
+                    FontWeight="Bold"
+                    VerticalAlignment="Bottom"
+                    Margin="0 0 0 10"
+                    HorizontalAlignment="Center" />
+                <StackPanel
+                    Grid.Row="1"
+                    Orientation="Vertical">
+                    <TextBlock
+                        Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Text="128" />
+                    <TextBlock
+                        Grid.Row="2"
+                        HorizontalAlignment="Center"
+                        Text="Orders"
+                        FontWeight="SemiBold"
+                        TextWrapping="WrapWholeWords" />
+                    <TextBlock
+                        Grid.Row="3"
+                        HorizontalAlignment="Center"
+                        Text="Last week"
+                        Margin="0 10 0 0" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Orientation="Vertical">
+                    <TextBlock
+                        Grid.Row="1"
+                        HorizontalAlignment="Center"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Text="3225" />
+                    <TextBlock
+                        Grid.Row="2"
+                        HorizontalAlignment="Center"
+                        Text="Orders"
+                        FontWeight="SemiBold"
+                        TextWrapping="WrapWholeWords" />
+                    <TextBlock
+                        Grid.Row="3"
+                        HorizontalAlignment="Center"
+                        Text="Last month"
+                        Margin="0 10 0 0" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!--Top Out of stock-->
+
+        <Grid
+            Grid.Row="2">
+            <Grid
+                Grid.Column="0"
+                Margin="10"
+                Background="CadetBlue">
+                <tk:DataGrid>
+                    
+                </tk:DataGrid>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>

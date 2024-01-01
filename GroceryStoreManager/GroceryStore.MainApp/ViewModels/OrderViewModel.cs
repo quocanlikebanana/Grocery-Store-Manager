@@ -1,14 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using DevExpress.Data.Extensions;
 using GroceryStore.Domain.Model;
 using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Command;
 using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Contracts.ViewModels;
-using GroceryStore.MainApp.Decorators;
 using GroceryStore.MainApp.Factories;
+using GroceryStore.MainApp.Helpers;
 using GroceryStore.MainApp.Models.Extensions;
 using GroceryStore.MainApp.Models.PreModel;
 
@@ -37,8 +36,8 @@ public partial class OrderViewModel : ObservableRecipient, INavigationAware
 
     public ObservableCollection<Order> Source { get; private set; } = new()
     {
-
     };
+
     [ObservableProperty]
     private Order? _selectedOrder = null;
 
@@ -218,7 +217,7 @@ public partial class OrderViewModel : ObservableRecipient, INavigationAware
         // Error
     }
 
-    public Action<int> GoToDetail { get; set; }
+    public Action<int>? GoToDetail { get; set; }
 
     private void DetailRecord(object? obj)
     {
@@ -226,7 +225,7 @@ public partial class OrderViewModel : ObservableRecipient, INavigationAware
         {
             return;
         }
-        GoToDetail.Invoke((int)SelectedOrder.Id!);
+        GoToDetail?.Invoke((int)SelectedOrder.Id!);
     }
 
     // =======================================

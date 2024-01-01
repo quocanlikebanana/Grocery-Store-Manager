@@ -1,5 +1,6 @@
 ﻿using GroceryStore.MainApp.ViewModels;
-
+using GroceryStore.MainApp.ViewModels.CategoryVMs;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace GroceryStore.MainApp.Views;
@@ -18,4 +19,20 @@ public sealed partial class CategoryPage : Page
         ViewModel = App.GetService<CategoryViewModel>();
         InitializeComponent();
     }
+}
+
+public class FormDataTemplateSelector : DataTemplateSelector
+{
+    public DataTemplate? OnNull { get; set; }
+    public DataTemplate? Form { get; set; }
+
+    protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
+    {
+        var vm = item as FormVM;
+        if (vm != null && vm.IsBase == false)
+        {
+            return Form!;
+        }
+        return OnNull!;
+    } 
 }

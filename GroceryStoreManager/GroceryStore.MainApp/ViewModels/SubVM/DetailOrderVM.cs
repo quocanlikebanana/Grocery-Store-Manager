@@ -1,8 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using DevExpress.Mvvm;
 using GroceryStore.Domain.Model;
 using GroceryStore.Domain.Service;
-using GroceryStore.MainApp.Contracts.ViewModels;
+using GroceryStore.MainApp.Command;
 using System.Windows.Input;
 
 namespace GroceryStore.MainApp.ViewModels.SubVM;
@@ -28,9 +27,9 @@ public class DetailOrderVM : ObservableRecipient
     public double TotalPrice => _order.TotalPrice;
 
     public ICommand GoBackCommand { get; }
-    public Action GoBackHandle { get; set; }
-    private void GoBack()
+    public Action? GoBackHandle { get; set; }
+    private void GoBack(object? param)
     {
-        GoBackHandle.Invoke();
+        GoBackHandle?.Invoke();
     }
 }

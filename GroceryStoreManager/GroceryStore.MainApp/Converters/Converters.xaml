@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="using:GroceryStore.MainApp.Converters">
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GroceryStore.MainApp.Converters">
 
-    <local:DummyConverter x:Key="DummyConverter" />
+    <local:DummyConverter
+        x:Key="DummyConverter" />
 
-    <local:ASBCustomerDisplayStringFormat x:Key="ASBCustomerDisplayStringFormat" />
-    <local:ASBProductDisplayStringFormat x:Key="ASBProductDisplayStringFormat" />
+    <local:ASBCustomerDisplayStringFormat
+        x:Key="ASBCustomerDisplayStringFormat" />
+    <local:ASBProductDisplayStringFormat
+        x:Key="ASBProductDisplayStringFormat" />
+    <local:ASBProductTypeDisplayStringFormat
+        x:Key="ASBProductTypeDisplayStringFormat" />
 
-    <local:CurrencyVNDConverter x:Key="CurrencyVNDConverter" />
-    <local:BoolToVisibility x:Key="BoolToVisibility" />
+    <local:CurrencyVNDConverter
+        x:Key="CurrencyVNDConverter" />
+    <local:DoubleConverter
+        x:Key="DoubleConverter" />
+    <local:BoolToVisibility
+        x:Key="BoolToVisibility" />
+
+    <local:RandomIconConverter
+        x:Key="RandomIconConverter" />
 
 </ResourceDictionary>

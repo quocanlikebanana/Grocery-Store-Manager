@@ -139,9 +139,6 @@ namespace GroceryStore.Data.EntityFramework.Services
                 int totalCount = await query.CountAsync();
                 int totalPage = (int)Math.Ceiling((double)totalCount / perPage);
 
-                int totalCount = await query.CountAsync();
-                int totalPage = (int)Math.Ceiling((double)totalCount / perPage);
-
                 query = query.Skip((pageNum - 1) * perPage).Take(perPage);
 
                 IEnumerable<Order> entities = await query.ToListAsync();

@@ -8,26 +8,24 @@ using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Decorators;
 using GroceryStore.MainApp.Models.Extensions;
 using GroceryStore.MainApp.Models.PreModel;
-using GroceryStore.MainApp.ViewModels.PopupVM;
 using Microsoft.UI.Xaml;
 
 namespace GroceryStore.MainApp.ViewModels.PopupVM;
 
 public partial class OrderPopupVM : PopupVMBase
 {
-    private readonly IDataService<Order> _orderDataService;
     private readonly IDataService<Product> _productDataService;
     private readonly IDataService<Customer> _customerDataService;
     private readonly IDataService<Coupon> _couponDataService;
 
     private int? _id = null;
 
-    public OrderPopupVM(IPopupService dialogService, IDataService<Order> orderDataService, IDataService<Product> productDataService, IDataService<Customer> customerDataService, IDataService<Coupon> couponDataService, Order? order = null) : base(dialogService, order)
+    public OrderPopupVM(IPopupService dialogService, Order? order = null) : base(dialogService, order)
     {
-        _orderDataService = orderDataService;
-        _productDataService = productDataService;
-        _customerDataService = customerDataService;
-        _couponDataService = couponDataService;
+        _productDataService = App.GetService<IDataService<Product>>();
+        _customerDataService = App.GetService<IDataService<Customer>>();
+        _couponDataService = App.GetService<IDataService<Coupon>>();
+
 
         LoadData();
         OrderResult = null;
@@ -132,6 +130,7 @@ public partial class OrderPopupVM : PopupVMBase
     public double CouponCustomerHas => SelectedCustomer?.CouponCount ?? 0;
     private double _currentCouponValue = -9999;
     public double CurrentCouponValue => _currentCouponValue;
+    private double _currentThresHold = -9999;
     private double _baseTotalDiscount = 0;
     public double TotalDiscount
     {
@@ -225,6 +224,7 @@ public partial class OrderPopupVM : PopupVMBase
                 _errorMessage = "Order has no product";
                 return false;
             }
+            // TODO: hide this, because its system error
             var testTotalPrice = 0.0;
             foreach (var item in Details)
             {
@@ -233,7 +233,6 @@ public partial class OrderPopupVM : PopupVMBase
             testTotalPrice -= TotalDiscount;
             if (testTotalPrice != TotalPrice)
             {
-                // TODO: hide this, because its system error
                 _errorMessage = "Total price is incorrect";
                 return false;
             }
@@ -253,6 +252,7 @@ public partial class OrderPopupVM : PopupVMBase
     private void LoadData()
     {
         _currentCouponValue = Task.Run(async () => (await _couponDataService.GetAll()).First().perCoupon).Result;
+        _currentThresHold = Task.Run(async () => (await _couponDataService.GetAll()).First().ThresHold).Result;
         var customerData = Task.Run(_customerDataService.GetAll).Result;
         AvailibleCustomer.Refresh(customerData);
         var productData = Task.Run(_productDataService.GetAll).Result;
@@ -268,6 +268,11 @@ public partial class OrderPopupVM : PopupVMBase
         // Accepted
         RenewOrderResult();
         SelectedCustomer!.CouponCount -= (int)CouponUsed;
+        // Bonous a Coupon
+        if (TotalPrice > _currentThresHold)
+        {
+            SelectedCustomer!.CouponCount += 1;
+        }
         return true;
     }
 

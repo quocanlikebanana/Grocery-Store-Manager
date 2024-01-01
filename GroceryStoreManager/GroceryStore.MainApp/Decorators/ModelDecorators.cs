@@ -3,7 +3,8 @@ using GroceryStore.MainApp.Helpers;
 
 namespace GroceryStore.MainApp.Decorators;
 
-// been used in the past
+// ToSearchString is for making string that easy to search, which can be found by ID, name, ... unlike unique string
+
 public class CustomerDecorator
 {
     private readonly Customer _customer;
@@ -89,6 +90,43 @@ public class OrderDecorator
         if (order1 != null && order2 != null)
         {
             res = order1.Id == order2.Id;
+        }
+        return res;
+    }
+}
+
+public class ProductTypeDecorator
+{
+    private readonly ProductType _productType;
+
+    public ProductTypeDecorator(ProductType productType)
+    {
+        _productType = productType;
+    }
+
+    public ProductType Get()
+    {
+        return _productType;
+    }
+
+    public override string ToString() => ToDisplayString(_productType);
+
+    public static string ToSearchString(ProductType productType)
+    {
+        return $"{productType.Name.ToLower()} {productType.Id}".TextNormalize();
+    }
+
+    public static string ToDisplayString(ProductType productType)
+    {
+        return $"{productType.Name} - ({productType.Id})";
+    }
+
+    public static bool Equal(ProductType? proType1, ProductType? proType2)
+    {
+        var res = false;
+        if (proType1 != null && proType2 != null)
+        {
+            res = proType1.Id == proType2.Id;
         }
         return res;
     }

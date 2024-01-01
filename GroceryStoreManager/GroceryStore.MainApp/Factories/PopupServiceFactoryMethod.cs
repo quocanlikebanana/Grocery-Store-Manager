@@ -16,26 +16,41 @@ public enum PopupType
 public enum PopupContent
 {
     Order,
+    Product,
+    Customer,
+    Warning,
+    Login,
 }
 
 public class PopupServiceFactoryMethod
 {
     public static IPopupService Get(PopupType type, PopupContent content)
     {
-        var _orderDetailDataService = App.GetService<IDataService<OrderDetail>>();
-        var _orderDataService = App.GetService<IDataService<Order>>();
-        var _productDataService = App.GetService<IDataService<Product>>();
-        var _customerDataService = App.GetService<IDataService<Customer>>();
-        var _couponDataService = App.GetService<IDataService<Coupon>>();
-
         Type contentType;
         Func<IPopupService, object?, PopupVMBase> contentCreate;
         switch (content)
         {
             case PopupContent.Order:
                 contentType = typeof(OrderPopup);
-                contentCreate = (ps, obj) => new OrderPopupVM(ps, _orderDataService, _productDataService, _customerDataService, _couponDataService, obj as Order);
+                contentCreate = (ps, obj) => new OrderPopupVM(ps, obj as Order);
                 break;
+            case PopupContent.Product:
+                contentType = typeof(ProductPopup);
+                contentCreate = (ps, obj) => new ProductPopupVM(ps, obj as Product);
+                break;
+            case PopupContent.Customer:
+                contentType = typeof(CustomerPopup);
+                contentCreate = (ps, obj) => new CustomerPopupVM(ps, obj as Customer );
+                break;
+            case PopupContent.Warning:
+                contentType = typeof(WarningPopup);
+                contentCreate = (ps, message) => new SimplePopupVM(ps, message);
+                break;
+            case PopupContent.Login:
+                contentType = typeof(LoginPopup);
+                contentCreate = (ps, message) => new LoginPopupVM(ps, message);
+                break;
+
             default:
                 throw new Exception();
         }

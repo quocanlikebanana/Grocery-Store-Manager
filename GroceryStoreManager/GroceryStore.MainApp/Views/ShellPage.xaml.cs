@@ -1,5 +1,6 @@
 ﻿using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Helpers;
+using GroceryStore.MainApp.Services;
 using GroceryStore.MainApp.ViewModels;
 
 using Microsoft.UI.Xaml;
@@ -38,12 +39,20 @@ public sealed partial class ShellPage : Page
         AppTitleBarText.Text = "Grocery Store Manager";
     }
 
-    private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    // where screen first load
+    private async void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         TitleBarHelper.UpdateTitleBar(RequestedTheme);
-
         KeyboardAccelerators.Add(BuildKeyboardAccelerator(VirtualKey.Left, VirtualKeyModifiers.Menu));
         KeyboardAccelerators.Add(BuildKeyboardAccelerator(VirtualKey.GoBack));
+
+        // can only load after has connection string
+        await App.GetService<ILoginService>().Authenticate();
+        var preserved = await App.GetService<IStatePreserveService>().LoadStateAsync();
+        if (!preserved)
+        {
+            App.GetService<INavigationService>().NavigateTo(typeof(DashboardViewModel).FullName!);
+        }
     }
 
     private void MainWindow_Activated(object sender, WindowActivatedEventArgs args)

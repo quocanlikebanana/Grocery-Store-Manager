@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test_ConsoleApp", "Test_Con
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Temporary_Appendix", "Temporary_Appendix\Temporary_Appendix.csproj", "{832E733D-0D47-460A-9555-9A33B7751F48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUI", "TestUI\TestUI.csproj", "{21CDC14A-75AA-40D8-80FF-29E6AD496C68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestUI", "TestUI\TestUI.csproj", "{21CDC14A-75AA-40D8-80FF-29E6AD496C68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

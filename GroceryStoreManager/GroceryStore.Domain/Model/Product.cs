@@ -31,7 +31,6 @@ namespace GroceryStore.Domain.Model
         public ProductType? Type { get; set; } = null;
         public double Price { get; set; }
         public int Quantity { get; set; }
-
         public double BasePrice { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using GroceryStore.MainApp.Helpers;
+﻿using GroceryStore.MainApp.Contracts.Services;
+using GroceryStore.MainApp.Helpers;
 
 using Windows.UI.ViewManagement;
 
@@ -22,6 +23,7 @@ public sealed partial class MainWindow : WindowEx
         dispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
         settings = new UISettings();
         settings.ColorValuesChanged += Settings_ColorValuesChanged; // cannot use FrameworkElement.ActualThemeChanged event
+        Closed += OnMainWindowClosed;
     }
 
     // this handles updating the caption button colors correctly when indows system theme is changed
@@ -33,5 +35,10 @@ public sealed partial class MainWindow : WindowEx
         {
             TitleBarHelper.ApplySystemThemeToCaptionButtons();
         });
+    }
+
+    private async void OnMainWindowClosed(object sender, Microsoft.UI.Xaml.WindowEventArgs args)
+    {
+        await App.GetService<IStatePreserveService>().SaveStateAsync();
     }
 }

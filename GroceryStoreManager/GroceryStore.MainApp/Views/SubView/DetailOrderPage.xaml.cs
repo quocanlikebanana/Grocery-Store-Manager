@@ -21,7 +21,6 @@ public sealed partial class DetailOrderPage : Page
         ViewModel = (DetailOrderVM)e.Parameter;
         ViewModel.GoBackHandle = () =>
         {
-            //Frame.Navigate(typeof(OrderPage));
             Frame.GoBack();
         };
         base.OnNavigatedTo(e);
