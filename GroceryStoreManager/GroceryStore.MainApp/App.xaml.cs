@@ -101,14 +101,12 @@ public partial class App : Application
             services.AddSingleton(typeof(IDataService<Order>), x => ActivatorUtilities.CreateInstance(x, typeof(OrderDataService), GetService<ILoginService>().ConnectionString()));
             services.AddSingleton(typeof(IDataService<OrderDetail>), x => ActivatorUtilities.CreateInstance(x, typeof(OrderDetailDataService), GetService<ILoginService>().ConnectionString()));
             services.AddSingleton(typeof(IDataService<Product>), x => ActivatorUtilities.CreateInstance(x, typeof(ProductDataService), GetService<ILoginService>().ConnectionString()));
-            services.AddSingleton(typeof(IDataService<ProductType>), x => ActivatorUtilities.CreateInstance(x, typeof(ProductType), GetService<ILoginService>().ConnectionString()));
-            services.AddSingleton<IStatisticService, StatisticService>();
+            services.AddSingleton(typeof(IDataService<ProductType>), x => ActivatorUtilities.CreateInstance(x, typeof(ProductTypeDataService), GetService<ILoginService>().ConnectionString()));
+            services.AddSingleton(typeof(IStatisticService), x => ActivatorUtilities.CreateInstance(x, typeof(StatisticService), GetService<ILoginService>().ConnectionString()));
 
             // Views and ViewModels
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<SettingsPage>();
-            services.AddTransient<ReportViewModel>();
-            services.AddTransient<ReportPage>();
             services.AddTransient<ProductViewModel>();
             services.AddTransient<ProductPage>();
             services.AddTransient<CategoryViewModel>();

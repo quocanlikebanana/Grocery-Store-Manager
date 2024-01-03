@@ -16,4 +16,9 @@ public sealed partial class StatisticPage : Page
         ViewModel = App.GetService<StatisticViewModel>();
         InitializeComponent();
     }
+
+    private void Chart_PointerWheelChanged(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
+    {
+        e.Handled = true;
+    }
 }

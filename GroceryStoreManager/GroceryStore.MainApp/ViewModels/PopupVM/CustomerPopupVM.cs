@@ -71,9 +71,13 @@ namespace GroceryStore.MainApp.ViewModels.PopupVM
                 {
                     _errorMessage = "Can't have an empty name";
                 }
-                if (string.IsNullOrEmpty(_tel))
+                else if (string.IsNullOrEmpty(_tel))
                 {
                     _errorMessage = "Must input a telephone number";
+                }
+                else if (string.IsNullOrEmpty(_address))
+                {
+                    _errorMessage = "Must input an address";
                 }
                 else
                 {

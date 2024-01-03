@@ -83,15 +83,6 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem
-                    x:Uid="Shell_Report"
-                    helpers:NavigationHelper.NavigateTo="GroceryStore.MainApp.ViewModels.ReportViewModel">
-                    <NavigationViewItem.Icon>
-                        <FontIcon
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            Glyph="&#xE9F9;" />
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem
                     x:Uid="Shell_Statistic"
                     helpers:NavigationHelper.NavigateTo="GroceryStore.MainApp.ViewModels.StatisticViewModel">
                     <NavigationViewItem.Icon>

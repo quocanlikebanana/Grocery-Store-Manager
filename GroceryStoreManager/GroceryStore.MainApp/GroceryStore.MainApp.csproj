@@ -72,6 +72,9 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="_dlls\GroceryStoreManager.ExcelManager-Copy.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Page Update="Views\BlankPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -120,9 +123,6 @@
     <Page Update="Views\SubWindowView\OrderPopup.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <None Update="_dlls\GroceryStore.Data.EntityFramework.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="_libs\Microsoft.EntityFrameworkCore.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

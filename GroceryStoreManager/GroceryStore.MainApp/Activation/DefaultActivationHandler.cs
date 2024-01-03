@@ -8,12 +8,10 @@ namespace GroceryStore.MainApp.Activation;
 public class DefaultActivationHandler : ActivationHandler<LaunchActivatedEventArgs>
 {
     private readonly INavigationService _navigationService;
-    private readonly IStatePreserveService _statePreserveService;
 
-    public DefaultActivationHandler(INavigationService navigationService, IStatePreserveService statePreserveService)
+    public DefaultActivationHandler(INavigationService navigationService)
     {
         _navigationService = navigationService;
-        _statePreserveService = statePreserveService;
     }
 
     protected override bool CanHandleInternal(LaunchActivatedEventArgs args)

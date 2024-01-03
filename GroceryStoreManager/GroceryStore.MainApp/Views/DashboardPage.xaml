@@ -16,7 +16,7 @@
         x:Name="ContentArea">
         <Grid.RowDefinitions>
             <RowDefinition
-                Height="12*" />
+                Height="10*" />
             <RowDefinition
                 Height="10*" />
             <RowDefinition
@@ -130,7 +130,7 @@
                     <TextBlock
                         FontSize="36"
                         FontWeight="Black"
-                        Text="1300"
+                        Text="{x:Bind ViewModel.TotalProduct}"
                         Margin="0 10 0 0"
                         HorizontalAlignment="Center" />
                     <TextBlock
@@ -175,13 +175,6 @@
                     FontSize="22"
                     FontWeight="Bold"
                     Foreground="#113367" />
-                <TextBlock
-                    Grid.Row="1"
-                    Margin="20 0 0 0"
-                    FontSize="12"
-                    Foreground="#9e616b"
-                    FontWeight="SemiBold"
-                    Text="1.000 VND unit" />
                 <ScrollViewer
                     BorderBrush="White"
                     BorderThickness="1"
@@ -247,7 +240,7 @@
                         HorizontalAlignment="Center"
                         FontSize="24"
                         FontWeight="Bold"
-                        Text="128" />
+                        Text="{x:Bind ViewModel.NewOrderInLast7Days}" />
                     <TextBlock
                         Grid.Row="2"
                         HorizontalAlignment="Center"
@@ -257,7 +250,7 @@
                     <TextBlock
                         Grid.Row="3"
                         HorizontalAlignment="Center"
-                        Text="Last week"
+                        Text="Last 7 days"
                         Margin="0 10 0 0" />
                 </StackPanel>
                 <StackPanel
@@ -269,7 +262,7 @@
                         HorizontalAlignment="Center"
                         FontSize="24"
                         FontWeight="Bold"
-                        Text="3225" />
+                        Text="{x:Bind ViewModel.NewOrderInMonth}" />
                     <TextBlock
                         Grid.Row="2"
                         HorizontalAlignment="Center"
@@ -279,7 +272,7 @@
                     <TextBlock
                         Grid.Row="3"
                         HorizontalAlignment="Center"
-                        Text="Last month"
+                        Text="This month"
                         Margin="0 10 0 0" />
                 </StackPanel>
             </Grid>
@@ -288,15 +281,69 @@
         <!--Top Out of stock-->
 
         <Grid
-            Grid.Row="2">
-            <Grid
-                Grid.Column="0"
-                Margin="10"
-                Background="CadetBlue">
-                <tk:DataGrid>
-                    
-                </tk:DataGrid>
-            </Grid>
+            Grid.Row="2"
+            Margin="5"
+            Padding="20"
+            Background="{ThemeResource SystemChromeMediumLowColor}">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Text="Top 5 Lowest Stock"
+                TextWrapping="WrapWholeWords"
+                FontSize="18"
+                Margin="0 0 0 10"
+                FontWeight="Bold"
+                Foreground="#bd5851" />
+            <tk:DataGrid
+                Grid.Row="1"
+                ItemsSource="{x:Bind ViewModel.Top5OutOfStock, Mode=TwoWay}"
+                AutoGenerateColumns="False">
+                <tk:DataGrid.Columns>
+                    <tk:DataGridTextColumn
+                        Header="Product ID"
+                        IsReadOnly="True"
+                        Width="*"
+                        Binding="{Binding Id}" />
+                    <tk:DataGridTextColumn
+                        Header="Product's Name"
+                        IsReadOnly="True"
+                        Width="2*"
+                        Binding="{Binding Name}" />
+                    <tk:DataGridTextColumn
+                        Header="Quantity"
+                        IsReadOnly="True"
+                        Width="*"
+                        Binding="{Binding Quantity}">
+                        <tk:DataGridTextColumn.ElementStyle>
+                            <Style
+                                TargetType="TextBlock">
+                                <Setter
+                                    Property="Foreground"
+                                    Value="#bd5851" />
+                                <Setter
+                                    Property="FontSize"
+                                    Value="16" />
+                                <Setter
+                                    Property="FontWeight"
+                                    Value="Bold" />
+                            </Style>
+                        </tk:DataGridTextColumn.ElementStyle>
+                    </tk:DataGridTextColumn>
+                    <tk:DataGridTextColumn
+                        Header="Category"
+                        IsReadOnly="True"
+                        Width="2*"
+                        Binding="{Binding Type.Name}" />
+                    <tk:DataGridTextColumn />
+                </tk:DataGrid.Columns>
+            </tk:DataGrid>
         </Grid>
     </Grid>
 </Page>

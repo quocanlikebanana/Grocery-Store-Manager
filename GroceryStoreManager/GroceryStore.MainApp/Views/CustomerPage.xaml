@@ -10,7 +10,7 @@
     xmlns:behaviors="using:GroceryStore.MainApp.Behaviors"
     behaviors:NavigationViewHeaderBehavior.HeaderMode="Always"
     mc:Ignorable="d">
-    
+
     <!--Enable header:-->
     <!--behaviors:NavigationViewHeaderBehavior.HeaderMode="Always"-->
 
@@ -124,8 +124,10 @@
                 <AutoSuggestBox
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom"
-                    PlaceholderText="Search customer"
+                    PlaceholderText="Search"
                     QueryIcon="Find"
+                    TextChanged="AutoSuggestBox_TextChanged"
+                    Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
                     MinWidth="300" />
             </CommandBar.Content>
 

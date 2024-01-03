@@ -36,14 +36,6 @@
             DefaultLabelPosition="Right"
             Grid.Row="0"
             Grid.Column="0">
-            <CommandBar.Content>
-                <AutoSuggestBox
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Bottom"
-                    PlaceholderText="Search customer"
-                    QueryIcon="Find"
-                    MinWidth="300" />
-            </CommandBar.Content>
             <AppBarButton
                 Command="{x:Bind ViewModel.ReloadCommand, Mode=OneWay}"
                 Icon="Refresh"
@@ -183,8 +175,6 @@
                 <core:DataTriggerBehavior Binding="{x:Bind ViewModel.Form}" Value="">
                 </core:DataTriggerBehavior>
             </i:Interaction.Behaviors>-->
-
-
 
             <ContentControl
                 VerticalAlignment="Center"

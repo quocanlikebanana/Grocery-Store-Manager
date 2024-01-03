@@ -18,4 +18,9 @@ public sealed partial class CustomerPage : Page
         ViewModel = App.GetService<CustomerViewModel>();
         InitializeComponent();
     }
+
+    private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        ViewModel.SearchCommand.Execute(null);
+    }
 }

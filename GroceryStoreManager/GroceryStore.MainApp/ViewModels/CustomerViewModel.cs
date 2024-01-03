@@ -7,6 +7,7 @@ using GroceryStore.MainApp.Command;
 using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Contracts.ViewModels;
 using GroceryStore.MainApp.Factories;
+using GroceryStore.MainApp.Helpers;
 using GroceryStore.MainApp.Models.PreModel;
 
 namespace GroceryStore.MainApp.ViewModels;
@@ -20,6 +21,9 @@ public partial class CustomerViewModel : ObservableRecipient, INavigationAware
     [NotifyPropertyChangedFor(nameof(HasCurrent))]
     private Customer? _selectedCustomer;
 
+    [ObservableProperty]
+    private string _searchText = string.Empty;
+
     public ObservableCollection<Customer> Customers { get; private set; } = new ObservableCollection<Customer>();
 
     public CustomerViewModel()
@@ -31,6 +35,7 @@ public partial class CustomerViewModel : ObservableRecipient, INavigationAware
         EditCommand = new DelegateCommand(EditRecord);
         DeleteCommand = new DelegateCommand(DeleteRecord);
         ReloadCommand = new DelegateCommand(Reload);
+        SearchCommand = new DelegateCommand(Reload);
     }
 
     public async void OnNavigatedTo(object parameter)
@@ -46,11 +51,20 @@ public partial class CustomerViewModel : ObservableRecipient, INavigationAware
     {
         SelectedCustomer = null;
         Customers.Clear();
-        var data = await _customerDS.GetAll();
-        foreach (var item in data)
+        var search = SearchText.TextNormalize();
+        var data = (await _customerDS.GetAll());
+        foreach (var customer in data)
         {
-            Customers.Add(item);
+            var key = customer.Name.TextNormalize();
+            if (key.Contains(search))
+            {
+                Customers.Add(customer);
+            }
         }
+        //foreach (var item in data)
+        //{
+        //    Customers.Add(item);
+        //}
         OnPropertyChanged(nameof(Customers));
     }
 
@@ -63,6 +77,7 @@ public partial class CustomerViewModel : ObservableRecipient, INavigationAware
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }
     public ICommand ReloadCommand { get; }
+    public ICommand SearchCommand { get; }
 
     private async void AddRecord(object? param)
     {

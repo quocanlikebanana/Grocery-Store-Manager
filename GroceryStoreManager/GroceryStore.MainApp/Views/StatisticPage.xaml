@@ -4,9 +4,516 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    xmlns:dxe="using:DevExpress.WinUI.Editors"
+    xmlns:dxd="using:DevExpress.WinUI.Drawing"
+    xmlns:dxg="using:DevExpress.WinUI.Grid"
+    xmlns:dxc="using:DevExpress.WinUI.Charts">
 
-    <Grid x:Name="ContentArea">
-        
-    </Grid>
+    <ScrollViewer
+        x:Name="ContentArea">
+        <StackPanel>
+
+            <!--Profit and Revenue-->
+
+            <Grid
+                Margin="0 20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="auto" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0 20"
+                    FontWeight="Bold"
+                    Style="{ThemeResource SubtitleTextBlockStyle}"
+                    Text="Profit And Revenue" />
+
+                <dxc:CartesianChart
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    ToolTipEnabled="True"
+                    AllowAxisXZoomScroll="True"
+                    AllowAxisYZoomScroll="True"
+                    PointerWheelChanged="Chart_PointerWheelChanged">
+                    <dxc:CartesianChart.Legend>
+                        <dxc:Legend
+                            HorizontalPosition="Center"
+                            VerticalPosition="BottomOutside" />
+                    </dxc:CartesianChart.Legend>
+                    <dxc:CartesianChart.AxisX>
+                        <dxc:AxisX
+                            SideMargins="1"
+                            DateTimeGridAlignment="{x:Bind ViewModel.ChartInfoPR.MeasureUnit, Mode=OneWay}"
+                            DateTimeMeasureUnit="{x:Bind ViewModel.ChartInfoPR.MeasureUnit, Mode=OneWay}"
+                            LabelPattern="{}{V:dd/MM/yy}" />
+                    </dxc:CartesianChart.AxisX>
+                    <dxc:CartesianChart.AxisY>
+                        <dxc:AxisY
+                            SideMargins="{x:Bind ViewModel.ChartInfoPR.MarignY, Mode=OneWay}"
+                            LabelPattern="{}{V}đ" />
+                    </dxc:CartesianChart.AxisY>
+                    <dxc:CartesianChart.Series>
+                        <!--Total Revenue-->
+                        <dxc:Series
+                            ShowInLegend="True"
+                            DisplayName="Total Revenue">
+                            <dxc:Series.View>
+                                <dxc:LineSeriesView
+                                    Brush="DarkBlue"
+                                    ToolTipPointPattern="{}{A:dd/MM/yy}: {V}đ"
+                                    ToolTipSeriesPattern="{}{S}"
+                                    ShowMarkers="True" />
+                            </dxc:Series.View>
+                            <dxc:Series.Data>
+                                <dxc:DataSource
+                                    PointSource="{x:Bind ViewModel.TotalRevenueData, Mode=OneWay}"
+                                    ArgumentDataMember="Argument"
+                                    ArgumentScaleType="DateTime"
+                                    ValueDataMember="Value"
+                                    ValueScaleType="Numerical" />
+                            </dxc:Series.Data>
+                        </dxc:Series>
+                        <!--Total Profit-->
+                        <dxc:Series
+                            ShowInLegend="True"
+                            DisplayName="Total Profit">
+                            <dxc:Series.View>
+                                <dxc:LineSeriesView
+                                    Brush="DarkGoldenrod"
+                                    ToolTipPointPattern="{}{A:dd/MM/yy}: {V}đ"
+                                    ToolTipSeriesPattern="{}{S}"
+                                    ShowMarkers="True" />
+                            </dxc:Series.View>
+                            <dxc:Series.Data>
+                                <dxc:DataSource
+                                    PointSource="{x:Bind ViewModel.TotalProfitData, Mode=OneWay}"
+                                    ArgumentDataMember="Argument"
+                                    ArgumentScaleType="DateTime"
+                                    ValueDataMember="Value"
+                                    ValueScaleType="Numerical" />
+                            </dxc:Series.Data>
+                        </dxc:Series>
+                    </dxc:CartesianChart.Series>
+                </dxc:CartesianChart>
+                <!--Time Unit-->
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="20">
+                    <RadioButtons
+                        ItemsSource="{x:Bind ViewModel.TimeUnits, Mode=OneWay}"
+                        SelectedItem="{x:Bind ViewModel.SelectedUnitPR, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <RadioButtons.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding Name}" />
+                            </DataTemplate>
+                        </RadioButtons.ItemTemplate>
+                    </RadioButtons>
+                </StackPanel>
+
+                <RelativePanel
+                    Grid.Row="2"
+                    Grid.Column="0">
+                    <!--Select-->
+                    <StackPanel
+                        Orientation="Horizontal"
+                        RelativePanel.AlignLeftWithPanel="True">
+                        <dxe:DateEdit
+                            Margin="10"
+                            Width="150"
+                            Header="Start date:"
+                            MaxValue="{x:Bind ViewModel.EndDatePR, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            EditValue="{x:Bind ViewModel.StartDatePR, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:DateEdit
+                            Margin="10"
+                            Width="150"
+                            Header="End date:"
+                            MinValue="{x:Bind ViewModel.StartDatePR, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            EditValue="{x:Bind ViewModel.EndDatePR, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button
+                            Margin="10"
+                            Padding="10 5"
+                            Style="{ThemeResource AccentButtonStyle}"
+                            VerticalAlignment="Bottom"
+                            Content="Refresh"
+                            Command="{x:Bind ViewModel.ReLoadPR}" />
+                    </StackPanel>
+                    <!--Summary-->
+                    <StackPanel
+                        RelativePanel.AlignRightWithPanel="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="auto" />
+                                <ColumnDefinition
+                                    Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="auto" />
+                                <RowDefinition
+                                    Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Text="Profit"
+                                Style="{ThemeResource SubtitleTextBlockStyle}"
+                                Margin="15 5" />
+                            <StackPanel
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Margin="15 5">
+                                <TextBlock>
+                                    <TextBlock.Inlines>
+                                        <Run
+                                            Text="Total: " />
+                                        <Run
+                                            FontWeight="SemiBold"
+                                            Text="{x:Bind ViewModel.TotalProfit,Mode=OneWay, Converter={StaticResource CurrencyVNDConverter}}" />
+                                    </TextBlock.Inlines>
+                                </TextBlock>
+                                <TextBlock>
+                                    <TextBlock.Inlines>
+                                        <Run
+                                            Text="Avg: " />
+                                        <Run
+                                            FontWeight="SemiBold"
+                                            Text="{x:Bind ViewModel.AvgProfit, Mode=OneWay, Converter={StaticResource CurrencyVNDConverter}}" />
+                                    </TextBlock.Inlines>
+                                </TextBlock>
+                            </StackPanel>
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Text="Revenue"
+                                Style="{ThemeResource SubtitleTextBlockStyle}"
+                                Margin="15 5" />
+                            <StackPanel
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="15 5">
+                                <TextBlock>
+                                    <TextBlock.Inlines>
+                                        <Run
+                                            Text="Total: " />
+                                        <Run
+                                            FontWeight="SemiBold"
+                                            Text="{x:Bind ViewModel.TotalProfit,Mode=OneWay,  Converter={StaticResource CurrencyVNDConverter}}" />
+                                    </TextBlock.Inlines>
+                                </TextBlock>
+                                <TextBlock>
+                                    <TextBlock.Inlines>
+                                        <Run
+                                            Text="Avg: " />
+                                        <Run
+                                            FontWeight="SemiBold"
+                                            Text="{x:Bind ViewModel.AvgProfit, Mode=OneWay, Converter={StaticResource CurrencyVNDConverter}}" />
+                                    </TextBlock.Inlines>
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </RelativePanel>
+            </Grid>
+
+            <!--Product Quantity-->
+
+            <Grid
+                Margin="0 20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0 20"
+                    FontWeight="Bold"
+                    Style="{ThemeResource SubtitleTextBlockStyle}"
+                    Text="Product Sales" />
+
+                <!--Time Unit-->
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="20">
+                    <RadioButtons
+                        ItemsSource="{x:Bind ViewModel.TimeUnits, Mode=OneWay}"
+                        SelectedItem="{x:Bind ViewModel.SelectedUnitPrQ, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <RadioButtons.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding Name}" />
+                            </DataTemplate>
+                        </RadioButtons.ItemTemplate>
+                    </RadioButtons>
+                </StackPanel>
+                <!--Chart-->
+                <dxc:CartesianChart
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    ToolTipEnabled="True"
+                    AllowAxisXZoomScroll="True"
+                    AllowAxisYZoomScroll="True"
+                    PointerWheelChanged="Chart_PointerWheelChanged">
+                    <dxc:CartesianChart.Legend>
+                        <dxc:Legend
+                            HorizontalPosition="Center"
+                            VerticalPosition="BottomOutside" />
+                    </dxc:CartesianChart.Legend>
+                    <dxc:CartesianChart.AxisX>
+                        <dxc:AxisX
+                            SideMargins="1"
+                            DateTimeGridAlignment="{x:Bind ViewModel.ChartInfoPrQ.MeasureUnit, Mode=OneWay}"
+                            DateTimeMeasureUnit="{x:Bind ViewModel.ChartInfoPrQ.MeasureUnit, Mode=OneWay}"
+                            LabelPattern="{}{V:dd/MM/yy}" />
+                    </dxc:CartesianChart.AxisX>
+                    <dxc:CartesianChart.AxisY>
+                        <dxc:AxisY
+                            SideMargins="{x:Bind ViewModel.ChartInfoPrQ.MarignY, Mode=OneWay}"
+                            LabelPattern="{}{V:0}" />
+                    </dxc:CartesianChart.AxisY>
+                    <dxc:CartesianChart.Series>
+                        <dxc:Series
+                            ShowInLegend="True"
+                            DisplayName="Total Revenue">
+                            <dxc:Series.View>
+                                <dxc:BarSeriesView
+                                    ToolTipPointPattern="{}{A:dd/MM/yy}: {V}"
+                                    ToolTipSeriesPattern="{}{S}" />
+                            </dxc:Series.View>
+                            <dxc:Series.Data>
+                                <dxc:DataSource
+                                    PointSource="{x:Bind ViewModel.ProductQuantityData, Mode=OneWay}"
+                                    ArgumentDataMember="Argument"
+                                    ArgumentScaleType="DateTime"
+                                    ValueDataMember="Value"
+                                    ValueScaleType="Numerical" />
+                            </dxc:Series.Data>
+                        </dxc:Series>
+                    </dxc:CartesianChart.Series>
+                </dxc:CartesianChart>
+                <!--Summary-->
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    HorizontalAlignment="Left"
+                    Orientation="Vertical">
+                    <TextBlock
+                        Text="Total sale"
+                        HorizontalAlignment="Center"
+                        FontWeight="SemiBold"
+                        Margin="0 0 0 10"
+                        Style="{ThemeResource DetailSubTitleStyle}" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource SubtitleTextBlockStyle}"
+                        Text="{x:Bind ViewModel.TotalProductQuantity,Mode=OneWay, Converter={StaticResource DoubleConverter}}" />
+                </StackPanel>
+                <!--Select-->
+                <RelativePanel
+                    Grid.Row="2"
+                    Grid.Column="0">
+                    <StackPanel
+                        Orientation="
+                         Horizontal"
+                        RelativePanel.AlignLeftWithPanel="True">
+                        <dxe:DateEdit
+                            Margin="
+                            10"
+                            Width="
+                            150"
+                            Header="Start
+                            date:"
+                            MaxValue="{x:Bind ViewModel.EndDatePrQ, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            EditValue="{x:Bind ViewModel.StartDatePrQ, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxe:DateEdit
+                            Margin="10"
+                            Width="150"
+                            Header="End date:"
+                            MinValue="{x:Bind ViewModel.StartDatePrQ, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            EditValue="{x:Bind ViewModel.EndDatePrQ, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button
+                            Margin="10"
+                            Padding="10 5"
+                            Style="{ThemeResource AccentButtonStyle}"
+                            VerticalAlignment="Bottom"
+                            Content="Refresh"
+                            Command="{x:Bind ViewModel.ReLoadPrQ}" />
+                    </StackPanel>
+                    <StackPanel
+                        VerticalAlignment="Bottom"
+                        Margin="0 0 30 0"
+                        RelativePanel.AlignRightWithPanel="True">
+                        <ComboBox
+                            DisplayMemberPath="Name"
+                            MinWidth="250"
+                            Header="Product:"
+                            ItemsSource="{x:Bind ViewModel.ProductList, Mode=OneWay}"
+                            SelectedItem="{x:Bind ViewModel.SelectedProduct, Mode=TwoWay}" />
+                        <TextBlock
+                            Text="Please select a Product"
+                            Foreground="{ThemeResource AccentAAFillColorDefaultBrush}"
+                            Visibility="{x:Bind ViewModel.NotSelectedProduct, Converter={StaticResource BoolToVisibility}, Mode=OneWay}" />
+                    </StackPanel>
+                </RelativePanel>
+            </Grid>
+
+            <!--Top Seller-->
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="auto " />
+                    <RowDefinition
+                        Height="* " />
+                    <RowDefinition
+                        Height="auto " />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0 20"
+                    FontWeight="Bold"
+                    Foreground="{ThemeResource AccentAAFillColorDefaultBrush}"
+                    Style="{ThemeResource SubtitleTextBlockStyle}"
+                    Text="Product Sales" />
+                <!--Top item display-->
+                <dxg:GridControl
+                    BorderBrush="{ThemeResource AccentAAFillColorDefaultBrush}"
+                    BorderThickness="1"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Margin="30"
+                    ItemsSource="{x:Bind ViewModel.TopSellerData, Mode=OneWay}"
+                    AutoWidth="True"
+                    AutoGenerateColumns="False">
+                    <dxg:GridControl.Columns>
+                        <dxg:GridTextColumn
+                            Header="Product's Name"
+                            AllowEditing="False"
+                            FieldName="Argument" />
+                        <dxg:GridTextColumn
+                            Header="Quantity Sold"
+                            AllowEditing="False"
+                            FieldName="Value" />
+                    </dxg:GridControl.Columns>
+                </dxg:GridControl>
+                <!--Pie Chart-->
+                <ScrollViewer
+                    Grid.Row="1"
+                    Grid.Column="0" VerticalScrollMode="Enabled">
+                    <dxc:PieChart
+                        ToolTipEnabled="True">
+                        <dxc:PieChart.Legend>
+                            <dxc:Legend
+                                IsMovableInsideDiagram="True"
+                                HorizontalPosition="RightOutside"
+                                VerticalPosition="Center"
+                                Orientation="Horizontal"
+                                MaximumRowsOrColumns="1"  />
+                        </dxc:PieChart.Legend>
+                        <dxc:PieChart.Series>
+                            <dxc:PieSeries>
+                                <dxc:PieSeries.View>
+                                    <dxc:PieSeriesView
+                                        ToolTipPointPattern="{}{A}: {V}"
+                                        LegendPointPattern="{}{A}: {V}"
+                                        ShowLabels="True"
+                                        LabelPattern="{}{VP:p}"
+                                        LabelPosition="Outside">
+                                        <dxc:PieSeriesView.Title>
+                                            <TextBlock
+                                                FontWeight="SemiBold"
+                                                Text="Product Sales"
+                                                Margin="10" />
+                                        </dxc:PieSeriesView.Title>
+                                    </dxc:PieSeriesView>
+                                </dxc:PieSeries.View>
+                                <dxc:PieSeries.Data>
+                                    <dxc:DataSource
+                                        PointSource="{x:Bind ViewModel.TopSellerData, Mode=OneWay}"
+                                        ArgumentDataMember="Argument"
+                                        ArgumentScaleType="Qualitative"
+                                        ValueDataMember="Value"
+                                        ValueScaleType="Numerical" />
+                                </dxc:PieSeries.Data>
+                            </dxc:PieSeries>
+                        </dxc:PieChart.Series>
+                    </dxc:PieChart>
+                </ScrollViewer>
+                <!--Time Unit-->
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="10">
+                    <RadioButtons
+                        VerticalAlignment="Center"
+                        ItemsSource="{x:Bind ViewModel.TimeUnits, Mode=OneWay}"
+                        SelectedItem="{x:Bind ViewModel.SelectedUnitTS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <RadioButtons.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding Name}" />
+                            </DataTemplate>
+                        </RadioButtons.ItemTemplate>
+                    </RadioButtons>
+                </StackPanel>
+                <!--Select Top-->
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    Margin="30"
+                    VerticalAlignment="Center">
+                    <ComboBox
+                        ItemsSource="{x:Bind ViewModel.Tops}"
+                        SelectedItem="{x:Bind ViewModel.SelectedTop, Mode=TwoWay}"
+                        Header="Select Top"
+                        MinWidth="150" />
+                    <Button
+                        Padding="10 5"
+                        Margin="20 30 0 0"
+                        Style="{ThemeResource AccentButtonStyle}"
+                        VerticalAlignment="Top"
+                        Content="Refresh"
+                        Command="{x:Bind ViewModel.ReLoadTS}" />
+                </StackPanel>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
 </Page>

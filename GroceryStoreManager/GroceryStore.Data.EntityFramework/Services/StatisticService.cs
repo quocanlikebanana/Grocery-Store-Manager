@@ -173,5 +173,95 @@ namespace GroceryStore.Data.EntityFramework.Services
                 return result;
             }
         }
+
+        public async Task<int> ProductSale(Product product)
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                var orderDetails = await context.Set<OrderDetail>()
+                                                .Include(d => d.Order)
+                                                .Where(d => d.Product.Id == product.Id)
+                                                .ToListAsync();
+                int quantitySold = orderDetails.Sum(d => d.Quantity);
+                return quantitySold;
+            }
+        }
+
+        public async Task<int> ProductSale(Product product, DateTime start, DateTime end)
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                var orderDetails = await context.Set<OrderDetail>()
+                                                .Include(d => d.Order)
+                                                .Where(d => d.Product.Id == product.Id && d.Order.OrderDate >= start && d.Order.OrderDate <= end)
+                                                .ToListAsync();
+                int quantitySold = orderDetails.Sum(d => d.Quantity);
+                return quantitySold;
+            }
+        }
+
+        public async Task<List<Tuple<Product, int>>> SoldProducts(DateTime start, DateTime end)
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                var allProducts = await context.Set<Product>().ToListAsync();
+
+                var resultList = new List<Tuple<Product, int>>();
+
+                foreach (var product in allProducts)
+                {
+                    var orderDetails = await context.Set<OrderDetail>()
+                                                    .Include(d => d.Order)
+                                                    .Where(d => d.Product.Id == product.Id && d.Order.OrderDate >= start && d.Order.OrderDate <= end)
+                                                    .ToListAsync();
+                    int quantitySold = orderDetails.Sum(d => d.Quantity);
+
+                    resultList.Add(new Tuple<Product, int>(product, quantitySold));
+                }
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<Tuple<Product, int>>> SoldProducts()
+        {
+            using (GroceryStoreManagerDBContext context = new GroceryStoreManagerDBContext(_connectionString))
+            {
+                var allProducts = await context.Set<Product>().ToListAsync();
+
+                var resultList = new List<Tuple<Product, int>>();
+
+                foreach (var product in allProducts)
+                {
+                    var orderDetails = await context.Set<OrderDetail>()
+                                                    .Include(d => d.Order)
+                                                    .Where(d => d.Product.Id == product.Id)
+                                                    .ToListAsync();
+                    int quantitySold = orderDetails.Sum(d => d.Quantity);
+
+                    resultList.Add(new Tuple<Product, int>(product, quantitySold));
+                }
+
+                return resultList;
+            }
+        }
+
+        public async Task<List<Tuple<Product, int>>> HotProducts(int top)
+        {
+            var soldProducts = await SoldProducts();
+
+            var hotProducts = soldProducts.OrderByDescending(p => p.Item2).Take(top).ToList();
+
+            return hotProducts;
+        }
+
+        public async Task<List<Tuple<Product, int>>> HotProducts(DateTime start, DateTime end, int top)
+        {
+            var soldProducts = await SoldProducts(start, end);
+
+            var hotProducts = soldProducts.OrderByDescending(p => p.Item2).Take(top).ToList();
+
+            return hotProducts;
+        }
     }
 }
