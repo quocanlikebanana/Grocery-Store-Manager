@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroceryStore.Domain.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ namespace GroceryStore.Domain.Service
         Task<double> GetTotalProfit(DateTime start, DateTime end);
         Task<double> GetAverageProfit();
         Task<double> GetAverageProfit(DateTime start, DateTime end);
+        Task<List<Tuple<Product, int>>> SoldProducts(DateTime start, DateTime end);
+        Task<List<Tuple<Product, int>>> HotProducts(DateTime start, DateTime end, int top);
         Task<int> GetNumberOf();
         Task<int> GetNumberOf(DateTime start, DateTime end);
     }
