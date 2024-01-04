@@ -2,7 +2,7 @@
 using System.Globalization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace GroceryStore.MainApp.Services.GraphQL;
+namespace GroceryStore.MainApp.Strategies.GraphQL;
 
 public class Latest
 {
@@ -44,7 +44,7 @@ public class CurrencyData
 
 public class CurrencyService
 {
-    private readonly string apiKey = AppConfigurate.Load("CurrencyAPI") ?? "";
+    private readonly string apiKey = Configurator.Load("CurrencyAPI", new AppconfigStorage()) ?? "";
     private readonly string hostUrl = "https://swop.cx/graphql";
     // because the server only allow limited type of query so no need to generalize it
     public async Task<CurrencyData?> GetCurrencyData()

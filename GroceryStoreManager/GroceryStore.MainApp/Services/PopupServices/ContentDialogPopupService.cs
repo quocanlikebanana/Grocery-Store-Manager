@@ -6,7 +6,7 @@ using GroceryStore.MainApp.Views;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace GroceryStore.MainApp.Services.PopupServices;
+namespace GroceryStore.MainApp.Strategies.PopupServices;
 
 public class ContentDialogPopupService : IPopupService
 {

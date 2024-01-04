@@ -6,7 +6,7 @@ using GroceryStore.MainApp.ViewModels;
 
 using Microsoft.UI.Xaml.Controls;
 
-namespace GroceryStore.MainApp.Services;
+namespace GroceryStore.MainApp.Strategies;
 
 public class NavigationViewService : INavigationViewService
 {

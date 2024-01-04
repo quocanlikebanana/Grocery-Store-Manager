@@ -2,8 +2,8 @@
 using GroceryStore.Domain.Model;
 using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Contracts.ViewModels;
-using GroceryStore.MainApp.Services.GraphQL;
-using GroceryStore.MainApp.Services.REST;
+using GroceryStore.MainApp.Strategies.GraphQL;
+using GroceryStore.MainApp.Strategies.REST;
 using System.Collections.ObjectModel;
 
 namespace GroceryStore.MainApp.ViewModels;

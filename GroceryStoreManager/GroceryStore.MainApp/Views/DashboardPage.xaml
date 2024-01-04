@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:weathermodel="using:GroceryStore.MainApp.Services.REST"
+    xmlns:weathermodel="using:GroceryStore.MainApp.Strategies.REST"
     xmlns:tk="using:CommunityToolkit.WinUI.UI.Controls">
 
     <Page.Resources>

@@ -2,7 +2,7 @@
 using GroceryStore.MainApp.Stores;
 using System.ComponentModel;
 
-namespace GroceryStore.MainApp.Services;
+namespace GroceryStore.MainApp.Strategies;
 
 public class SubNavigationService
 {

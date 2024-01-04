@@ -16,7 +16,7 @@ public partial class LoginPopupVM : PopupVMBase
     public LoginPopupVM(IPopupService dialogService, object? content = null) : base(dialogService, content)
     {
         LoginCommand = new DelegateCommand(Login);
-        if (bool.TryParse(AppConfigurate.Load("RememberMe"), out bool rememberme))
+        if (bool.TryParse(Configurator.Load("RememberMe"), out bool rememberme))
         {
             RememberMe = rememberme;
         }
@@ -24,10 +24,10 @@ public partial class LoginPopupVM : PopupVMBase
         {
             RememberMe = false;
         }
-        Username = RememberMe ? AppConfigurate.Username : "";
+        Username = RememberMe ? Configurator.Load("Username") ?? "" : "";
         LoadPassword = () =>
         {
-            return RememberMe ? AppConfigurate.Password : "";
+            return RememberMe ? Configurator.LoadSecure("Password") ?? "" : "";
         };
     }
 
@@ -42,10 +42,10 @@ public partial class LoginPopupVM : PopupVMBase
     private bool _rememberMe = false;
 
     [ObservableProperty]
-    private string _server = AppConfigurate.Server;
+    private string _server = Configurator.Load("Server") ?? "";
 
     [ObservableProperty]
-    private string _database = AppConfigurate.Database;
+    private string _database = Configurator.Load("Database") ?? "";
 
     // ========================
 
@@ -65,8 +65,6 @@ public partial class LoginPopupVM : PopupVMBase
     {
         return await Task.Run(() =>
         {
-            // Make the connecting more realistic
-            Thread.Sleep(2000);
             var testConnection = new Microsoft.Data.SqlClient.SqlConnection(connectionString);
             try
             {
@@ -86,7 +84,7 @@ public partial class LoginPopupVM : PopupVMBase
         IsLoading = true;
         var password = RetrivePassword!.Invoke();
         var builder = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder();
-        builder.DataSource = $"{Server}\\SQLEXPRESS";
+        builder.DataSource = Server;
         builder.InitialCatalog = Database;
         builder.UserID = Username;
         builder.Password = password;
@@ -100,19 +98,22 @@ public partial class LoginPopupVM : PopupVMBase
             // Remember me
             if (RememberMe == true)
             {
-                AppConfigurate.ConfigUser(Username, password);
+                Configurator.Config("Username", Username);
+                Configurator.ConfigSecure("Password", password);
             }
             else
             {
                 // Remove old record
-                AppConfigurate.ConfigUser("", "");
+                Configurator.Config("Username", "");
+                Configurator.ConfigSecure("Password", "");
             }
-            AppConfigurate.ConfigDatabase(Server, Database);
-            AppConfigurate.Config("RememberMe", _rememberMe.ToString());
+            Configurator.Config("Server", Server);
+            Configurator.Config("Database", Database);
+            Configurator.Config("RememberMe", _rememberMe.ToString());
 
             // For System.Data.Sqlclient
             var builderSys = new System.Data.SqlClient.SqlConnectionStringBuilder();
-            builderSys.DataSource = $"{Server}\\SQLEXPRESS";
+            builderSys.DataSource = Server;
             builderSys.InitialCatalog = Database;
             builderSys.UserID = Username;
             builderSys.Password = password;
@@ -124,7 +125,7 @@ public partial class LoginPopupVM : PopupVMBase
         else
         {
             // Fail
-            ErrorMessage = "Failed while connecting to the database";
+            ErrorMessage = "Failed while connecting to the database. Connection string: " + connectionString;
         }
         IsLoading = false;
     }

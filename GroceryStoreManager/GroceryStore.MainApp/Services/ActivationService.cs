@@ -6,7 +6,7 @@ using GroceryStore.MainApp.Views;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
-namespace GroceryStore.MainApp.Services;
+namespace GroceryStore.MainApp.Strategies;
 
 public class ActivationService : IActivationService
 {

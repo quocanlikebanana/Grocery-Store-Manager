@@ -3,7 +3,7 @@ using GroceryStore.MainApp.Helpers;
 
 using Microsoft.UI.Xaml;
 
-namespace GroceryStore.MainApp.Services;
+namespace GroceryStore.MainApp.Strategies;
 
 public class ThemeSelectorService : IThemeSelectorService
 {

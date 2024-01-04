@@ -1,7 +1,7 @@
 ﻿using GroceryStore.Domain.Model;
 using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Contracts.Services;
-using GroceryStore.MainApp.Services.PopupServices;
+using GroceryStore.MainApp.Strategies.PopupServices;
 using GroceryStore.MainApp.ViewModels.PopupVM;
 using GroceryStore.MainApp.Views.PopupView;
 

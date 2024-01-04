@@ -4,7 +4,7 @@ using GraphQL.Client.Serializer.Newtonsoft;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 
-namespace GroceryStore.MainApp.Services.GraphQL;
+namespace GroceryStore.MainApp.Strategies.GraphQL;
 
 public class GraphQLService
 {

@@ -1,9 +1,9 @@
 ﻿using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Factories;
-using GroceryStore.MainApp.Services.PopupServices;
+using GroceryStore.MainApp.Strategies.PopupServices;
 using Microsoft.Data.SqlClient;
 
-namespace GroceryStore.MainApp.Services
+namespace GroceryStore.MainApp.Strategies
 {
     public class LoginService : ILoginService
     {

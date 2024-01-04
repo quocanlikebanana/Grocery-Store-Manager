@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 
-namespace GroceryStore.MainApp.Services.REST;
+namespace GroceryStore.MainApp.Strategies.REST;
 
 public class RestService
 {

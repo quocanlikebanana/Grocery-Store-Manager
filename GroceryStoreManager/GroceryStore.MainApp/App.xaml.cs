@@ -7,7 +7,7 @@ using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Core.Contracts.Services;
 using GroceryStore.MainApp.Core.Services;
 using GroceryStore.MainApp.Models;
-using GroceryStore.MainApp.Services;
+using GroceryStore.MainApp.Strategies;
 using GroceryStore.MainApp.ViewModels;
 using GroceryStore.MainApp.Views;
 using Microsoft.Data.SqlClient;

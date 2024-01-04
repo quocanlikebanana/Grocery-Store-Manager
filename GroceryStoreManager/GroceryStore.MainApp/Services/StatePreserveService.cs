@@ -7,7 +7,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.Storage;
 
-namespace GroceryStore.MainApp.Services;
+namespace GroceryStore.MainApp.Strategies;
 
 public class StatePreserveService : IStatePreserveService
 {

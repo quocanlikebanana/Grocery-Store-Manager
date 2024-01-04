@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 using Windows.ApplicationModel;
 using Windows.Storage;
 
-namespace GroceryStore.MainApp.Services;
+namespace GroceryStore.MainApp.Strategies;
 
 public class LocalSettingsService : ILocalSettingsService
 {

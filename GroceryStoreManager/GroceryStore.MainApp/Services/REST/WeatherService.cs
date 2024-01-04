@@ -1,7 +1,7 @@
 ﻿using GroceryStore.MainApp.Config;
 using Newtonsoft.Json;
 
-namespace GroceryStore.MainApp.Services.REST;
+namespace GroceryStore.MainApp.Strategies.REST;
 
 
 
@@ -51,7 +51,7 @@ public class WeatherMain
 
 public class WeatherService
 {
-    private readonly string apiKey = AppConfigurate.Load("WeatherAPI") ?? "";
+    private readonly string apiKey = Configurator.Load("WeatherAPI", new AppconfigStorage()) ?? "";
     private readonly string hostUrl = "https://api.openweathermap.org/data/2.5/weather";
     private string getUrlParam(string cityName) => $"?q={cityName}&appid={apiKey}&lang=vi&units=metric";
     private string getImageUrl(string code) => $"https://openweathermap.org/img/wn/{code}@2x.png";

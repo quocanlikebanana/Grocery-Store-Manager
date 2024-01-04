@@ -1,6 +1,6 @@
 ﻿using GroceryStore.MainApp.Contracts.Services;
 using GroceryStore.MainApp.Helpers;
-using GroceryStore.MainApp.Services;
+using GroceryStore.MainApp.Strategies;
 using GroceryStore.MainApp.ViewModels;
 
 using Microsoft.UI.Xaml;
