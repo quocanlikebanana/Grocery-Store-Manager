@@ -1,12 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DevExpress.WinUI.Charts;
-using DevExpress.WinUI.Scheduler.Internal;
-using DevExpress.XtraPrinting.Native.Lines;
 using GroceryStore.Domain.Model;
 using GroceryStore.Domain.Service;
 using GroceryStore.MainApp.Command;
 using GroceryStore.MainApp.Contracts.ViewModels;
-using System;
 using System.Windows.Input;
 
 namespace GroceryStore.MainApp.ViewModels;
@@ -256,9 +253,16 @@ public class ArgumentValuePairDate<T>
 
     public static async Task<List<ArgumentValuePairDate<T>>> SplitRange(DateTime start, DateTime end, TimeSpanUnit tsUnit, Func<DateTime, DateTime, Task<T>> cb)
     {
+        // check valid date
+        if (end < start) return new List<ArgumentValuePairDate<T>>();
+        // check if its too many record
+        var ts = tsUnit.Value;
+        if (end.Subtract(start).Divide(ts) >= 30)
+        {
+            ts = end.Subtract(start).Divide(30);
+        }
         DateTime next;
         start = start.Date;
-        var ts = tsUnit.Value;
         var result = new List<ArgumentValuePairDate<T>>();
         while (start < end)
         {

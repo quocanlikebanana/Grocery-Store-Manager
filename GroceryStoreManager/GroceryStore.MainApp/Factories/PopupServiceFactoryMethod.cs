@@ -19,6 +19,7 @@ public enum PopupContent
     Product,
     Customer,
     Warning,
+    Error,
     Login,
 }
 
@@ -40,10 +41,14 @@ public class PopupServiceFactoryMethod
                 break;
             case PopupContent.Customer:
                 contentType = typeof(CustomerPopup);
-                contentCreate = (ps, obj) => new CustomerPopupVM(ps, obj as Customer );
+                contentCreate = (ps, obj) => new CustomerPopupVM(ps, obj as Customer);
                 break;
             case PopupContent.Warning:
                 contentType = typeof(WarningPopup);
+                contentCreate = (ps, message) => new SimplePopupVM(ps, message);
+                break;
+            case PopupContent.Error:
+                contentType = typeof(ErrorPopup);
                 contentCreate = (ps, message) => new SimplePopupVM(ps, message);
                 break;
             case PopupContent.Login:

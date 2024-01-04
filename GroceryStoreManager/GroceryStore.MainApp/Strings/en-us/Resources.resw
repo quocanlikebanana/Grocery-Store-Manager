@@ -163,10 +163,10 @@
     <value>Managing the bussiness of a small grocery store</value>
   </data>
   <data name="SettingsPage_PrivacyTermsLink.Content" xml:space="preserve">
-    <value>Privacy Statement</value>
+    <value>Supports</value>
   </data>
   <data name="SettingsPage_PrivacyTermsLink.NavigateUri" xml:space="preserve">
-    <value>https://localhost:8080/</value>
+    <value>https://drive.google.com/drive/folders/1xI43mV7OVU_46wPj5yj_RSXTYUFsEvDZ?usp=sharing</value>
   </data>
   <data name="Shell_Statistic.Content" xml:space="preserve">
     <value>Statistic</value>

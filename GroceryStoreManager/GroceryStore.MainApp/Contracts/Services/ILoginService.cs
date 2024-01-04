@@ -4,4 +4,5 @@ internal interface ILoginService
 {
     Task Authenticate();
     string ConnectionString();
+    string ConnectionStringSys();
 }

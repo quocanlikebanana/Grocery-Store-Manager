@@ -26,6 +26,7 @@
     <None Remove="Views\BlankPage.xaml" />
     <None Remove="Views\PopupView\ContentDialogBase.xaml" />
     <None Remove="Views\PopupView\CustomerPopup.xaml" />
+    <None Remove="Views\PopupView\ErrorPopup.xaml" />
     <None Remove="Views\PopupView\LoginPopup.xaml" />
     <None Remove="Views\PopupView\OrderPopup.xaml" />
     <None Remove="Views\PopupView\ProductPopup.xaml" />
@@ -47,6 +48,8 @@
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
     <PackageReference Include="DevExpress.WinUI" Version="23.1.7-pre-23337" />
+    <PackageReference Include="ExcelDataReader" Version="3.7.0-develop00385" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.7.0-develop00385" />
     <PackageReference Include="GraphQL.Client" Version="6.0.2" />
     <PackageReference Include="GraphQL.Client.Abstractions" Version="6.0.2" />
     <PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="6.0.2" />
@@ -55,10 +58,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.14" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Microsoft.SqlServer.SqlManagementObjects" Version="170.21.0" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.4.231008000" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Syncfusion.Editors.WinUI" Version="23.2.7" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="WinUIEx" Version="2.3.2" />
   </ItemGroup>
 
@@ -72,7 +77,16 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Page Update="Views\PopupView\ErrorPopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <None Update="_dlls\GroceryStore.Data.Backup.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="_dlls\GroceryStoreManager.ExcelManager-Copy.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="_dlls\GroceryStoreManager.ExcelManager.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Page Update="Views\BlankPage.xaml">

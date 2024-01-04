@@ -1,16 +1,12 @@
 ﻿using ExcelDataReader;
-using GroceryStoreManager.DatabaseConnector;
-using System;
-using System.Collections.Generic;
+using GroceryStore.MainApp.Core.Services;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace GroceryStoreManager.ExcelManager
 {
-    public class ExcelReader
+    public class ExcelReader : IExcelReaderService
     {
         public string FilePath;
         public string ConnectionString;

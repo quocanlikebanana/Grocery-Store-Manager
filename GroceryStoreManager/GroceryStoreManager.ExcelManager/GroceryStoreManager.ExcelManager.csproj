@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GroceryStoreManager.DatabaseConnector\GroceryStoreManager.DatabaseConnector.csproj" />
+    <ProjectReference Include="..\GroceryStore.MainApp.Core\GroceryStore.MainApp.Core.csproj" />
   </ItemGroup>
 
 </Project>

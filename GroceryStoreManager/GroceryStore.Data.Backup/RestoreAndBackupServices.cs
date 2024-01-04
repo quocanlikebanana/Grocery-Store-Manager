@@ -2,10 +2,11 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
+using GroceryStore.MainApp.Core.Services;
 
 namespace GroceryStore.Data.Backup
 {
-    public class RestoreAndBackupService
+    public class RestoreAndBackupService : IBackupService
     {
         private SqlConnection _sqlConnection;
 

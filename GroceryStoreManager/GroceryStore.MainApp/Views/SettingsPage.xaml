@@ -8,16 +8,22 @@
     xmlns:xaml="using:Microsoft.UI.Xaml"
     mc:Ignorable="d">
     <Page.Resources>
-        <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <helpers:EnumToBooleanConverter
+            x:Key="EnumToBooleanConverter" />
     </Page.Resources>
     <Grid>
         <StackPanel
             x:Name="ContentArea">
-            <TextBlock x:Uid="Settings_Personalization" Style="{ThemeResource SubtitleTextBlockStyle}" />
-            <StackPanel Margin="{StaticResource SmallTopBottomMargin}">
-                <TextBlock x:Uid="Settings_Theme" />
+            <TextBlock
+                x:Uid="Settings_Personalization"
+                Style="{ThemeResource SubtitleTextBlockStyle}" />
+            <StackPanel
+                Margin="{StaticResource SmallTopBottomMargin}">
+                <TextBlock
+                    x:Uid="Settings_Theme" />
 
-                <StackPanel Margin="{StaticResource XSmallTopMargin}">
+                <StackPanel
+                    Margin="{StaticResource XSmallTopMargin}">
                     <RadioButton
                         x:Uid="Settings_Theme_Light"
                         Command="{x:Bind ViewModel.SwitchThemeCommand}"
@@ -51,17 +57,56 @@
                 </StackPanel>
             </StackPanel>
 
-            <TextBlock x:Uid="Settings_About" Style="{ThemeResource SubtitleTextBlockStyle}" />
+            <TextBlock
+                Margin="0 5"
+                Text="Import Products and Categories from Excel file" />
+            <Button
+                HorizontalAlignment="Left"
+                Content="Import"
+                Margin="0 5"
+                Padding="10 5"
+                Command="{x:Bind ViewModel.ImportExcelCommand}"
+                Style="{ThemeResource DefaultButtonStyle}" />
 
-            <StackPanel Margin="{StaticResource XSmallTopMargin}">
-                <TextBlock Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}" Style="{ThemeResource BodyTextBlockStyle}" />
+            <TextBlock
+                Margin="0 10"
+                Text="Local back up Database" />
+            <StackPanel
+                Margin="0 5 0 40"
+                Orientation="Horizontal">
+                <Button
+                    Margin="0 0 5 0"
+                    Padding="10 5"
+                    Style="{ThemeResource DefaultButtonStyle}"
+                    Content="Save" 
+                    Command="{x:Bind ViewModel.SaveBackupCommand}"/>
+                <Button
+                    Margin="5 0 0 0"
+                    Padding="10 5"
+                    Style="{ThemeResource DefaultButtonStyle}"
+                    Content="Load" 
+                    Command="{x:Bind ViewModel.LoadBackupCommand}"/>
+            </StackPanel>
+
+            <TextBlock
+                x:Uid="Settings_About"
+                Style="{ThemeResource SubtitleTextBlockStyle}" />
+
+            <StackPanel
+                Margin="{StaticResource XSmallTopMargin}">
+                <TextBlock
+                    Text="{x:Bind ViewModel.VersionDescription, Mode=OneWay}"
+                    Style="{ThemeResource BodyTextBlockStyle}" />
 
                 <TextBlock
                     x:Uid="Settings_AboutDescription"
                     Margin="{StaticResource XSmallTopMargin}"
                     Style="{ThemeResource BodyTextBlockStyle}" />
-                <HyperlinkButton x:Uid="SettingsPage_PrivacyTermsLink" Margin="{StaticResource SettingsPageHyperlinkButtonMargin}" />
+                <HyperlinkButton
+                    x:Uid="SettingsPage_PrivacyTermsLink"
+                    Margin="{StaticResource SettingsPageHyperlinkButtonMargin}" />
             </StackPanel>
+
         </StackPanel>
     </Grid>
 </Page>

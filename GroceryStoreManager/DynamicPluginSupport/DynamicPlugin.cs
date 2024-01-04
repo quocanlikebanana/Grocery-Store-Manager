@@ -18,6 +18,8 @@ public class DynamicPlugin
         // Get list of DLL files
         _myAssFiles = new DirectoryInfo(myAssDirectory).GetFiles("*.dll", SearchOption.TopDirectoryOnly);
         _domain = AppDomain.CurrentDomain;
+        // On dependent assembly: even if we've listed dependent assembly in list of files, it's still going to search for the denpendent assembly on the event below
+        _domain.AssemblyResolve += LoadReferenceLib;
     }
 
     // NOTICE: Everytime the assembly project is updated, you should re-copy it back to the _dlls file
@@ -26,9 +28,6 @@ public class DynamicPlugin
     {
         // List of Contract's inhertance
         var implements = new List<Type>();
-
-        // On dependent assembly: even if we've listed dependent assembly in list of files, it's still going to search for the denpendent assembly on the event below
-        _domain.AssemblyResolve += LoadReferenceLib;
 
         // Load all assemblies from current working directory
         foreach (var fileInfo in _myAssFiles)
@@ -81,5 +80,37 @@ public class DynamicPlugin
         }
         var assembly = Assembly.LoadFrom(assemblyPath);
         return assembly;
+    }
+
+    public static Type GetImplement<IContract>(string fileName)
+    {
+        // Load all assemblies from current working directory
+        foreach (var fileInfo in _myAssFiles)
+        {
+            if (fileInfo.Name != fileName) continue;
+            var fileFullName = fileInfo.FullName;
+            var types = Array.Empty<Type>();
+            try
+            {
+                var assName = AssemblyName.GetAssemblyName(fileFullName);
+                var assembly = _domain.Load(assName);
+                types = assembly.GetTypes();
+            }
+            catch (BadImageFormatException)
+            {
+                throw new Exception($"{fileName} is not an assembly");
+            }
+            foreach (var type in types)
+            {
+                if (type.IsClass && !type.IsAbstract)
+                {
+                    if (typeof(IContract).IsAssignableFrom(type))
+                    {
+                        return type;
+                    }
+                }
+            }
+        }
+        throw new Exception("DLL not found for: " + typeof(IContract).FullName);
     }
 }

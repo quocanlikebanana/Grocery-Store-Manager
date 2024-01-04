@@ -62,6 +62,7 @@
                             </TextBlock.Inlines>
                         </TextBlock>
                         <TextBlock
+                            Foreground="Black"
                             Text="{Binding Description}"
                             HorizontalAlignment="Center" />
                     </StackPanel>
@@ -110,6 +111,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock
+                    Foreground="Black"
                     Grid.Row="0"
                     Grid.Column="1"
                     Margin="10"
@@ -123,17 +125,20 @@
                     Grid.Column="1"
                     Orientation="Vertical">
                     <FontIcon
+                        Foreground="Black"
                         Glyph="&#xE719;"
                         FontSize="40"
                         FontWeight="Bold"
                         HorizontalAlignment="Center" />
                     <TextBlock
+                        Foreground="Black"
                         FontSize="36"
                         FontWeight="Black"
                         Text="{x:Bind ViewModel.TotalProduct}"
                         Margin="0 10 0 0"
                         HorizontalAlignment="Center" />
                     <TextBlock
+                        Foreground="Black"
                         Text="Products"
                         FontSize="16"
                         FontWeight="SemiBold"
@@ -176,7 +181,8 @@
                     FontWeight="Bold"
                     Foreground="#113367" />
                 <ScrollViewer
-                    BorderBrush="White"
+                    Foreground="Black"
+                    BorderBrush="{ThemeResource AccentAAFillColorDefaultBrush}"
                     BorderThickness="1"
                     Grid.Row="2"
                     HorizontalScrollMode="Auto"
@@ -190,8 +196,10 @@
                             <DataTemplate>
                                 <RelativePanel>
                                     <TextBlock
+                                        Foreground="Black"
                                         Text="{Binding Key}" />
                                     <TextBlock
+                                        Foreground="Black"
                                         Text="{Binding Value}"
                                         RelativePanel.AlignRightWithPanel="True" />
                                 </RelativePanel>
@@ -224,6 +232,7 @@
                         Width="*" />
                 </Grid.ColumnDefinitions>
                 <FontIcon
+                    Foreground="Black"
                     Grid.Row="0"
                     Grid.ColumnSpan="2"
                     Glyph="&#xEE93;"
@@ -236,18 +245,21 @@
                     Grid.Row="1"
                     Orientation="Vertical">
                     <TextBlock
+                        Foreground="Black"
                         Grid.Row="1"
                         HorizontalAlignment="Center"
                         FontSize="24"
                         FontWeight="Bold"
                         Text="{x:Bind ViewModel.NewOrderInLast7Days}" />
                     <TextBlock
+                        Foreground="Black"
                         Grid.Row="2"
                         HorizontalAlignment="Center"
                         Text="Orders"
                         FontWeight="SemiBold"
                         TextWrapping="WrapWholeWords" />
                     <TextBlock
+                        Foreground="Black"
                         Grid.Row="3"
                         HorizontalAlignment="Center"
                         Text="Last 7 days"
@@ -258,18 +270,21 @@
                     Grid.Column="1"
                     Orientation="Vertical">
                     <TextBlock
+                        Foreground="Black"
                         Grid.Row="1"
                         HorizontalAlignment="Center"
                         FontSize="24"
                         FontWeight="Bold"
                         Text="{x:Bind ViewModel.NewOrderInMonth}" />
                     <TextBlock
+                        Foreground="Black"
                         Grid.Row="2"
                         HorizontalAlignment="Center"
                         Text="Orders"
                         FontWeight="SemiBold"
                         TextWrapping="WrapWholeWords" />
                     <TextBlock
+                        Foreground="Black"
                         Grid.Row="3"
                         HorizontalAlignment="Center"
                         Text="This month"
@@ -300,7 +315,7 @@
                 FontSize="18"
                 Margin="0 0 0 10"
                 FontWeight="Bold"
-                Foreground="#bd5851" />
+                Foreground="#d90c00" />
             <tk:DataGrid
                 Grid.Row="1"
                 ItemsSource="{x:Bind ViewModel.Top5OutOfStock, Mode=TwoWay}"

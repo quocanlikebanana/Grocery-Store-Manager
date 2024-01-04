@@ -76,6 +76,12 @@ public partial class App : Application
             services.AddSingleton<ILoginService, LoginService>();
             services.AddSingleton<IFileService, FileService>();
 
+            //var excelService = DynamicPlugin.GetImplements<IExcelReader>().ToList().FirstOrDefault();
+            //services.AddSingleton(typeof(IExcelReader), x => ActivatorUtilities.CreateInstance(x, excelService!));
+            //var excelService = DynamicPlugin.GetImplements<IBackupService>().ToList().FirstOrDefault();
+            //services.AddSingleton(typeof(IBackupService), x => ActivatorUtilities.CreateInstance(x, excelService!));
+
+
             //var order_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Order>>().ToList();
             //var coupon_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Coupon>>().ToList();
             //var customer_DataServiceImplements = DynamicPlugin.GetImplements<IDataService<Customer>>().ToList();

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using GroceryStore.MainApp.Contracts.Services;
 using Microsoft.Data.SqlClient;
+using System.Data.SqlClient;
 using System.Windows.Input;
 using GroceryStore.MainApp.Config;
 using GroceryStore.MainApp.Command;
@@ -10,6 +11,7 @@ namespace GroceryStore.MainApp.ViewModels.PopupVM;
 public partial class LoginPopupVM : PopupVMBase
 {
     private string _connectionString = string.Empty;
+    private string _connectionStringSys = string.Empty;
 
     public LoginPopupVM(IPopupService dialogService, object? content = null) : base(dialogService, content)
     {
@@ -65,7 +67,7 @@ public partial class LoginPopupVM : PopupVMBase
         {
             // Make the connecting more realistic
             Thread.Sleep(2000);
-            var testConnection = new SqlConnection(connectionString);
+            var testConnection = new Microsoft.Data.SqlClient.SqlConnection(connectionString);
             try
             {
                 testConnection.Open();
@@ -83,7 +85,7 @@ public partial class LoginPopupVM : PopupVMBase
     {
         IsLoading = true;
         var password = RetrivePassword!.Invoke();
-        var builder = new SqlConnectionStringBuilder();
+        var builder = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder();
         builder.DataSource = $"{Server}\\SQLEXPRESS";
         builder.InitialCatalog = Database;
         builder.UserID = Username;
@@ -107,6 +109,15 @@ public partial class LoginPopupVM : PopupVMBase
             }
             AppConfigurate.ConfigDatabase(Server, Database);
             AppConfigurate.Config("RememberMe", _rememberMe.ToString());
+
+            // For System.Data.Sqlclient
+            var builderSys = new System.Data.SqlClient.SqlConnectionStringBuilder();
+            builderSys.DataSource = $"{Server}\\SQLEXPRESS";
+            builderSys.InitialCatalog = Database;
+            builderSys.UserID = Username;
+            builderSys.Password = password;
+            builderSys.TrustServerCertificate = true;
+            _connectionStringSys = builderSys.ConnectionString;
             _connectionString = connectionString;
             Accept(null);
         }
@@ -123,6 +134,6 @@ public partial class LoginPopupVM : PopupVMBase
 
     public override object? GetFormData()
     {
-        return _connectionString;
+        return Tuple.Create(_connectionString, _connectionStringSys);
     }
 }

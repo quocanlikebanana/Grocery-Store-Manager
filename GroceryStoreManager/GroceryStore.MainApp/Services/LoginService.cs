@@ -8,6 +8,7 @@ namespace GroceryStore.MainApp.Services
     public class LoginService : ILoginService
     {
         private string _connectionString = string.Empty;
+        private string _connectionStringSys = string.Empty;
         public LoginService()
         {
         }
@@ -16,22 +17,12 @@ namespace GroceryStore.MainApp.Services
         {
             // If can't connect => GO TO Services and Refresh, Restart some of the SQL services
             var loginPopup = PopupServiceFactoryMethod.Get(PopupType.ContentDialog, PopupContent.Login);
-            var result = await loginPopup.ShowWindow();
-            _connectionString = (string)result!;
-
-            //// TODO: Connection string configuration
-            //var builder = new SqlConnectionStringBuilder();
-            //builder.DataSource = "localhost\\SQLEXPRESS";
-            ////builder.InitialCatalog = "newestDataBase";
-            //builder.InitialCatalog = "testDataWindow";
-            //builder.IntegratedSecurity = true;
-            //builder.TrustServerCertificate = true;
-            //var connectionString = builder.ConnectionString;
+            var result = await loginPopup.ShowWindow() as Tuple<string, string>;
+            _connectionString = result!.Item1;
+            _connectionStringSys = result!.Item2;
         }
 
-        public string ConnectionString()
-        {
-            return _connectionString;
-        }
+        public string ConnectionString() => _connectionString;
+        public string ConnectionStringSys() => _connectionStringSys;
     }
 }
