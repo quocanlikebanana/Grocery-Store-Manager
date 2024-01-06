@@ -111,15 +111,31 @@ public class PMOrder
         return true;
     }
 
-    public async Task<bool> Update()
+    public async Task<bool> Update(Order preOrder)
     {
         try
         {
-            var obj = GetUpdateObject();
-            var result = await _orderDataService.Update((int)Id!, obj) ?? throw new Exception();
+            var curOrder = GetUpdateObject();
+            var result = await _orderDataService.Update((int)Id!, curOrder) ?? throw new Exception();
             Id = result.Id;
             //await UpdateCustomer();   // We dont update customer coupon because coupon price may vary (and we out of time)
             await UpdateProduct();
+            foreach (var od in preOrder.details)
+            {
+                bool found = false;
+                foreach (var sod in curOrder.details)
+                {
+                    if (sod.OrderId == od.OrderId && sod.ProductId == od.ProductId)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    await _orderDetailDataService.Delete((int)od.OrderId!, od.ProductId);
+                }
+            }
         }
         catch (Exception ex)
         {

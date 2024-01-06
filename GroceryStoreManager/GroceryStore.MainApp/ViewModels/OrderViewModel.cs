@@ -186,11 +186,12 @@ public partial class OrderViewModel : ObservableRecipient, INavigationAware
         {
             return;
         }
+        var preOrder = SelectedOrder;
         var result = await _popupService.ShowWindow(SelectedOrder);
         if (result != null && result is PMOrder pmOrder)
         {
             // TODO: Display loading screen here
-            var updateResult = await pmOrder.Update();
+            var updateResult = await pmOrder.Update(preOrder);
             if (updateResult == true)
             {
                 Reload(null);
